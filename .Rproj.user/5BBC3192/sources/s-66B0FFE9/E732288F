@@ -5,13 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "767315378",
+    "hash" : "0",
     "id" : "E732288F",
-    "lastKnownWriteTime" : 1635300925,
-    "last_content_update" : 1635300925,
+    "lastKnownWriteTime" : 1635301145,
+    "last_content_update" : 1635301145754,
     "path" : "~/Dropbox (GaTech)/GT_Research/Spatial_Networks_R/SSN_tutorial/_bookdown.yml",
     "project_path" : "_bookdown.yml",
     "properties" : {
+        "cursorPosition" : "6,0",
+        "scrollLine" : "0"
     },
     "read_only" : false,
     "read_only_alternatives" : [
