@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1635392034724.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "196759679",
+    "id" : "C2E64FDD",
+    "lastKnownWriteTime" : 1635476383,
+    "last_content_update" : 1635476383410,
+    "path" : "~/Dropbox (GaTech)/GT_Research/Spatial_Networks_R/SSN_tutorial/03-nodes.Rmd",
+    "project_path" : "03-nodes.Rmd",
+    "properties" : {
+        "cursorPosition" : "23,13",
+        "scrollLine" : "10"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

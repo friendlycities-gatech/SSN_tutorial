@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1635476390337.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3221694541",
+    "id" : "4F3FFA2C",
+    "lastKnownWriteTime" : 1635477846,
+    "last_content_update" : 1635477846851,
+    "path" : "~/Dropbox (GaTech)/GT_Research/Spatial_Networks_R/SSN_tutorial/02-nxMetric.Rmd",
+    "project_path" : "02-nxMetric.Rmd",
+    "properties" : {
+        "cursorPosition" : "193,31",
+        "scrollLine" : "187"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

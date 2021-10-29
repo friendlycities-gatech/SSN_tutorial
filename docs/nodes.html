@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Visualizing Nodes | Spatial Social Networks (SSN) Visualization and Metrics with R</title>
+  <meta name="description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Visualizing Nodes | Spatial Social Networks (SSN) Visualization and Metrics with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Visualizing Nodes | Spatial Social Networks (SSN) Visualization and Metrics with R" />
+  
+  <meta name="twitter:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  
+
+<meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
+
+
+<meta name="date" content="2021-10-29" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="metrics.html"/>
+<link rel="next" href="edges.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="metrics.html"><a href="metrics.html"><i class="fa fa-check"></i><b>2</b> Network Metrics</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="metrics.html"><a href="metrics.html#network-data-formats"><i class="fa fa-check"></i><b>2.1</b> Network Data Formats</a></li>
+<li class="chapter" data-level="2.2" data-path="metrics.html"><a href="metrics.html#network-metrics"><i class="fa fa-check"></i><b>2.2</b> Network Metrics</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="metrics.html"><a href="metrics.html#network-metrics-for-nodes"><i class="fa fa-check"></i><b>2.2.1</b> Network Metrics for Nodes</a></li>
+<li class="chapter" data-level="2.2.2" data-path="metrics.html"><a href="metrics.html#network-metrics-for-edges"><i class="fa fa-check"></i><b>2.2.2</b> Network Metrics for Edges</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="metrics.html"><a href="metrics.html#igraph-visualization"><i class="fa fa-check"></i><b>2.3</b> igraph Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="nodes.html"><a href="nodes.html"><i class="fa fa-check"></i><b>3</b> Visualizing Nodes</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="nodes.html"><a href="nodes.html#convert-coordinates-to-points"><i class="fa fa-check"></i><b>3.1</b> Convert Coordinates to Points</a></li>
+<li class="chapter" data-level="3.2" data-path="nodes.html"><a href="nodes.html#visualize-nodes"><i class="fa fa-check"></i><b>3.2</b> Visualize Nodes</a></li>
+<li class="chapter" data-level="3.3" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-color"><i class="fa fa-check"></i><b>3.3</b> Visualize Nodes by Node Color</a></li>
+<li class="chapter" data-level="3.4" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-size"><i class="fa fa-check"></i><b>3.4</b> Visualize Nodes by Node Size</a></li>
+<li class="chapter" data-level="3.5" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-size-and-color"><i class="fa fa-check"></i><b>3.5</b> Visualize Nodes by Size and Color</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="edges.html"><a href="edges.html"><i class="fa fa-check"></i><b>4</b> Visualizing Edges</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="edges.html"><a href="edges.html#convert-points-into-lines"><i class="fa fa-check"></i><b>4.1</b> Convert Points into Lines</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="edges.html"><a href="edges.html#method-1-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Group by lineID and Summarize Points into Line</a></li>
+<li class="chapter" data-level="4.1.2" data-path="edges.html"><a href="edges.html#method-2-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Join Two Point Geometry into One Row and Unite into Line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="edges.html"><a href="edges.html#visualizing-edges"><i class="fa fa-check"></i><b>4.2</b> Visualizing Edges</a></li>
+<li class="chapter" data-level="4.3" data-path="edges.html"><a href="edges.html#visualizing-edges-by-line-width"><i class="fa fa-check"></i><b>4.3</b> Visualizing Edges by Line Width</a></li>
+<li class="chapter" data-level="4.4" data-path="edges.html"><a href="edges.html#visualizing-edges-by-color"><i class="fa fa-check"></i><b>4.4</b> Visualizing Edges by Color</a></li>
+<li class="chapter" data-level="4.5" data-path="edges.html"><a href="edges.html#visualizing-edges-by-width-and-color"><i class="fa fa-check"></i><b>4.5</b> Visualizing Edges by Width and Color</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Social Networks (SSN) Visualization and Metrics with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="nodes" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Visualizing Nodes</h1>
+<p>In this chapter, we continue to use the American Mafia data introduced in Chapter 2. This chapter covers the following topics:</p>
+<ul>
+<li>How to convert node coordinates into point geometry</li>
+<li>How to visualize nodes with constant color and size</li>
+<li>How to visualize nodes with varying node size by attributes</li>
+<li>How to visualize nodes with varying color by attributes</li>
+<li>How to visualize nodes with varying node size and color with a combined legend</li>
+</ul>
+<p>You will be able to find a copy of all the codes at the bottom of the page.</p>
+<p><img src="Figs/03-nodes-1.png" width="50%" /><img src="Figs/03-nodes-2.png" width="50%" /><img src="Figs/03-nodes-3.png" width="50%" /><img src="Figs/03-nodes-4.png" width="50%" /></p>
+<p>Before proceeding to the codes, please load the following packages:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="nodes.html#cb20-1"></a><span class="kw">library</span>(sf)</span>
+<span id="cb20-2"><a href="nodes.html#cb20-2"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb20-3"><a href="nodes.html#cb20-3"></a><span class="kw">library</span>(tmap)</span>
+<span id="cb20-4"><a href="nodes.html#cb20-4"></a><span class="kw">library</span>(igraph)</span>
+<span id="cb20-5"><a href="nodes.html#cb20-5"></a><span class="kw">library</span>(RColorBrewer)</span>
+<span id="cb20-6"><a href="nodes.html#cb20-6"></a><span class="kw">library</span>(tigris)</span>
+<span id="cb20-7"><a href="nodes.html#cb20-7"></a><span class="co">#install.packages(&quot;devtools&quot;) #to download R package on GitHub</span></span>
+<span id="cb20-8"><a href="nodes.html#cb20-8"></a><span class="co">#devtools::install_github(&quot;friendlycities-gatech/SSNtools&quot;)</span></span>
+<span id="cb20-9"><a href="nodes.html#cb20-9"></a><span class="kw">library</span>(SSNtools)</span></code></pre></div>
+<div id="convert-coordinates-to-points" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Convert Coordinates to Points</h2>
+<p>The data for the nodes may come in two common format. One is the node table that we mentioned in Chapter 2 (REF), and the other is spatial object, in which nodes are already point geometry. The <strong>node table</strong> often stores the spatial information of the node as two columns: <code>latitude</code> and <code>longitude</code>. <strong>Spatial object</strong> contains spatial information of the node in the <code>geometry</code> column. It also includes projection coordinates system of the object. Unless you are working with <code>ggplot2</code>, most other visualization packages require nodes to be spatial objects for mapping.</p>
+<p>You can convert a node table with coordinates into a spatial object with <code>st_as_sf</code> function in <code>sf</code> package. Spatial information is stored in the <strong>LonX</strong> and <strong>LatY</strong> column in <code>MafiaNodes</code> node table. Therefore, when we convert it to <code>sf</code> spatial object, we need to set the coordinates crs to be <em>WGS84</em> (4326).</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="nodes.html#cb21-1"></a><span class="co">#MafiaNodes is a built-in dataset in SSNtools R package</span></span>
+<span id="cb21-2"><a href="nodes.html#cb21-2"></a>MafiaSpatial =<span class="st"> </span>MafiaNodes <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb21-3"><a href="nodes.html#cb21-3"></a><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords=</span><span class="kw">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>) </span>
+<span id="cb21-4"><a href="nodes.html#cb21-4"></a></span>
+<span id="cb21-5"><a href="nodes.html#cb21-5"></a><span class="kw">head</span>(MafiaSpatial, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## Simple feature collection with 3 features and 4 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: -117.291 ymin: 34.1493 xmax: -77.5774 ymax: 43.1356
+## CRS:           EPSG:4326
+##               NODE      Family NY        NiceLabel
+## 1 VALENTI-COSTENZA     Bonanno  1 Costenza Valenti
+## 2    VALENTI-FRANK     Bonanno  1    Frank Valenti
+## 3 DIPOLLITO-JOSEPH Los_Angeles  0 Joseph Dipollito
+##                   geometry
+## 1 POINT (-77.6064 43.1349)
+## 2 POINT (-77.5774 43.1356)
+## 3 POINT (-117.291 34.1493)</code></pre>
+</div>
+<div id="visualize-nodes" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Visualize Nodes</h2>
+<p><strong>First step</strong>, we download the U.S. state shapefile through <code>tigris</code> package as the background for visualization and transform the shapefile and the dataframe data to the appropriate crs (coordinate reference system).</p>
+<p>The coordinate information can be stored in other projection system other than the commonly used WGS84. Users need to find out what crs is used before transforming the data to another system. Only when crs are the same for two or more shapefiles (or geometry) can we overlay them correctly on each other. Since we are mapping the data on U.S. mainland, we exclude U.S. territories and further transform the node table into <code>sf</code> spatial objects with <em>North America Equidistant Conic projection</em> (crs=102010).</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="nodes.html#cb23-1"></a><span class="co">#Convert coordinate system</span></span>
+<span id="cb23-2"><a href="nodes.html#cb23-2"></a>MafiaSpatial =<span class="st"> </span>MafiaSpatial <span class="op">%&gt;%</span></span>
+<span id="cb23-3"><a href="nodes.html#cb23-3"></a><span class="st">  </span><span class="kw">st_transform</span>(MafiaSpatioal, <span class="dt">crs=</span><span class="dv">102010</span>)</span>
+<span id="cb23-4"><a href="nodes.html#cb23-4"></a></span>
+<span id="cb23-5"><a href="nodes.html#cb23-5"></a><span class="co">#states is a function in tigris to download U.S. state boundary shapefile</span></span>
+<span id="cb23-6"><a href="nodes.html#cb23-6"></a>us_states =<span class="st"> </span><span class="kw">states</span>(<span class="dt">cb=</span><span class="ot">TRUE</span>, <span class="dt">progress_bar =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb23-7"><a href="nodes.html#cb23-7"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>STUSPS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;PR&#39;</span>,<span class="st">&#39;AS&#39;</span>, <span class="st">&#39;AK&#39;</span>, <span class="st">&#39;GU&#39;</span>,<span class="st">&#39;MP&#39;</span>,<span class="st">&#39;VI&#39;</span>, <span class="st">&#39;HI&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb23-8"><a href="nodes.html#cb23-8"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dt">crs=</span><span class="dv">102010</span>)</span></code></pre></div>
+<p><strong>Second step</strong>: visualize the nodes on the US state map!</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="nodes.html#cb24-1"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>) <span class="co"># set tmap plotting mode to static map </span></span>
+<span id="cb24-2"><a href="nodes.html#cb24-2"></a><span class="kw">tm_shape</span>(us_states) <span class="op">+</span><span class="st">  </span></span>
+<span id="cb24-3"><a href="nodes.html#cb24-3"></a><span class="st">  </span><span class="kw">tm_polygons</span>() <span class="op">+</span><span class="st"> </span><span class="co">#draw U.S. state shapefile first as polygons</span></span>
+<span id="cb24-4"><a href="nodes.html#cb24-4"></a><span class="st">  </span><span class="kw">tm_shape</span>(MafiaSpatial) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb24-5"><a href="nodes.html#cb24-5"></a><span class="st">  </span><span class="kw">tm_symbols</span>() <span class="co">#overlay nodes as points</span></span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+</div>
+<div id="visualize-nodes-by-node-color" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Visualize Nodes by Node Color</h2>
+<p>The map above only shows the locations of Mafia members. We want to visualize the influence of these members and find out where influential people reside. We load the edge file <code>MafiaEdges</code> and calculate the degree of each node.</p>
+<p><strong>To vary the node color by degree</strong>, we simply set the <code>col</code> argument to the variable <code>degree</code> that should vary by color. Different from node size, <code>style</code> argument can modulate the breaks for node color in different styles, such as quantile breaks, equal interval breaks, head/tail breaks and so on. The number of class is defaulted to five. To define the color, you can either pass a R palette (e.g., <code>YlGnBu</code>) or a vector of color to <code>palette</code> argument. More details can be found in <code>tmap</code> <a href="https://cran.r-project.org/web/packages/tmap/tmap.pdf">document</a>.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="nodes.html#cb25-1"></a><span class="co">#MafiaEdges is a built-in dataset in SSNtools</span></span>
+<span id="cb25-2"><a href="nodes.html#cb25-2"></a><span class="co">#Construct a network and calculate the degree for each node. </span></span>
+<span id="cb25-3"><a href="nodes.html#cb25-3"></a>g =<span class="st"> </span><span class="kw">graph_from_data_frame</span>(MafiaEdges, <span class="dt">directed =</span> <span class="ot">FALSE</span>, <span class="dt">vertices=</span>MafiaSpatial)</span>
+<span id="cb25-4"><a href="nodes.html#cb25-4"></a>MafiaSpatial<span class="op">$</span>degree =<span class="st"> </span><span class="kw">degree</span>(g)</span>
+<span id="cb25-5"><a href="nodes.html#cb25-5"></a></span>
+<span id="cb25-6"><a href="nodes.html#cb25-6"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb25-7"><a href="nodes.html#cb25-7"></a><span class="kw">tm_shape</span>(us_states) <span class="op">+</span></span>
+<span id="cb25-8"><a href="nodes.html#cb25-8"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>) <span class="op">+</span></span>
+<span id="cb25-9"><a href="nodes.html#cb25-9"></a><span class="st">  </span><span class="kw">tm_shape</span>(MafiaSpatial) <span class="op">+</span></span>
+<span id="cb25-10"><a href="nodes.html#cb25-10"></a><span class="st">  </span><span class="kw">tm_symbols</span>(</span>
+<span id="cb25-11"><a href="nodes.html#cb25-11"></a>    <span class="dt">size=</span><span class="dv">1</span>, <span class="co">#constant node size</span></span>
+<span id="cb25-12"><a href="nodes.html#cb25-12"></a>    <span class="dt">col=</span><span class="st">&#39;degree&#39;</span>, <span class="dt">palette =</span> <span class="st">&#39;YlGnBu&#39;</span>, <span class="co">#define which numeric column to vary by color and the color palette</span></span>
+<span id="cb25-13"><a href="nodes.html#cb25-13"></a>    <span class="dt">style=</span><span class="st">&#39;quantile&#39;</span>, <span class="dt">n =</span> <span class="dv">4</span>, <span class="co">#define the color breaks using quantile, and set the number of classes to 4.</span></span>
+<span id="cb25-14"><a href="nodes.html#cb25-14"></a>    <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="dt">border.alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb25-15"><a href="nodes.html#cb25-15"></a>    <span class="dt">title.col=</span><span class="kw">c</span>(<span class="st">&#39;Degree of Connections&#39;</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+</div>
+<div id="visualize-nodes-by-node-size" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Visualize Nodes by Node Size</h2>
+<p><strong>To visualize the node size by the connection degree</strong>, we have to set the node size varies by degree in <code>tm_symbols</code>. The default breaks for node size is interval breaks. You can adjust the breaks for node size in the legend directly through <code>sizes.legend</code> argument in <code>tm_symbols</code>.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="nodes.html#cb26-1"></a><span class="co"># Visualize </span></span>
+<span id="cb26-2"><a href="nodes.html#cb26-2"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb26-3"><a href="nodes.html#cb26-3"></a><span class="kw">tm_shape</span>(us_states) <span class="op">+</span></span>
+<span id="cb26-4"><a href="nodes.html#cb26-4"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>) <span class="op">+</span><span class="st"> </span><span class="co">#turn the background color of the polygons to transparent</span></span>
+<span id="cb26-5"><a href="nodes.html#cb26-5"></a><span class="st">  </span><span class="kw">tm_shape</span>(MafiaSpatial) <span class="op">+</span></span>
+<span id="cb26-6"><a href="nodes.html#cb26-6"></a><span class="st">  </span><span class="kw">tm_symbols</span>(<span class="dt">size=</span><span class="st">&quot;degree&quot;</span>, <span class="dt">scale=</span><span class="dv">2</span>, <span class="co">#scale up the node size </span></span>
+<span id="cb26-7"><a href="nodes.html#cb26-7"></a>             <span class="dt">col=</span><span class="st">&#39;lightblue&#39;</span>, <span class="dt">border.col=</span><span class="st">&#39;#6698CC&#39;</span>, </span>
+<span id="cb26-8"><a href="nodes.html#cb26-8"></a>             <span class="dt">title.size=</span><span class="kw">c</span>(<span class="st">&#39;Degree of Connections&#39;</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<!-- One challenge for this map (and others that visualize nodes) is that there are too many nodes cluster at nearby locations, which makes it difficult for people to find the most influential people and see the distribution of the nodes. One solution is to adjust the breaks of the node size and add color to breaks so that the influential nodes can stand out more. Another solution is to create an inset map for New York City area where the nodes are most cluttered (see Chapter5).  -->
+<p><strong>If you want node size to follow a particular break, then nodes need to be grouped into size brackets</strong>. Differnt from color whose breaks can be adjusted in <code>style</code> argument (e.g., style=‘quantile’), changing node size is not straightforward. This example shows how to size nodes in quantile breaks. We first check the quantile breakdown of the degree in the data as the reference. Then, we create a new <code>degree_brackets</code> column that group nodes with different degree to ordered categories. Lastly, we set the <code>size</code> argument in <code>tm_symbols</code> to the new <code>degree_brackets</code> column, which changes the size of the nodes in the map. We adjust the legend breaks using <code>sizes.legend</code>. <code>sizes.legend</code> only changes the size of the nodes in the legend but not for nodes in the map (use scale for the latter). More details can be found in <code>tmap</code> <a href="https://cran.r-project.org/web/packages/tmap/tmap.pdf">document</a>.</p>
+<p><strong>The final node size in the map = relative node size defined in <code>degree_brackets</code> / <code>size.max</code> * <code>scale</code></strong></p>
+<p>Numbers in the <code>degree_brackets</code> column only define the relative size difference between the nodes. <code>size.max</code> and <code>scale</code> are often defaulted to be 1, therefore makes it easy for people to directly define node size in the <code>degree_brackets</code> column. In that case, the node with designated with the highest size value will have the node size of 1. In our example, node size of 1 is visually too small in the map, so we scale up the node size by 1.5. Thus, the actual node sizes for the four brackets are c(0.1, 0.3, 0.5, 1)/1*1.5 = c(0.15, 0.45, 0.75, 1.5).</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="nodes.html#cb27-1"></a><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)</span></code></pre></div>
+<pre><code>##   0%  25%  50%  75% 100% 
+##    2    8   12   20  154</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="nodes.html#cb29-1"></a><span class="co"># Create a new &#39;degree_bracket&#39; column that contains the node size for each group of nodes. </span></span>
+<span id="cb29-2"><a href="nodes.html#cb29-2"></a>MafiaSpatial =<span class="st"> </span>MafiaSpatial <span class="op">%&gt;%</span></span>
+<span id="cb29-3"><a href="nodes.html#cb29-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">degree_brackets =</span> <span class="kw">case_when</span>(</span>
+<span id="cb29-4"><a href="nodes.html#cb29-4"></a>    degree <span class="op">&gt;=</span><span class="st"> </span><span class="dv">2</span> <span class="op">&amp;</span><span class="st"> </span>degree <span class="op">&lt;</span><span class="st"> </span><span class="dv">8</span> <span class="op">~</span><span class="st"> </span><span class="fl">0.1</span>,</span>
+<span id="cb29-5"><a href="nodes.html#cb29-5"></a>    degree <span class="op">&gt;=</span><span class="st"> </span><span class="dv">8</span> <span class="op">&amp;</span><span class="st"> </span>degree <span class="op">&lt;</span><span class="st"> </span><span class="dv">12</span> <span class="op">~</span><span class="st"> </span><span class="fl">0.3</span>, </span>
+<span id="cb29-6"><a href="nodes.html#cb29-6"></a>    degree <span class="op">&gt;=</span><span class="st"> </span><span class="dv">12</span> <span class="op">&amp;</span><span class="st"> </span>degree <span class="op">&lt;</span><span class="st"> </span><span class="dv">20</span> <span class="op">~</span><span class="st"> </span><span class="fl">0.5</span>,</span>
+<span id="cb29-7"><a href="nodes.html#cb29-7"></a>    degree <span class="op">&gt;=</span><span class="st"> </span><span class="dv">20</span> <span class="op">&amp;</span><span class="st"> </span>degree <span class="op">&lt;=</span><span class="st"> </span><span class="dv">154</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb29-8"><a href="nodes.html#cb29-8"></a>  ))</span>
+<span id="cb29-9"><a href="nodes.html#cb29-9"></a></span>
+<span id="cb29-10"><a href="nodes.html#cb29-10"></a><span class="co"># Visualize</span></span>
+<span id="cb29-11"><a href="nodes.html#cb29-11"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb29-12"><a href="nodes.html#cb29-12"></a><span class="kw">tm_shape</span>(us_states) <span class="op">+</span></span>
+<span id="cb29-13"><a href="nodes.html#cb29-13"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>) <span class="op">+</span></span>
+<span id="cb29-14"><a href="nodes.html#cb29-14"></a><span class="st">  </span><span class="kw">tm_shape</span>(MafiaSpatial) <span class="op">+</span></span>
+<span id="cb29-15"><a href="nodes.html#cb29-15"></a><span class="st">  </span><span class="kw">tm_symbols</span>(</span>
+<span id="cb29-16"><a href="nodes.html#cb29-16"></a>    <span class="dt">size=</span><span class="st">&quot;degree_brackets&quot;</span>, <span class="dt">size.max =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="fl">1.5</span>,</span>
+<span id="cb29-17"><a href="nodes.html#cb29-17"></a>    <span class="dt">sizes.legend =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="op">/</span><span class="dv">1</span><span class="op">*</span><span class="fl">1.5</span>,</span>
+<span id="cb29-18"><a href="nodes.html#cb29-18"></a>    <span class="dt">sizes.legend.labels =</span> <span class="kw">c</span>(<span class="st">&#39;2-8&#39;</span>,<span class="st">&#39;8-12&#39;</span>,<span class="st">&#39;12-20&#39;</span>,<span class="st">&#39;20-154&#39;</span>),</span>
+<span id="cb29-19"><a href="nodes.html#cb29-19"></a>    <span class="dt">col=</span><span class="st">&#39;lightblue&#39;</span>, <span class="dt">border.col=</span><span class="st">&#39;#6698CC&#39;</span>, <span class="co">#blue grey</span></span>
+<span id="cb29-20"><a href="nodes.html#cb29-20"></a>    <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">border.alpha =</span> <span class="fl">0.5</span>, </span>
+<span id="cb29-21"><a href="nodes.html#cb29-21"></a>    <span class="dt">title.size=</span><span class="kw">c</span>(<span class="st">&#39;Degree of Connections&#39;</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+</div>
+<div id="visualize-nodes-by-size-and-color" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Visualize Nodes by Size and Color</h2>
+<p>The automatic legend in tmap now cannot support color and size legend in one. <strong>To combine the color and size legend</strong>, we have to manually create a legend with the color and size attributes from the color and size legends, using <code>tm_add_legend</code>. To replicate the color, we use <code>RColorBrewer</code> package to generate colors for a given number, which is the default way that <code>tmap</code> assigns colors. To replicate the size, we pass in the square root of the actual node size. Setting node size in <code>tm_add_legend</code> is tricky, which is the square roots of the actual node size (see <a href="https://github.com/mtennekes/tmap/issues/451">here</a> for detail explanation). Remember: <strong>The final node size in the map = relative node size defined in <code>degree_brackets</code> / <code>size.max</code> * <code>scale</code></strong>. Lastly, we set the <code>legend.col.show =FALSE</code> and <code>legend.size.show =FALSE</code> to hide the default legends.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="nodes.html#cb30-1"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb30-2"><a href="nodes.html#cb30-2"></a><span class="kw">tm_shape</span>(us_states) <span class="op">+</span></span>
+<span id="cb30-3"><a href="nodes.html#cb30-3"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>) <span class="op">+</span></span>
+<span id="cb30-4"><a href="nodes.html#cb30-4"></a><span class="st">  </span><span class="kw">tm_shape</span>(MafiaSpatial) <span class="op">+</span></span>
+<span id="cb30-5"><a href="nodes.html#cb30-5"></a><span class="st">  </span><span class="kw">tm_symbols</span>(</span>
+<span id="cb30-6"><a href="nodes.html#cb30-6"></a>    <span class="co">#arguments that define point sizes </span></span>
+<span id="cb30-7"><a href="nodes.html#cb30-7"></a>    <span class="dt">size=</span><span class="st">&quot;degree_brackets&quot;</span>, <span class="dt">size.max =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="fl">1.5</span>,</span>
+<span id="cb30-8"><a href="nodes.html#cb30-8"></a>    <span class="dt">legend.size.show =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb30-9"><a href="nodes.html#cb30-9"></a>    <span class="co">#arguments that define point colors </span></span>
+<span id="cb30-10"><a href="nodes.html#cb30-10"></a>    <span class="dt">col=</span><span class="st">&#39;degree_brackets&#39;</span>, <span class="dt">palette =</span> <span class="st">&#39;YlGnBu&#39;</span>, <span class="dt">n =</span> <span class="dv">4</span>,</span>
+<span id="cb30-11"><a href="nodes.html#cb30-11"></a>    <span class="dt">alpha=</span><span class="fl">0.5</span>, </span>
+<span id="cb30-12"><a href="nodes.html#cb30-12"></a>    <span class="dt">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="dt">border.alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb30-13"><a href="nodes.html#cb30-13"></a>    <span class="dt">legend.col.show =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb30-14"><a href="nodes.html#cb30-14"></a><span class="st">  </span><span class="kw">tm_add_legend</span>(<span class="dt">type=</span><span class="kw">c</span>(<span class="st">&quot;symbol&quot;</span>),</span>
+<span id="cb30-15"><a href="nodes.html#cb30-15"></a>                <span class="dt">col =</span> <span class="kw">brewer.pal</span>(<span class="dv">4</span>, <span class="st">&quot;YlGnBu&quot;</span>), <span class="co">#copy the color from R palette</span></span>
+<span id="cb30-16"><a href="nodes.html#cb30-16"></a>                <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">is.portrait =</span> <span class="ot">FALSE</span>, <span class="co"># legend becomes horizontal</span></span>
+<span id="cb30-17"><a href="nodes.html#cb30-17"></a>                <span class="co"># size defined here should be the sqaure root of the normalized point size * scale. </span></span>
+<span id="cb30-18"><a href="nodes.html#cb30-18"></a>                <span class="co"># The square root is taken since the area is proportional to the data, not the radius.</span></span>
+<span id="cb30-19"><a href="nodes.html#cb30-19"></a>                <span class="dt">size =</span> (<span class="kw">c</span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="dv">1</span>)<span class="op">/</span><span class="dv">1</span>)<span class="op">^</span><span class="fl">0.5</span><span class="op">*</span><span class="fl">1.5</span>, </span>
+<span id="cb30-20"><a href="nodes.html#cb30-20"></a>                <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&#39;2-8&#39;</span>,<span class="st">&#39;8-12&#39;</span>,<span class="st">&#39;12-20&#39;</span>,<span class="st">&#39;20-154&#39;</span>), <span class="co">#break labels </span></span>
+<span id="cb30-21"><a href="nodes.html#cb30-21"></a>                <span class="dt">border.col =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">border.alpha =</span> <span class="fl">0.2</span>,</span>
+<span id="cb30-22"><a href="nodes.html#cb30-22"></a>                <span class="dt">title =</span> <span class="kw">c</span>(<span class="st">&quot;Degree of Connections&quot;</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>The full codes for creating the map above is in the following:
+<!-- **Scale bar** and **north arrow** can be added to the map like layers using `tm_scale_bar` and `tm_compass`, while map **title** is created as an argument in `tm_layer`. The full codes for creating the final map with scale bar, north arrow, and proper title is in the following:  --></p>
+<p><!-- # Add other cartography elements  -->
+<!-- tm_compass(position=c('right', 'bottom')) +  -->
+<!-- tm_scale_bar(position=c('right', 'bottom'), breaks=c(0, 500, 1000)) +  -->
+<!-- tm_layout( -->
+<!--   title = "Map of Mafia Members in U.S.", -->
+<!--   title.position=c('center', 'top'), -->
+<!--   inner.margins = c(0.1,0.05,0.1,0.05) --></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="nodes.html#cb31-1"></a><span class="kw">library</span>(readr)</span>
+<span id="cb31-2"><a href="nodes.html#cb31-2"></a><span class="kw">library</span>(igraph)</span>
+<span id="cb31-3"><a href="nodes.html#cb31-3"></a><span class="kw">library</span>(tmap)</span>
+<span id="cb31-4"><a href="nodes.html#cb31-4"></a><span class="kw">library</span>(sf)</span>
+<span id="cb31-5"><a href="nodes.html#cb31-5"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb31-6"><a href="nodes.html#cb31-6"></a><span class="kw">library</span>(RColorBrewer)</span>
+<span id="cb31-7"><a href="nodes.html#cb31-7"></a><span class="kw">library</span>(SSNtools)</span>
+<span id="cb31-8"><a href="nodes.html#cb31-8"></a></span>
+<span id="cb31-9"><a href="nodes.html#cb31-9"></a><span class="co">#read data</span></span>
+<span id="cb31-10"><a href="nodes.html#cb31-10"></a>MafiaSpatial =<span class="st"> </span>MafiaNodes <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-11"><a href="nodes.html#cb31-11"></a><span class="st">  </span><span class="kw">st_as_sf</span>(<span class="dt">coords=</span><span class="kw">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>), <span class="dt">crs =</span> <span class="dv">4326</span>) </span>
+<span id="cb31-12"><a href="nodes.html#cb31-12"></a></span>
+<span id="cb31-13"><a href="nodes.html#cb31-13"></a>us_states =<span class="st"> </span><span class="kw">states</span>(<span class="dt">cb=</span><span class="ot">TRUE</span>, <span class="dt">progress_bar=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb31-14"><a href="nodes.html#cb31-14"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>STUSPS <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;PR&#39;</span>,<span class="st">&#39;AS&#39;</span>, <span class="st">&#39;AK&#39;</span>, <span class="st">&#39;GU&#39;</span>,<span class="st">&#39;MP&#39;</span>,<span class="st">&#39;VI&#39;</span>, <span class="st">&#39;HI&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb31-15"><a href="nodes.html#cb31-15"></a><span class="st">  </span><span class="kw">st_transform</span>(<span class="dt">crs=</span><span class="dv">102010</span>)</span>
+<span id="cb31-16"><a href="nodes.html#cb31-16"></a></span>
+<span id="cb31-17"><a href="nodes.html#cb31-17"></a><span class="co"># Construct a network and calculate the degree for each node.</span></span>
+<span id="cb31-18"><a href="nodes.html#cb31-18"></a>g =<span class="st"> </span><span class="kw">graph_from_data_frame</span>(MafiaEdges, <span class="dt">directed =</span> <span class="ot">FALSE</span>, <span class="dt">vertices=</span>MafiaSpatial)</span>
+<span id="cb31-19"><a href="nodes.html#cb31-19"></a>MafiaSpatial<span class="op">$</span>degree =<span class="st"> </span><span class="kw">degree</span>(g)</span>
+<span id="cb31-20"><a href="nodes.html#cb31-20"></a></span>
+<span id="cb31-21"><a href="nodes.html#cb31-21"></a><span class="co"># Create a new column that assign point size to points with varying degree.</span></span>
+<span id="cb31-22"><a href="nodes.html#cb31-22"></a>MafiaSpatial =<span class="st"> </span>MafiaSpatial <span class="op">%&gt;%</span></span>
+<span id="cb31-23"><a href="nodes.html#cb31-23"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">degree_brackets =</span> <span class="kw">case_when</span>(</span>
+<span id="cb31-24"><a href="nodes.html#cb31-24"></a>    degree <span class="op">&gt;=</span><span class="st"> </span><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)[<span class="dv">1</span>] <span class="op">&amp;</span><span class="st"> </span>degree <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)[<span class="dv">2</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.1</span>,</span>
+<span id="cb31-25"><a href="nodes.html#cb31-25"></a>    degree <span class="op">&gt;=</span><span class="st"> </span><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)[<span class="dv">2</span>] <span class="op">&amp;</span><span class="st"> </span>degree <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)[<span class="dv">3</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.3</span>,</span>
+<span id="cb31-26"><a href="nodes.html#cb31-26"></a>    degree <span class="op">&gt;=</span><span class="st"> </span><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)[<span class="dv">3</span>] <span class="op">&amp;</span><span class="st"> </span>degree <span class="op">&lt;</span><span class="st"> </span><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)[<span class="dv">4</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.5</span>,</span>
+<span id="cb31-27"><a href="nodes.html#cb31-27"></a>    degree <span class="op">&gt;=</span><span class="st"> </span><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)[<span class="dv">4</span>] <span class="op">&amp;</span><span class="st"> </span>degree <span class="op">&lt;=</span><span class="st"> </span><span class="kw">quantile</span>(MafiaSpatial<span class="op">$</span>degree)[<span class="dv">5</span>] <span class="op">~</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb31-28"><a href="nodes.html#cb31-28"></a>  ))</span>
+<span id="cb31-29"><a href="nodes.html#cb31-29"></a></span>
+<span id="cb31-30"><a href="nodes.html#cb31-30"></a><span class="co"># Visualize</span></span>
+<span id="cb31-31"><a href="nodes.html#cb31-31"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb31-32"><a href="nodes.html#cb31-32"></a><span class="kw">tm_shape</span>(us_states) <span class="op">+</span></span>
+<span id="cb31-33"><a href="nodes.html#cb31-33"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>) <span class="op">+</span></span>
+<span id="cb31-34"><a href="nodes.html#cb31-34"></a><span class="st">  </span><span class="kw">tm_shape</span>(MafiaSpatial) <span class="op">+</span></span>
+<span id="cb31-35"><a href="nodes.html#cb31-35"></a><span class="st">  </span><span class="kw">tm_symbols</span>(</span>
+<span id="cb31-36"><a href="nodes.html#cb31-36"></a>    <span class="co">#arguments that define point sizes</span></span>
+<span id="cb31-37"><a href="nodes.html#cb31-37"></a>    <span class="dt">size=</span><span class="st">&quot;degree_brackets&quot;</span>, <span class="dt">size.max =</span> <span class="dv">1</span>, <span class="dt">scale =</span> <span class="fl">1.5</span>,</span>
+<span id="cb31-38"><a href="nodes.html#cb31-38"></a>    <span class="dt">legend.size.show =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb31-39"><a href="nodes.html#cb31-39"></a>    <span class="co">#arguments that define point colors</span></span>
+<span id="cb31-40"><a href="nodes.html#cb31-40"></a>    <span class="dt">col=</span><span class="st">&#39;degree&#39;</span>, <span class="dt">palette =</span> <span class="st">&#39;YlGnBu&#39;</span>, <span class="dt">style=</span><span class="st">&#39;quantile&#39;</span>, <span class="dt">n =</span> <span class="dv">4</span>,</span>
+<span id="cb31-41"><a href="nodes.html#cb31-41"></a>    <span class="dt">alpha=</span><span class="fl">0.5</span>,</span>
+<span id="cb31-42"><a href="nodes.html#cb31-42"></a>    <span class="dt">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="dt">border.alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb31-43"><a href="nodes.html#cb31-43"></a>    <span class="dt">legend.col.show =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb31-44"><a href="nodes.html#cb31-44"></a><span class="st">  </span><span class="kw">tm_add_legend</span>(<span class="dt">type=</span><span class="kw">c</span>(<span class="st">&quot;symbol&quot;</span>),</span>
+<span id="cb31-45"><a href="nodes.html#cb31-45"></a>                <span class="dt">col =</span> <span class="kw">brewer.pal</span>(<span class="dv">4</span>, <span class="st">&quot;YlGnBu&quot;</span>), <span class="co">#copy the color from R palette</span></span>
+<span id="cb31-46"><a href="nodes.html#cb31-46"></a>                <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">is.portrait =</span> <span class="ot">FALSE</span>, <span class="co"># legend becomes horizontal</span></span>
+<span id="cb31-47"><a href="nodes.html#cb31-47"></a>                <span class="co"># size defined here should be the sqaure root of the normalized point size * scale.</span></span>
+<span id="cb31-48"><a href="nodes.html#cb31-48"></a>                <span class="co"># The square root is taken since the area is proportional to the data, not the radius.</span></span>
+<span id="cb31-49"><a href="nodes.html#cb31-49"></a>                <span class="dt">size =</span> (<span class="kw">c</span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="dv">1</span>)<span class="op">/</span><span class="dv">1</span>)<span class="op">^</span><span class="fl">0.5</span><span class="op">*</span><span class="fl">1.5</span>,</span>
+<span id="cb31-50"><a href="nodes.html#cb31-50"></a>                <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&#39;2-8&#39;</span>,<span class="st">&#39;8-12&#39;</span>,<span class="st">&#39;12-20&#39;</span>,<span class="st">&#39;20-154&#39;</span>), <span class="co">#break labels</span></span>
+<span id="cb31-51"><a href="nodes.html#cb31-51"></a>                <span class="dt">border.col =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">border.alpha =</span> <span class="fl">0.2</span>,</span>
+<span id="cb31-52"><a href="nodes.html#cb31-52"></a>                <span class="dt">title =</span> <span class="kw">c</span>(<span class="st">&quot;Degree of Connections&quot;</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<!-- ## Visualize Multiple Node Attributes -->
+<!-- In the American Mafia example, we only visualize nodes with one attribute. What if we want to compare multiple attributes of a node? We use the remittance network data between countries as an example to show: -->
+<!-- * Visualize multiple node attributes by size  -->
+<!-- * Visualize multiple node attributes by size and color  -->
+<!-- The remittance network data comes from [World Bank](https://www.worldbank.org/en/topic/migrationremittancesdiasporaissues/brief/migration-remittances-data) for the year 2017.   -->
+<!-- ## Bounding Box and Inset Maps -->
+<!-- ## Interactive mode and Base Maps  -->
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="metrics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="edges.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["SSN_tutorial.pdf", "SSN_tutorial.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

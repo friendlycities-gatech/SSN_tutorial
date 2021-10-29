@@ -4,27 +4,27 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>A Minimal Book Example</title>
-  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <title>Spatial Social Networks (SSN) Visualization and Metrics with R</title>
+  <meta name="description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="A Minimal Book Example" />
+  <meta property="og:title" content="Spatial Social Networks (SSN) Visualization and Metrics with R" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta property="og:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A Minimal Book Example" />
+  <meta name="twitter:title" content="Spatial Social Networks (SSN) Visualization and Metrics with R" />
   
-  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="twitter:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
   
 
-<meta name="author" content="Yihui Xie" />
+<meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
 
 
-<meta name="date" content="2021-10-26" />
+<meta name="date" content="2021-10-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 
-<link rel="next" href="intro.html"/>
+<link rel="next" href="metrics.html"/>
 <script src="libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -133,16 +133,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">A Minimal Book Example</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prerequisites</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Introduction</a></li>
-<li class="chapter" data-level="3" data-path="literature.html"><a href="literature.html"><i class="fa fa-check"></i><b>3</b> Literature</a></li>
-<li class="chapter" data-level="4" data-path="methods.html"><a href="methods.html"><i class="fa fa-check"></i><b>4</b> Methods</a></li>
-<li class="chapter" data-level="5" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>5</b> Applications</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="metrics.html"><a href="metrics.html"><i class="fa fa-check"></i><b>2</b> Network Metrics</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="applications.html"><a href="applications.html#example-one"><i class="fa fa-check"></i><b>5.1</b> Example one</a></li>
-<li class="chapter" data-level="5.2" data-path="applications.html"><a href="applications.html#example-two"><i class="fa fa-check"></i><b>5.2</b> Example two</a></li>
+<li class="chapter" data-level="2.1" data-path="metrics.html"><a href="metrics.html#network-data-formats"><i class="fa fa-check"></i><b>2.1</b> Network Data Formats</a></li>
+<li class="chapter" data-level="2.2" data-path="metrics.html"><a href="metrics.html#network-metrics"><i class="fa fa-check"></i><b>2.2</b> Network Metrics</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="metrics.html"><a href="metrics.html#network-metrics-for-nodes"><i class="fa fa-check"></i><b>2.2.1</b> Network Metrics for Nodes</a></li>
+<li class="chapter" data-level="2.2.2" data-path="metrics.html"><a href="metrics.html#network-metrics-for-edges"><i class="fa fa-check"></i><b>2.2.2</b> Network Metrics for Edges</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>6</b> Final Words</a></li>
+<li class="chapter" data-level="2.3" data-path="metrics.html"><a href="metrics.html#igraph-visualization"><i class="fa fa-check"></i><b>2.3</b> igraph Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="nodes.html"><a href="nodes.html"><i class="fa fa-check"></i><b>3</b> Visualizing Nodes</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="nodes.html"><a href="nodes.html#convert-coordinates-to-points"><i class="fa fa-check"></i><b>3.1</b> Convert Coordinates to Points</a></li>
+<li class="chapter" data-level="3.2" data-path="nodes.html"><a href="nodes.html#visualize-nodes"><i class="fa fa-check"></i><b>3.2</b> Visualize Nodes</a></li>
+<li class="chapter" data-level="3.3" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-color"><i class="fa fa-check"></i><b>3.3</b> Visualize Nodes by Node Color</a></li>
+<li class="chapter" data-level="3.4" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-size"><i class="fa fa-check"></i><b>3.4</b> Visualize Nodes by Node Size</a></li>
+<li class="chapter" data-level="3.5" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-size-and-color"><i class="fa fa-check"></i><b>3.5</b> Visualize Nodes by Size and Color</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="edges.html"><a href="edges.html"><i class="fa fa-check"></i><b>4</b> Visualizing Edges</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="edges.html"><a href="edges.html#convert-points-into-lines"><i class="fa fa-check"></i><b>4.1</b> Convert Points into Lines</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="edges.html"><a href="edges.html#method-1-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Group by lineID and Summarize Points into Line</a></li>
+<li class="chapter" data-level="4.1.2" data-path="edges.html"><a href="edges.html#method-2-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Join Two Point Geometry into One Row and Unite into Line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="edges.html"><a href="edges.html#visualizing-edges"><i class="fa fa-check"></i><b>4.2</b> Visualizing Edges</a></li>
+<li class="chapter" data-level="4.3" data-path="edges.html"><a href="edges.html#visualizing-edges-by-line-width"><i class="fa fa-check"></i><b>4.3</b> Visualizing Edges by Line Width</a></li>
+<li class="chapter" data-level="4.4" data-path="edges.html"><a href="edges.html#visualizing-edges-by-color"><i class="fa fa-check"></i><b>4.4</b> Visualizing Edges by Color</a></li>
+<li class="chapter" data-level="4.5" data-path="edges.html"><a href="edges.html#visualizing-edges-by-width-and-color"><i class="fa fa-check"></i><b>4.5</b> Visualizing Edges by Width and Color</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="final-words.html"><a href="final-words.html"><i class="fa fa-check"></i><b>5</b> Final Words</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -156,7 +178,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Social Networks (SSN) Visualization and Metrics with R</a>
           </h1>
         </div>
 
@@ -165,19 +187,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">A Minimal Book Example</h1>
-<p class="author"><em>Yihui Xie</em></p>
-<p class="date"><em>2021-10-26</em></p>
+<h1 class="title">Spatial Social Networks (SSN) Visualization and Metrics with R</h1>
+<p class="author"><em>Xiaofan Liang, Clio Andris, Dipto Sarkar</em></p>
+<p class="date"><em>2021-10-29</em></p>
 </div>
-<div id="prerequisites" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Prerequisites</h1>
-<p>This is a <em>sample</em> book written in <strong>Markdown</strong>. You can use anything that Pandoc’s Markdown supports, e.g., a math equation <span class="math inline">\(a^2 + b^2 = c^2\)</span>.</p>
-<p>The <strong>bookdown</strong> package can be installed from CRAN or Github:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;bookdown&quot;</span>)</span>
-<span id="cb1-2"><a href="index.html#cb1-2"></a><span class="co"># or the development version</span></span>
-<span id="cb1-3"><a href="index.html#cb1-3"></a><span class="co"># devtools::install_github(&quot;rstudio/bookdown&quot;)</span></span></code></pre></div>
-<p>Remember each Rmd file contains one and only one chapter, and a chapter is defined by the first-level heading <code>#</code>.</p>
-<p>To compile this example to PDF, you need XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <a href="https://yihui.org/tinytex/" class="uri">https://yihui.org/tinytex/</a>.</p>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<p>This tutorial is dedicated to describe the basic concepts, methods, and visualizations involved to map and analyze non-planar networks (social networks &amp; relationships) in geographic space using R. A non-planar network is a network in which the nodes are geolocated, while the edges can cross over each other without creating new nodes. For example, mapping Facebook friendships and flight routes in geographic space are non-planar. A planar network is spatially embedded in a way that the edges intersect only at the endpoints, such as the road, river, and eletrical grid networks. There are already <a href="https://www.r-spatial.org/r/2019/09/26/spatial-networks.html">some tutorials</a> for mapping and analyzing planar networks, but none exists for non-planar networks.</p>
+<p>We assume our audience has basic knowledge of R programming with Tidyverse pakcage and basic GIS concepts (e.g., basic geometry types, coordinate system projection, spatial operation etc.). If not, you can use this book <a href="https://geocompr.robinlovelace.net/spatial-operations.html">Geocomputation with R</a> to get started with the basic concepts.</p>
+<p>Mapping relationship in geographic space has its own challenges, which is described thoroughly in Andris’s paper <a href="https://isiarticles.com/bundles/Article/pre/pdf/105132.pdf">Challenges for Social Flows</a>. In our visualization examples, we will try to show the best practices to map social networks in space that can counter some of these problems.</p>
+<p>All the data you need to complete the tutorial will be downloaded from <a href="https://github.com/friendlycities-gatech/Mapping_Networks_R">Friendly Cities Lab GitHub page</a>.</p>
+<p><strong>Required Packages</strong></p>
+<p>We use <code>igraph</code> package to calculate network metrics, <code>sf</code> package to create geospatial objects from dataframe, <code>tmap</code> package to create both static and interactive maps, <code>tmaptools</code> package to extract OpenStreetMap basemaps, and <code>tidyverse</code> package as the syntax to process data. You can download the packages using the following codes:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;igraph&quot;</span>) <span class="co">#for network analysis</span></span>
+<span id="cb1-2"><a href="index.html#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">&quot;sf&quot;</span>) <span class="co">#for spatial objects operation</span></span>
+<span id="cb1-3"><a href="index.html#cb1-3"></a><span class="kw">install.packages</span>(<span class="st">&quot;tmap&quot;</span>) <span class="co">#for mapping </span></span>
+<span id="cb1-4"><a href="index.html#cb1-4"></a><span class="kw">install.packages</span>(<span class="st">&quot;tmaptools&quot;</span>) <span class="co">#for using read.osm to extract basemaps</span></span>
+<span id="cb1-5"><a href="index.html#cb1-5"></a><span class="kw">install.packages</span>(<span class="st">&quot;stars&quot;</span>) <span class="co">#for using Mapbox to extract basemaps </span></span>
+<span id="cb1-6"><a href="index.html#cb1-6"></a><span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>) <span class="co">#for data processing </span></span>
+<span id="cb1-7"><a href="index.html#cb1-7"></a><span class="kw">install.packages</span>(<span class="st">&#39;tigris&#39;</span>) <span class="co">#for loading TIGRR shapefiles</span></span>
+<span id="cb1-8"><a href="index.html#cb1-8"></a></span>
+<span id="cb1-9"><a href="index.html#cb1-9"></a><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) <span class="co">#to download R package on GitHub</span></span>
+<span id="cb1-10"><a href="index.html#cb1-10"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>)</span></code></pre></div>
+<p>There are a few packages for visualizing maps. We chose <code>tmap</code> in the end for its flexibility to switch between interactive maps and static plots.</p>
+<p><code>ggpplot2</code> has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of <code>ggpplot2</code> is that it can easily add high-resolution Google Maps as basemaps using <code>ggmap</code> package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to <a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html">map planar networks</a> and <a href="https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/">produce basic elements of a map</a>. However, you need to convert spatial objects to dataframe for <code>ggpplot2</code> to draw on.</p>
+<p><code>cartography</code> has limited mapping functions, but can come in handy when you only need to draw a few simple types of maps. It has some functions that are very friendly for mapping spatial networks, such as <code>getLinkLayer</code> that takes in point shapefiles and edge tables and return edge shapefiles. You can also overlay proportional symbols and proportional links layers. However, you may not get to control the details of the maps in the most desirable ways.</p>
+<p><code>tmap</code> is equally powerful as <code>ggpplot2</code>, and has the extra function to switch between a static plot and interactive plot mode. This feature is useful when you want to zoom in and out to explore your data. The interaction component is operationalized through <code>Leaflet</code> package. To draw basemaps with <code>tmap</code>, you can either use the <code>read_osm</code> function in <code>tmaptools</code> or use package <code>stars</code> to wrap around the raster downloaded through Mapbox API. For <code>read_osm</code> to work, you will need to install <code>rJava</code> for the function to run, which may further require <a href="https://github.com/rstudio/rstudio/issues/2254">downloading Java and Java Development kit</a>. You can see Chapter X for examples to add basemaps.</p>
+<p><code>sf</code> converts data frame into spatial objects that can be used in base R plot function and <code>tmap</code>. It can also conduct various spatial operation, such as coordinate system projection, spatial joins, and topological relations. A brief introduction of how to streamline <code>sf</code> and <code>tmap</code> is given in the book <a href="https://geocompr.robinlovelace.net/spatial-operations.html">Geocomputation with R</a>.</p>
+<p><code>igraph</code> is the go-to package for network analysis, such as calculating the centrality measures of a network. These measures may become the attributes for nodes or edges in the maps. We will show the workflow from <code>igraph</code> to <code>tmap</code> with examples in Chapter X.</p>
+<p><code>tidyverse</code> provides a set of packages that share the same data representation and use the <a href="https://style.tidyverse.org/pipes.html">pip symbol</a> <code>%&gt;%</code> to connect steps of processing.</p>
+<p><code>tigris</code> download geographic boundary shapefiles from TIGER website.</p>
+<p><code>SSNtools</code> is an R package that provides metrics for analyzing and visualizing spatial social networks.</p>
 
 </div>
             </section>
@@ -186,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 
-<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="metrics.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -236,20 +276,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>
