@@ -1,4 +1,4 @@
-# Advanced Techniques 
+# Advanced SSN Metrics 
 
 ## Network Modularity 
 

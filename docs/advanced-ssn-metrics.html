@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Spatial Social Networks (SSN) Visualization and Metrics with R</title>
+  <title>Chapter 6 Advanced SSN Metrics | Spatial Social Networks (SSN) Visualization and Metrics with R</title>
   <meta name="description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
   <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Spatial Social Networks (SSN) Visualization and Metrics with R" />
+  <meta property="og:title" content="Chapter 6 Advanced SSN Metrics | Spatial Social Networks (SSN) Visualization and Metrics with R" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Spatial Social Networks (SSN) Visualization and Metrics with R" />
+  <meta name="twitter:title" content="Chapter 6 Advanced SSN Metrics | Spatial Social Networks (SSN) Visualization and Metrics with R" />
   
   <meta name="twitter:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="metrics.html"/>
+<link rel="prev" href="advanced-aesthetics.html"/>
+<link rel="next" href="edges.html"/>
 <script src="libs/header-attrs-2.1/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -200,47 +200,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Spatial Social Networks (SSN) Visualization and Metrics with R</h1>
-<p class="author"><em>Xiaofan Liang, Clio Andris, Dipto Sarkar</em></p>
-<p class="date"><em>2021-11-04</em></p>
+<div id="advanced-ssn-metrics" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Advanced SSN Metrics</h1>
+<div id="network-modularity" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Network Modularity</h2>
 </div>
-<div id="introduction" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>This tutorial is dedicated to describe the basic concepts, methods, and visualizations involved to map and analyze non-planar networks (social networks &amp; relationships) in geographic space using R. A non-planar network is a network in which the nodes are geolocated, while the edges can cross over each other without creating new nodes. For example, mapping Facebook friendships and flight routes in geographic space are non-planar. A planar network is spatially embedded in a way that the edges intersect only at the endpoints, such as the road, river, and eletrical grid networks. There are already <a href="https://www.r-spatial.org/r/2019/09/26/spatial-networks.html">some tutorials</a> for mapping and analyzing planar networks, but none exists for non-planar networks.</p>
-<p>We assume our audience has basic knowledge of R programming with Tidyverse pakcage and basic GIS concepts (e.g., basic geometry types, coordinate system projection, spatial operation etc.). If not, you can use this book <a href="https://geocompr.robinlovelace.net/spatial-operations.html">Geocomputation with R</a> to get started with the basic concepts.</p>
-<p>Mapping relationship in geographic space has its own challenges, which is described thoroughly in Andris’s paper <a href="https://isiarticles.com/bundles/Article/pre/pdf/105132.pdf">Challenges for Social Flows</a>. In our visualization examples, we will try to show the best practices to map social networks in space that can counter some of these problems.</p>
-<p>All the data you need to complete the tutorial will be downloaded from <a href="https://github.com/friendlycities-gatech/Mapping_Networks_R">Friendly Cities Lab GitHub page</a>.</p>
-<p><strong>Required Packages</strong></p>
-<p>We use <code>igraph</code> package to calculate network metrics, <code>sf</code> package to create geospatial objects from dataframe, <code>tmap</code> package to create both static and interactive maps, <code>tmaptools</code> package to extract OpenStreetMap basemaps, and <code>tidyverse</code> package as the syntax to process data. You can download the packages using the following codes:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;igraph&quot;</span>) <span class="co">#for network analysis</span></span>
-<span id="cb1-2"><a href="index.html#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">&quot;sf&quot;</span>) <span class="co">#for spatial objects operation</span></span>
-<span id="cb1-3"><a href="index.html#cb1-3"></a><span class="kw">install.packages</span>(<span class="st">&quot;tmap&quot;</span>) <span class="co">#for mapping </span></span>
-<span id="cb1-4"><a href="index.html#cb1-4"></a><span class="kw">install.packages</span>(<span class="st">&quot;tmaptools&quot;</span>) <span class="co">#for using read.osm to extract basemaps</span></span>
-<span id="cb1-5"><a href="index.html#cb1-5"></a><span class="kw">install.packages</span>(<span class="st">&quot;stars&quot;</span>) <span class="co">#for using Mapbox to extract basemaps </span></span>
-<span id="cb1-6"><a href="index.html#cb1-6"></a><span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>) <span class="co">#for data processing </span></span>
-<span id="cb1-7"><a href="index.html#cb1-7"></a><span class="kw">install.packages</span>(<span class="st">&#39;tigris&#39;</span>) <span class="co">#for loading TIGRR shapefiles</span></span>
-<span id="cb1-8"><a href="index.html#cb1-8"></a></span>
-<span id="cb1-9"><a href="index.html#cb1-9"></a><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) <span class="co">#to download R package on GitHub</span></span>
-<span id="cb1-10"><a href="index.html#cb1-10"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>)</span></code></pre></div>
-<p>There are a few packages for visualizing maps. We chose <code>tmap</code> in the end for its flexibility to switch between interactive maps and static plots.</p>
-<p><code>ggpplot2</code> has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of <code>ggpplot2</code> is that it can easily add high-resolution Google Maps as basemaps using <code>ggmap</code> package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to <a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html">map planar networks</a> and <a href="https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/">produce basic elements of a map</a>. However, you need to convert spatial objects to dataframe for <code>ggpplot2</code> to draw on.</p>
-<p><code>cartography</code> has limited mapping functions, but can come in handy when you only need to draw a few simple types of maps. It has some functions that are very friendly for mapping spatial networks, such as <code>getLinkLayer</code> that takes in point shapefiles and edge tables and return edge shapefiles. You can also overlay proportional symbols and proportional links layers. However, you may not get to control the details of the maps in the most desirable ways.</p>
-<p><code>tmap</code> is equally powerful as <code>ggpplot2</code>, and has the extra function to switch between a static plot and interactive plot mode. This feature is useful when you want to zoom in and out to explore your data. The interaction component is operationalized through <code>Leaflet</code> package. To draw basemaps with <code>tmap</code>, you can either use the <code>read_osm</code> function in <code>tmaptools</code> or use package <code>stars</code> to wrap around the raster downloaded through Mapbox API. For <code>read_osm</code> to work, you will need to install <code>rJava</code> for the function to run, which may further require <a href="https://github.com/rstudio/rstudio/issues/2254">downloading Java and Java Development kit</a>. You can see Chapter X for examples to add basemaps.</p>
-<p><code>sf</code> converts data frame into spatial objects that can be used in base R plot function and <code>tmap</code>. It can also conduct various spatial operation, such as coordinate system projection, spatial joins, and topological relations. A brief introduction of how to streamline <code>sf</code> and <code>tmap</code> is given in the book <a href="https://geocompr.robinlovelace.net/spatial-operations.html">Geocomputation with R</a>.</p>
-<p><code>igraph</code> is the go-to package for network analysis, such as calculating the centrality measures of a network. These measures may become the attributes for nodes or edges in the maps. We will show the workflow from <code>igraph</code> to <code>tmap</code> with examples in Chapter X.</p>
-<p><code>tidyverse</code> provides a set of packages that share the same data representation and use the <a href="https://style.tidyverse.org/pipes.html">pip symbol</a> <code>%&gt;%</code> to connect steps of processing.</p>
-<p><code>tigris</code> download geographic boundary shapefiles from TIGER website.</p>
-<p><code>SSNtools</code> is an R package that provides metrics for analyzing and visualizing spatial social networks.</p>
+<div id="ssn-hot-spot-detection" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> SSN Hot Spot Detection</h2>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="metrics.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="advanced-aesthetics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="edges.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
