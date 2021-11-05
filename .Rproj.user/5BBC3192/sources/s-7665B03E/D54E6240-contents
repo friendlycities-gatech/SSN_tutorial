@@ -1,0 +1,80 @@
+# Advanced Aesthetics 
+
+## Export for Editing
+
+`tmap` allows users to export `tmap object` as a static map in the format of pdf, eps, svg, wmf, png, jpg, bmp, or tiff. You can define the resolution, height, and width of the export. 
+
+```{r, message=FALSE, eval=FALSE}
+tmap_save(tm = TMAP_OBJECT, filename='PATH/FILENAME.png')
+```
+
+With these formats, you can import the tmap maps into Adobe Illustrators or Photoshop to further edit the details. You can also export the shapefiles you created in R to experiment in GIS softwares through `sf` package. 
+
+```{r, message=FALSE, eval=FALSE}
+library(sf)
+library(tidyverse)
+library(tmap)
+library(SSNtools)
+
+MafiaSpatial = MafiaNodes %>% 
+  st_as_sf(coords=c("LonX", "LatY"), crs = 4326) 
+
+st_write(MafiaSpatial, "MafiaSpatial.shp") 
+```
+
+Unfortunately, there isn't a way to export tmap object to GIS softwares without losing the aesthetics yet (e.g., scale, size, color etc., see updates on this issue  [here](https://github.com/r-tmap/tmap/issues/510)). 
+
+## Interactive Maps
+
+`tmap` allows users to view their maps in interactive modes with pre-defined Leaflet basemap styles, such as OpenStreetMap, Esri.WorldGrayCanvas, and Esri.WorldTopoMap. This is a quick and easy way to generate preliminary maps with base maps for presentations and illustrations. The interactive mode can also help you examine your data in a spatial context by adding pop up labels or hover labels.
+
+You can also publish your `tmap` interactive map through RPub under your account. As an example, copy and paste the following code in a `Rmd` file. You can create `Rmd` file from Rstudio File->New File->R Markdown. In R Markdown, `Knit` the file and the option to `Publish` should appear. You can select the RPub option and create a free account. See [this post](https://nceas.github.io/oss-lessons/publishing-maps-to-the-web-in-r/publishing-maps-to-the-web-in-r.html) for more details. 
+
+```{r warning=FALSE, message=FALSE, echo=FALSE, eval=FALSE}
+---
+output: html_document
+---
+#silence warning and messages from loading the packages. Echo=FALSE hides the codes in the html output
+```{r warning=FALSE, message=FALSE, echo=TRUE, eval=FALSE}
+
+library(tidyverse)
+library(sf)
+library(tmap)
+library(SSNtools)
+library(igraph)
+
+#Prepare data
+MafiaSpatial = MafiaNodes %>% 
+  st_as_sf(coords=c("LonX", "LatY"), crs = 4326) 
+g = graph_from_data_frame(MafiaEdges, directed = FALSE, vertices=MafiaSpatial)
+MafiaSpatial$degree = degree(g)
+
+#Create interactive tmap 
+tmap_mode('view')
+tm_shape(MafiaSpatial) +
+  tm_symbols(size="degree", scale=5, 
+             col='lightblue', border.col='#6698CC', 
+             title.size=c('Degree of Connections'), 
+             #determine the hover label
+             id = 'NiceLabel',  
+             #determine the pop up contents
+             popup.vars = c('Name: '='NiceLabel', 'Mafia Family: '='Family', 
+                            'Degree of Connections: '='degree')) 
+
+#close out the code chuck with ```
+```
+
+This is an [example publish](https://rpubs.com/xiaofanliang/831192) to RPub and what the output will look like. Click and hover your mouse in the map to explore the pop up labels and see the changing coordinates on the top left corner. You can also switch the base map style in the box below the zoom functions. 
+```{r, echo=FALSE}
+htmltools::includeHTML("interactive_tmap_to_web.html")
+```
+
+## Base Map 
+
+## Inset Map
+
+## Small Multiples
+
+## Edge Arc 
+
+## Edge Bundling

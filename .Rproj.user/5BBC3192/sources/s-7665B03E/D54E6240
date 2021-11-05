@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1635950234956.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D54E6240",
+    "lastKnownWriteTime" : 1636073323,
+    "last_content_update" : 1636073323544,
+    "path" : "~/Dropbox (GaTech)/GT_Research/Spatial_Networks_R/SSN_tutorial/05-aesthetic.Rmd",
+    "project_path" : "05-aesthetic.Rmd",
+    "properties" : {
+        "cursorPosition" : "48,36",
+        "scrollLine" : "37"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Advanced Techniques | Spatial Social Networks (SSN) Visualization and Metrics with R</title>
+  <meta name="description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Advanced Techniques | Spatial Social Networks (SSN) Visualization and Metrics with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Advanced Techniques | Spatial Social Networks (SSN) Visualization and Metrics with R" />
+  
+  <meta name="twitter:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  
+
+<meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
+
+
+<meta name="date" content="2021-11-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="advanced-aesthetics.html"/>
+<link rel="next" href="edges.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="metrics.html"><a href="metrics.html"><i class="fa fa-check"></i><b>2</b> Network Metrics</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="metrics.html"><a href="metrics.html#network-data-formats"><i class="fa fa-check"></i><b>2.1</b> Network Data Formats</a></li>
+<li class="chapter" data-level="2.2" data-path="metrics.html"><a href="metrics.html#network-metrics"><i class="fa fa-check"></i><b>2.2</b> Network Metrics</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="metrics.html"><a href="metrics.html#network-metrics-for-nodes"><i class="fa fa-check"></i><b>2.2.1</b> Network Metrics for Nodes</a></li>
+<li class="chapter" data-level="2.2.2" data-path="metrics.html"><a href="metrics.html#network-metrics-for-edges"><i class="fa fa-check"></i><b>2.2.2</b> Network Metrics for Edges</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="metrics.html"><a href="metrics.html#igraph-visualization"><i class="fa fa-check"></i><b>2.3</b> igraph Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="nodes.html"><a href="nodes.html"><i class="fa fa-check"></i><b>3</b> Visualizing Nodes</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="nodes.html"><a href="nodes.html#convert-coordinates-to-points"><i class="fa fa-check"></i><b>3.1</b> Convert Coordinates to Points</a></li>
+<li class="chapter" data-level="3.2" data-path="nodes.html"><a href="nodes.html#visualize-nodes"><i class="fa fa-check"></i><b>3.2</b> Visualize Nodes</a></li>
+<li class="chapter" data-level="3.3" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-color"><i class="fa fa-check"></i><b>3.3</b> Visualize Nodes by Node Color</a></li>
+<li class="chapter" data-level="3.4" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-size"><i class="fa fa-check"></i><b>3.4</b> Visualize Nodes by Node Size</a></li>
+<li class="chapter" data-level="3.5" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-size-and-color"><i class="fa fa-check"></i><b>3.5</b> Visualize Nodes by Size and Color</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="vizedges.html"><a href="vizedges.html"><i class="fa fa-check"></i><b>4</b> Visualizing Edges</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="vizedges.html"><a href="vizedges.html#convert-points-into-lines"><i class="fa fa-check"></i><b>4.1</b> Convert Points into Lines</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="vizedges.html"><a href="vizedges.html#method-1-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Group by lineID and Summarize Points into Line</a></li>
+<li class="chapter" data-level="4.1.2" data-path="vizedges.html"><a href="vizedges.html#method-2-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Join Two Point Geometry into One Row and Unite into Line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges"><i class="fa fa-check"></i><b>4.2</b> Visualizing Edges</a></li>
+<li class="chapter" data-level="4.3" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-line-width"><i class="fa fa-check"></i><b>4.3</b> Visualizing Edges by Line Width</a></li>
+<li class="chapter" data-level="4.4" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-color"><i class="fa fa-check"></i><b>4.4</b> Visualizing Edges by Color</a></li>
+<li class="chapter" data-level="4.5" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-width-and-color"><i class="fa fa-check"></i><b>4.5</b> Visualizing Edges by Width and Color</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html"><i class="fa fa-check"></i><b>5</b> Advanced Aesthetics</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#export-for-editing"><i class="fa fa-check"></i><b>5.1</b> Export for Editing</a></li>
+<li class="chapter" data-level="5.2" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#interactive-maps"><i class="fa fa-check"></i><b>5.2</b> Interactive Maps</a></li>
+<li class="chapter" data-level="5.3" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#base-map"><i class="fa fa-check"></i><b>5.3</b> Base Map</a></li>
+<li class="chapter" data-level="5.4" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#inset-map"><i class="fa fa-check"></i><b>5.4</b> Inset Map</a></li>
+<li class="chapter" data-level="5.5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#small-multiples"><i class="fa fa-check"></i><b>5.5</b> Small Multiples</a></li>
+<li class="chapter" data-level="5.6" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#edge-arc"><i class="fa fa-check"></i><b>5.6</b> Edge Arc</a></li>
+<li class="chapter" data-level="5.7" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#edge-bundling"><i class="fa fa-check"></i><b>5.7</b> Edge Bundling</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="advanced-techniques.html"><a href="advanced-techniques.html"><i class="fa fa-check"></i><b>6</b> Advanced Techniques</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="advanced-techniques.html"><a href="advanced-techniques.html#network-modularity"><i class="fa fa-check"></i><b>6.1</b> Network Modularity</a></li>
+<li class="chapter" data-level="6.2" data-path="advanced-techniques.html"><a href="advanced-techniques.html#ssn-hot-spot-detection"><i class="fa fa-check"></i><b>6.2</b> SSN Hot Spot Detection</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="edges.html"><a href="edges.html"><i class="fa fa-check"></i><b>7</b> Future Development</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Social Networks (SSN) Visualization and Metrics with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="advanced-techniques" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Advanced Techniques</h1>
+<div id="network-modularity" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Network Modularity</h2>
+</div>
+<div id="ssn-hot-spot-detection" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> SSN Hot Spot Detection</h2>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="advanced-aesthetics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="edges.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["SSN_tutorial.pdf", "SSN_tutorial.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

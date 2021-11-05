@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Visualizing Edges | Spatial Social Networks (SSN) Visualization and Metrics with R</title>
+  <meta name="description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Visualizing Edges | Spatial Social Networks (SSN) Visualization and Metrics with R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Visualizing Edges | Spatial Social Networks (SSN) Visualization and Metrics with R" />
+  
+  <meta name="twitter:description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
+  
+
+<meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
+
+
+<meta name="date" content="2021-11-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="nodes.html"/>
+<link rel="next" href="advanced-aesthetics.html"/>
+<script src="libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="metrics.html"><a href="metrics.html"><i class="fa fa-check"></i><b>2</b> Network Metrics</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="metrics.html"><a href="metrics.html#network-data-formats"><i class="fa fa-check"></i><b>2.1</b> Network Data Formats</a></li>
+<li class="chapter" data-level="2.2" data-path="metrics.html"><a href="metrics.html#network-metrics"><i class="fa fa-check"></i><b>2.2</b> Network Metrics</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="metrics.html"><a href="metrics.html#network-metrics-for-nodes"><i class="fa fa-check"></i><b>2.2.1</b> Network Metrics for Nodes</a></li>
+<li class="chapter" data-level="2.2.2" data-path="metrics.html"><a href="metrics.html#network-metrics-for-edges"><i class="fa fa-check"></i><b>2.2.2</b> Network Metrics for Edges</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="metrics.html"><a href="metrics.html#igraph-visualization"><i class="fa fa-check"></i><b>2.3</b> igraph Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="nodes.html"><a href="nodes.html"><i class="fa fa-check"></i><b>3</b> Visualizing Nodes</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="nodes.html"><a href="nodes.html#convert-coordinates-to-points"><i class="fa fa-check"></i><b>3.1</b> Convert Coordinates to Points</a></li>
+<li class="chapter" data-level="3.2" data-path="nodes.html"><a href="nodes.html#visualize-nodes"><i class="fa fa-check"></i><b>3.2</b> Visualize Nodes</a></li>
+<li class="chapter" data-level="3.3" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-color"><i class="fa fa-check"></i><b>3.3</b> Visualize Nodes by Node Color</a></li>
+<li class="chapter" data-level="3.4" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-size"><i class="fa fa-check"></i><b>3.4</b> Visualize Nodes by Node Size</a></li>
+<li class="chapter" data-level="3.5" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-size-and-color"><i class="fa fa-check"></i><b>3.5</b> Visualize Nodes by Size and Color</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="vizedges.html"><a href="vizedges.html"><i class="fa fa-check"></i><b>4</b> Visualizing Edges</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="vizedges.html"><a href="vizedges.html#convert-points-into-lines"><i class="fa fa-check"></i><b>4.1</b> Convert Points into Lines</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="vizedges.html"><a href="vizedges.html#method-1-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Group by lineID and Summarize Points into Line</a></li>
+<li class="chapter" data-level="4.1.2" data-path="vizedges.html"><a href="vizedges.html#method-2-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Join Two Point Geometry into One Row and Unite into Line</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges"><i class="fa fa-check"></i><b>4.2</b> Visualizing Edges</a></li>
+<li class="chapter" data-level="4.3" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-line-width"><i class="fa fa-check"></i><b>4.3</b> Visualizing Edges by Line Width</a></li>
+<li class="chapter" data-level="4.4" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-color"><i class="fa fa-check"></i><b>4.4</b> Visualizing Edges by Color</a></li>
+<li class="chapter" data-level="4.5" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-width-and-color"><i class="fa fa-check"></i><b>4.5</b> Visualizing Edges by Width and Color</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html"><i class="fa fa-check"></i><b>5</b> Advanced Aesthetics</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#export-for-editing"><i class="fa fa-check"></i><b>5.1</b> Export for Editing</a></li>
+<li class="chapter" data-level="5.2" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#interactive-maps"><i class="fa fa-check"></i><b>5.2</b> Interactive Maps</a></li>
+<li class="chapter" data-level="5.3" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#base-map"><i class="fa fa-check"></i><b>5.3</b> Base Map</a></li>
+<li class="chapter" data-level="5.4" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#inset-map"><i class="fa fa-check"></i><b>5.4</b> Inset Map</a></li>
+<li class="chapter" data-level="5.5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#small-multiples"><i class="fa fa-check"></i><b>5.5</b> Small Multiples</a></li>
+<li class="chapter" data-level="5.6" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#edge-arc"><i class="fa fa-check"></i><b>5.6</b> Edge Arc</a></li>
+<li class="chapter" data-level="5.7" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#edge-bundling"><i class="fa fa-check"></i><b>5.7</b> Edge Bundling</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="advanced-techniques.html"><a href="advanced-techniques.html"><i class="fa fa-check"></i><b>6</b> Advanced Techniques</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="advanced-techniques.html"><a href="advanced-techniques.html#network-modularity"><i class="fa fa-check"></i><b>6.1</b> Network Modularity</a></li>
+<li class="chapter" data-level="6.2" data-path="advanced-techniques.html"><a href="advanced-techniques.html#ssn-hot-spot-detection"><i class="fa fa-check"></i><b>6.2</b> SSN Hot Spot Detection</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="edges.html"><a href="edges.html"><i class="fa fa-check"></i><b>7</b> Future Development</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Social Networks (SSN) Visualization and Metrics with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="vizedges" class="section level1" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Visualizing Edges</h1>
+<p>In this chapter, we will use commute data from U.S. Census LEHD (Longitudinal Employer-Household Dynamics) Origin-Destination Employment Statistics (<a href="https://lehd.ces.census.gov/data/">LODES</a>). We will use <code>lehdr</code> package to download LODES commute data between counties in Georgia and use <code>tigris</code> to download county shapefiles and convert to centroids as points in the spatial networks.</p>
+<p>This chapter covers the following topics:</p>
+<ul>
+<li>How to convert point data into line geometry</li>
+<li>How to visualize edges with constant color and size</li>
+<li>How to visualize edges with varying edge width by attributes</li>
+<li>How to visualize edges with varying edge color by attributes</li>
+<li>How to visualize edges with varying edge size and edge color with a combined legend</li>
+</ul>
+<p>You will be able to find a copy of all the codes at the bottom of the page.</p>
+<p><img src="Figs/04-edges-1.png" width="50%" /><img src="Figs/04-edges-3.png" width="50%" /><img src="Figs/04-edges-4.png" width="50%" /><img src="Figs/04-edges-6.png" width="50%" /></p>
+<p>Before proceeding to the codes, please load the following packages:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="vizedges.html#cb33-1"></a><span class="kw">library</span>(sf)</span>
+<span id="cb33-2"><a href="vizedges.html#cb33-2"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb33-3"><a href="vizedges.html#cb33-3"></a><span class="kw">library</span>(tmap)</span>
+<span id="cb33-4"><a href="vizedges.html#cb33-4"></a><span class="kw">library</span>(tigris)</span>
+<span id="cb33-5"><a href="vizedges.html#cb33-5"></a><span class="kw">library</span>(lehdr)</span></code></pre></div>
+<div id="convert-points-into-lines" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Convert Points into Lines</h2>
+<p>To start, we use <code>lehdr</code> <a href="https://github.com/jamgreen/lehdr">package</a> to download LODES commute data between counties in Georgia and use <code>tigris</code> <a href="https://github.com/walkerke/tigris">package</a> to download county shapefiles and convert to centroids as points in the spatial networks.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="vizedges.html#cb34-1"></a><span class="co">#counties is a function in tigris package</span></span>
+<span id="cb34-2"><a href="vizedges.html#cb34-2"></a>GA_county =<span class="st"> </span><span class="kw">counties</span>(<span class="dt">state =</span> <span class="st">&#39;GA&#39;</span>, <span class="dt">cb=</span><span class="ot">TRUE</span>, <span class="dt">year=</span><span class="dv">2018</span>, <span class="dt">progress_bar=</span><span class="ot">FALSE</span>) </span>
+<span id="cb34-3"><a href="vizedges.html#cb34-3"></a></span>
+<span id="cb34-4"><a href="vizedges.html#cb34-4"></a><span class="co">#grab_lodes is a function in lehdr package</span></span>
+<span id="cb34-5"><a href="vizedges.html#cb34-5"></a>data =<span class="st"> </span><span class="kw">grab_lodes</span>(<span class="dt">state=</span><span class="st">&#39;ga&#39;</span>, <span class="dt">year=</span><span class="dv">2018</span>, <span class="dt">lodes_type =</span> <span class="st">&#39;od&#39;</span>, <span class="dt">state_part =</span> <span class="st">&#39;main&#39;</span>, <span class="dt">agg_geo =</span> <span class="st">&#39;county&#39;</span>)</span>
+<span id="cb34-6"><a href="vizedges.html#cb34-6"></a></span>
+<span id="cb34-7"><a href="vizedges.html#cb34-7"></a><span class="co">#filter top 1000 county-to-county flows </span></span>
+<span id="cb34-8"><a href="vizedges.html#cb34-8"></a>ctc_commutes =<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(w_county, h_county, S000)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb34-9"><a href="vizedges.html#cb34-9"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">flow =</span> S000) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb34-10"><a href="vizedges.html#cb34-10"></a><span class="st">  </span><span class="kw">filter</span>(h_county <span class="op">!=</span><span class="st"> </span>w_county) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb34-11"><a href="vizedges.html#cb34-11"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(flow)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb34-12"><a href="vizedges.html#cb34-12"></a><span class="st">  </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) </span>
+<span id="cb34-13"><a href="vizedges.html#cb34-13"></a></span>
+<span id="cb34-14"><a href="vizedges.html#cb34-14"></a><span class="kw">head</span>(ctc_commutes, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 3
+##   w_county h_county   flow
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;
+## 1 13121    13089    128889
+## 2 13121    13067    109627
+## 3 13121    13135     87646</code></pre>
+<p>Columns <code>h_county</code> and <code>w_county</code> contain the county FIPS (or GEOID) codes. <code>S000</code> contains the total number of job flows between the home county and the work county. We also only want to create lines between counties, so we will filter out flows that have the same <code>h_county</code> and <code>w_county</code>.</p>
+<p>There are two ways to convert points into a line geometry.</p>
+<div id="method-1-group-by-lineid-and-summarize-points-into-line" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Method 1: Group by lineID and Summarize Points into Line</h3>
+<p><strong>The first one</strong> is to group the points coordinates by line ID, summarize the flow values, and then use <code>st_cast</code> in the <code>sf</code> package to turn the grouped point coordinates into a line geometry. This method is particularly useful if you start with a file that only contain coordinates but no geometry. It is also convenient GPS trajectory data because each row is a point data associated with a line ID and you want to connect all the points that represent one trajectory.</p>
+<p>For our data, we have a flow dataframe that contains the origin and destination ID and the flow volumn, and a separate county centroid shapefile that can be joined to the flow dataframe. To leverage method 1, we have to split one OD pair into two rows so that the first row contains the point geometry of the origin and the second row contains the point geometry of the destination. To do that, we perform a little trick: we swap the position of the <code>h_county</code> and <code>w_county</code> of <code>ctc_commutes</code> and bind it to the existing <code>ctc_commutes</code> dataframe. Then when we join county shapefiles by <code>h_county</code>, we actually join the shapefiles for both the origin county and the destination county. Then we can use the group_by and summarise method to create lines. Noted that column <code>ID</code> needs to be created before and during binding the <code>ctc_commutes</code>, so that group_by knows which OD is one the same line. You also need to ensure the dataframe is an <code>sf</code> object after doing <code>left_join</code> through <code>st_as_sf()</code>.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="vizedges.html#cb36-1"></a>edges =<span class="st"> </span>ctc_commutes <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb36-2"><a href="vizedges.html#cb36-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ID =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb36-3"><a href="vizedges.html#cb36-3"></a><span class="st">  </span><span class="kw">bind_rows</span>(ctc_commutes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">w_county =</span> h_county, <span class="dt">h_county =</span> w_county) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">ID =</span> <span class="kw">row_number</span>())) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb36-4"><a href="vizedges.html#cb36-4"></a><span class="st">  </span><span class="kw">left_join</span>(GA_county <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_centroid</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(GEOID, geometry)), <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&#39;h_county&#39;</span> =<span class="st"> &#39;GEOID&#39;</span>), <span class="dt">copy=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb36-5"><a href="vizedges.html#cb36-5"></a><span class="st">  </span><span class="kw">st_as_sf</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb36-6"><a href="vizedges.html#cb36-6"></a><span class="st">  </span><span class="kw">group_by</span>(ID) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb36-7"><a href="vizedges.html#cb36-7"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">w_county=</span><span class="kw">first</span>(w_county), <span class="dt">h_county =</span> <span class="kw">first</span>(h_county), <span class="dt">flow=</span><span class="kw">mean</span>(flow)) <span class="op">%&gt;%</span></span>
+<span id="cb36-8"><a href="vizedges.html#cb36-8"></a><span class="st">  </span><span class="kw">st_cast</span>(<span class="st">&quot;LINESTRING&quot;</span>) </span>
+<span id="cb36-9"><a href="vizedges.html#cb36-9"></a></span>
+<span id="cb36-10"><a href="vizedges.html#cb36-10"></a><span class="kw">head</span>(edges, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## Simple feature collection with 3 features and 4 fields
+## Geometry type: LINESTRING
+## Dimension:     XY
+## Bounding box:  xmin: -84.5767 ymin: 33.77149 xmax: -84.02363 ymax: 33.96167
+## CRS:           4269
+## # A tibble: 3 × 5
+##      ID w_county h_county   flow                                geometry
+##   &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;                        &lt;LINESTRING [°]&gt;
+## 1     1 13121    13089    128889 (-84.4676 33.78992, -84.22637 33.77149)
+## 2     2 13121    13067    109627  (-84.5767 33.94143, -84.4676 33.78992)
+## 3     3 13121    13135     87646 (-84.4676 33.78992, -84.02363 33.96167)</code></pre>
+</div>
+<div id="method-2-join-two-point-geometry-into-one-row-and-unite-into-line" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Method 2: Join Two Point Geometry into One Row and Unite into Line</h3>
+<p><strong>The second way</strong> to convert points into lines is to join two point geometry in one row and cast them into a line. This method is particularly useful if you already have separate geometry files for origin and destination nodes, which is the case for our data.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="vizedges.html#cb38-1"></a>edges =<span class="st"> </span>ctc_commutes <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb38-2"><a href="vizedges.html#cb38-2"></a><span class="st">  </span><span class="kw">left_join</span>(GA_county <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_centroid</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(GEOID, geometry)), <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&#39;h_county&#39;</span> =<span class="st"> &#39;GEOID&#39;</span>), <span class="dt">copy=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb38-3"><a href="vizedges.html#cb38-3"></a><span class="st">  </span><span class="kw">left_join</span>(GA_county <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_centroid</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(GEOID, geometry)), <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&#39;w_county&#39;</span> =<span class="st"> &#39;GEOID&#39;</span>), <span class="dt">copy=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb38-4"><a href="vizedges.html#cb38-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">geometry =</span> <span class="kw">st_cast</span>(<span class="kw">st_union</span>(geometry.x, geometry.y), <span class="st">&quot;LINESTRING&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb38-5"><a href="vizedges.html#cb38-5"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(geometry.x, geometry.y)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_as_sf</span>()</span>
+<span id="cb38-6"><a href="vizedges.html#cb38-6"></a></span>
+<span id="cb38-7"><a href="vizedges.html#cb38-7"></a><span class="kw">head</span>(edges, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## Simple feature collection with 3 features and 3 fields
+## Geometry type: LINESTRING
+## Dimension:     XY
+## Bounding box:  xmin: -84.5767 ymin: 33.77149 xmax: -84.02363 ymax: 33.96167
+## CRS:           4269
+## # A tibble: 3 × 4
+##   w_county h_county   flow                                geometry
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;                        &lt;LINESTRING [°]&gt;
+## 1 13121    13089    128889 (-84.4676 33.78992, -84.22637 33.77149)
+## 2 13121    13067    109627  (-84.5767 33.94143, -84.4676 33.78992)
+## 3 13121    13135     87646 (-84.4676 33.78992, -84.02363 33.96167)</code></pre>
+</div>
+</div>
+<div id="visualizing-edges" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Visualizing Edges</h2>
+<p>The simplest edge visualization code snippet using <code>tmap</code> is the following:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="vizedges.html#cb40-1"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb40-2"><a href="vizedges.html#cb40-2"></a><span class="co">#Visualize edges </span></span>
+<span id="cb40-3"><a href="vizedges.html#cb40-3"></a><span class="kw">tm_shape</span>(GA_county) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb40-4"><a href="vizedges.html#cb40-4"></a><span class="st">  </span><span class="kw">tm_polygons</span>() <span class="op">+</span></span>
+<span id="cb40-5"><a href="vizedges.html#cb40-5"></a><span class="st">  </span><span class="kw">tm_shape</span>(edges) <span class="op">+</span></span>
+<span id="cb40-6"><a href="vizedges.html#cb40-6"></a><span class="st">  </span><span class="kw">tm_lines</span>()</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+</div>
+<div id="visualizing-edges-by-line-width" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Visualizing Edges by Line Width</h2>
+<p>To visualize edges by line width, we added a column variable <code>flow</code> for line width in <code>tm_lines()</code>.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="vizedges.html#cb41-1"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb41-2"><a href="vizedges.html#cb41-2"></a><span class="kw">tm_shape</span>(GA_county) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb41-3"><a href="vizedges.html#cb41-3"></a><span class="st">  </span><span class="co">#change polygon background to be transparent</span></span>
+<span id="cb41-4"><a href="vizedges.html#cb41-4"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>, <span class="dt">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="op">+</span></span>
+<span id="cb41-5"><a href="vizedges.html#cb41-5"></a><span class="st">  </span><span class="kw">tm_shape</span>(edges) <span class="op">+</span></span>
+<span id="cb41-6"><a href="vizedges.html#cb41-6"></a><span class="st">  </span><span class="co">#define line width and properties associated with lines </span></span>
+<span id="cb41-7"><a href="vizedges.html#cb41-7"></a><span class="st">  </span><span class="kw">tm_lines</span>(<span class="dt">lwd=</span><span class="st">&#39;flow&#39;</span>, <span class="dt">scale=</span><span class="dv">10</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">legend.lwd.is.portrait =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb41-8"><a href="vizedges.html#cb41-8"></a>           <span class="dt">title.lwd =</span> <span class="kw">c</span>(<span class="st">&#39;Commutes Across Counties&#39;</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb41-9"><a href="vizedges.html#cb41-9"></a><span class="st">  </span><span class="kw">tm_layout</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
+<span id="cb41-10"><a href="vizedges.html#cb41-10"></a>            <span class="dt">inner.margins =</span> <span class="kw">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.07</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>The default line width setting is proportional to the column variable (in this case, flow values). As you can see, this default is not a good visualization for the map because edges with small amount of flows are too thin to be seen. In reality, the degree weight distribution of non-planar networks is often skewed, with a few edges have very high flow values and most of the rest have low values. Therefore, we need to adjust the breaks to better visualize the spatial network.</p>
+<p><strong>To adjust the line width breaks</strong>, we need to create a column to store relative edge width, which is similar to the node size visualization in chapter 2. We chose a skewed quantile breaks for line width.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="vizedges.html#cb42-1"></a><span class="co"># We design the breaks for edge width through a skewed quantile distribution</span></span>
+<span id="cb42-2"><a href="vizedges.html#cb42-2"></a>brks =<span class="st"> </span><span class="kw">round</span>(<span class="kw">quantile</span>(edges<span class="op">$</span>flow, <span class="dt">probs=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>)</span>
+<span id="cb42-3"><a href="vizedges.html#cb42-3"></a></span>
+<span id="cb42-4"><a href="vizedges.html#cb42-4"></a><span class="co"># We create a column called flow_breaks that stores relative line width </span></span>
+<span id="cb42-5"><a href="vizedges.html#cb42-5"></a>edges =<span class="st"> </span>edges <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
+<span id="cb42-6"><a href="vizedges.html#cb42-6"></a>  <span class="dt">flow_width =</span> <span class="kw">case_when</span>(</span>
+<span id="cb42-7"><a href="vizedges.html#cb42-7"></a>    flow <span class="op">&gt;=</span><span class="st"> </span>brks[<span class="dv">1</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">2</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.1</span>,</span>
+<span id="cb42-8"><a href="vizedges.html#cb42-8"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">2</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">3</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.3</span>,</span>
+<span id="cb42-9"><a href="vizedges.html#cb42-9"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">3</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">4</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.5</span>,</span>
+<span id="cb42-10"><a href="vizedges.html#cb42-10"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">4</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">5</span>] <span class="op">~</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb42-11"><a href="vizedges.html#cb42-11"></a>  )</span>
+<span id="cb42-12"><a href="vizedges.html#cb42-12"></a>)</span>
+<span id="cb42-13"><a href="vizedges.html#cb42-13"></a></span>
+<span id="cb42-14"><a href="vizedges.html#cb42-14"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb42-15"><a href="vizedges.html#cb42-15"></a><span class="kw">tm_shape</span>(GA_county) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-16"><a href="vizedges.html#cb42-16"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>, <span class="dt">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-17"><a href="vizedges.html#cb42-17"></a><span class="st">  </span><span class="co"># commute edges are arranged by flow values from high to low so that </span></span>
+<span id="cb42-18"><a href="vizedges.html#cb42-18"></a><span class="st">  </span><span class="co"># high volumn flows will be plotted on the top of the low value ones.  </span></span>
+<span id="cb42-19"><a href="vizedges.html#cb42-19"></a><span class="st">  </span><span class="kw">tm_shape</span>(<span class="kw">arrange</span>(edges, flow)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-20"><a href="vizedges.html#cb42-20"></a><span class="st">  </span><span class="kw">tm_lines</span>(<span class="dt">lwd=</span><span class="st">&quot;flow_width&quot;</span>, <span class="dt">scale=</span><span class="dv">2</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>,</span>
+<span id="cb42-21"><a href="vizedges.html#cb42-21"></a>           <span class="dt">lwd.legend =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="op">*</span><span class="dv">2</span>, </span>
+<span id="cb42-22"><a href="vizedges.html#cb42-22"></a>           <span class="dt">legend.lwd.is.portrait =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb42-23"><a href="vizedges.html#cb42-23"></a>           <span class="dt">lwd.legend.labels=</span><span class="kw">c</span>(<span class="st">&#39;300-600&#39;</span>,<span class="st">&#39;601-3400&#39;</span>,</span>
+<span id="cb42-24"><a href="vizedges.html#cb42-24"></a>                               <span class="st">&#39;3401-30,000&#39;</span>,<span class="st">&#39;30,001-130,000&#39;</span>),</span>
+<span id="cb42-25"><a href="vizedges.html#cb42-25"></a>           <span class="dt">title.lwd =</span> <span class="kw">c</span>(<span class="st">&#39;Commutes Across Counties&#39;</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb42-26"><a href="vizedges.html#cb42-26"></a><span class="st">  </span><span class="kw">tm_layout</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
+<span id="cb42-27"><a href="vizedges.html#cb42-27"></a>            <span class="dt">inner.margins =</span> <span class="kw">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.05</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+</div>
+<div id="visualizing-edges-by-color" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Visualizing Edges by Color</h2>
+<p>To visualize edges by color, we assign a variable column <code>flow</code> to argument <code>col</code> in <code>tm_lines</code>. Since we already established that the edges are better viewed through a skewed flow breaks, we manually assign break values for color. To do that, we give argument <code>breaks</code> a vector of fixed numbers, and set argument <code>style</code> to <code>fixed</code>. The following map has constant line width across different colors.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="vizedges.html#cb43-1"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb43-2"><a href="vizedges.html#cb43-2"></a><span class="kw">tm_shape</span>(GA_county) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb43-3"><a href="vizedges.html#cb43-3"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>, <span class="dt">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb43-4"><a href="vizedges.html#cb43-4"></a><span class="st">  </span><span class="kw">tm_shape</span>(<span class="kw">arrange</span>(edges, flow)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb43-5"><a href="vizedges.html#cb43-5"></a><span class="st">  </span><span class="co"># all the parameters for adjusting colors</span></span>
+<span id="cb43-6"><a href="vizedges.html#cb43-6"></a><span class="st">  </span><span class="kw">tm_lines</span>(<span class="dt">col=</span><span class="st">&quot;flow&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.5</span>, <span class="dt">scale =</span> <span class="dv">1</span>,</span>
+<span id="cb43-7"><a href="vizedges.html#cb43-7"></a>           <span class="dt">breaks =</span> <span class="kw">round</span>(<span class="kw">quantile</span>(edges<span class="op">$</span>flow, <span class="dt">probs=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
+<span id="cb43-8"><a href="vizedges.html#cb43-8"></a>           <span class="dt">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="dt">n =</span> <span class="dv">4</span>, </span>
+<span id="cb43-9"><a href="vizedges.html#cb43-9"></a>           <span class="dt">title.col =</span> <span class="kw">c</span>(<span class="st">&#39;Commutes Across Counties&#39;</span>),</span>
+<span id="cb43-10"><a href="vizedges.html#cb43-10"></a>           <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&#39;300-600&#39;</span>,<span class="st">&#39;601-3400&#39;</span>,<span class="st">&#39;3401-30,000&#39;</span>,<span class="st">&#39;30,001-130,000&#39;</span>),</span>
+<span id="cb43-11"><a href="vizedges.html#cb43-11"></a>           <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb43-12"><a href="vizedges.html#cb43-12"></a><span class="st">  </span><span class="kw">tm_layout</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
+<span id="cb43-13"><a href="vizedges.html#cb43-13"></a>            <span class="dt">inner.margins =</span> <span class="kw">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.05</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+</div>
+<div id="visualizing-edges-by-width-and-color" class="section level2" number="4.5">
+<h2><span class="header-section-number">4.5</span> Visualizing Edges by Width and Color</h2>
+<p>Similar to node visualization, to visualize edges with both line width and color, we need to add arguments for both and create a combined legend through <code>tm_add_legend</code>. Unfortunately, the package does not have an automatic way to combine color and line width legend together, so we have to define the values manually.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="vizedges.html#cb44-1"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb44-2"><a href="vizedges.html#cb44-2"></a></span>
+<span id="cb44-3"><a href="vizedges.html#cb44-3"></a>map =<span class="st"> </span><span class="kw">tm_shape</span>(GA_county) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-4"><a href="vizedges.html#cb44-4"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>, <span class="dt">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-5"><a href="vizedges.html#cb44-5"></a><span class="st">  </span><span class="kw">tm_shape</span>(<span class="kw">arrange</span>(edges, flow)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-6"><a href="vizedges.html#cb44-6"></a><span class="st">  </span><span class="kw">tm_lines</span>(</span>
+<span id="cb44-7"><a href="vizedges.html#cb44-7"></a>    <span class="co">#arguments that define the styles for color </span></span>
+<span id="cb44-8"><a href="vizedges.html#cb44-8"></a>    <span class="dt">col=</span><span class="st">&quot;flow&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>, </span>
+<span id="cb44-9"><a href="vizedges.html#cb44-9"></a>    <span class="dt">breaks =</span> <span class="kw">round</span>(<span class="kw">quantile</span>(edges<span class="op">$</span>flow, <span class="dt">probs=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
+<span id="cb44-10"><a href="vizedges.html#cb44-10"></a>    <span class="dt">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="dt">n =</span> <span class="dv">4</span>, </span>
+<span id="cb44-11"><a href="vizedges.html#cb44-11"></a>    <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>),</span>
+<span id="cb44-12"><a href="vizedges.html#cb44-12"></a>    <span class="dt">legend.col.show =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb44-13"><a href="vizedges.html#cb44-13"></a>    <span class="co">#arguments that define the styles for line width </span></span>
+<span id="cb44-14"><a href="vizedges.html#cb44-14"></a>    <span class="dt">lwd=</span><span class="st">&quot;flow_width&quot;</span>, <span class="dt">scale=</span><span class="dv">2</span>,</span>
+<span id="cb44-15"><a href="vizedges.html#cb44-15"></a>    <span class="dt">legend.lwd.show =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-16"><a href="vizedges.html#cb44-16"></a><span class="st">  </span><span class="co">#add manual legends to combine color and line width schema</span></span>
+<span id="cb44-17"><a href="vizedges.html#cb44-17"></a><span class="st">  </span><span class="kw">tm_add_legend</span>(</span>
+<span id="cb44-18"><a href="vizedges.html#cb44-18"></a>    <span class="dt">type=</span><span class="kw">c</span>(<span class="st">&#39;line&#39;</span>), </span>
+<span id="cb44-19"><a href="vizedges.html#cb44-19"></a>    <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>), </span>
+<span id="cb44-20"><a href="vizedges.html#cb44-20"></a>    <span class="dt">lwd=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>), </span>
+<span id="cb44-21"><a href="vizedges.html#cb44-21"></a>    <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&#39;300-600&#39;</span>,<span class="st">&#39;601-3400&#39;</span>,<span class="st">&#39;3401-30,000&#39;</span>,<span class="st">&#39;30,001-130,000&#39;</span>),</span>
+<span id="cb44-22"><a href="vizedges.html#cb44-22"></a>    <span class="dt">title=</span><span class="st">&#39;Commutes Across Counties&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb44-23"><a href="vizedges.html#cb44-23"></a><span class="st">  </span><span class="kw">tm_layout</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
+<span id="cb44-24"><a href="vizedges.html#cb44-24"></a>            <span class="dt">inner.margins =</span> <span class="kw">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.05</span>))</span>
+<span id="cb44-25"><a href="vizedges.html#cb44-25"></a>map</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p>Perfect! Now we can see clearly that commutes across counties are most intensive around the Atlanta metropolitan area and less so in the south of the state. We can further perfect the map by <strong>adding information about within county flows and visualize the numbers as node sizes</strong>. Here we show a new technique, which is to save the map we already plotted as a variable, and add new components to it. In this way, we do not have to regenerate the portion of the map that we already produced and speed up the mapping and testing time dramatically!</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="vizedges.html#cb45-1"></a><span class="co"># creating nodes as point geometry that represent within county flows </span></span>
+<span id="cb45-2"><a href="vizedges.html#cb45-2"></a>nodes =<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb45-3"><a href="vizedges.html#cb45-3"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(w_county, h_county, S000)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb45-4"><a href="vizedges.html#cb45-4"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">flow =</span> S000) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb45-5"><a href="vizedges.html#cb45-5"></a><span class="st">  </span><span class="kw">filter</span>(h_county <span class="op">==</span><span class="st"> </span>w_county) <span class="op">%&gt;%</span></span>
+<span id="cb45-6"><a href="vizedges.html#cb45-6"></a><span class="st">  </span><span class="kw">left_join</span>(GA_county <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_centroid</span>(), <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&#39;h_county&#39;</span> =<span class="st"> &#39;GEOID&#39;</span>), <span class="dt">copy=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb45-7"><a href="vizedges.html#cb45-7"></a><span class="st">  </span><span class="kw">st_as_sf</span>()</span>
+<span id="cb45-8"><a href="vizedges.html#cb45-8"></a></span>
+<span id="cb45-9"><a href="vizedges.html#cb45-9"></a><span class="co"># here we use quantile breaks for node size </span></span>
+<span id="cb45-10"><a href="vizedges.html#cb45-10"></a>brks =<span class="st"> </span><span class="kw">quantile</span>(nodes<span class="op">$</span>flow, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.25</span>))</span>
+<span id="cb45-11"><a href="vizedges.html#cb45-11"></a>nodes =<span class="st"> </span>nodes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
+<span id="cb45-12"><a href="vizedges.html#cb45-12"></a>  <span class="dt">size =</span> <span class="kw">case_when</span>(</span>
+<span id="cb45-13"><a href="vizedges.html#cb45-13"></a>    flow <span class="op">&gt;=</span><span class="st"> </span>brks[<span class="dv">1</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">2</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.1</span>,</span>
+<span id="cb45-14"><a href="vizedges.html#cb45-14"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">2</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">3</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.3</span>,</span>
+<span id="cb45-15"><a href="vizedges.html#cb45-15"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">3</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">4</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.5</span>,</span>
+<span id="cb45-16"><a href="vizedges.html#cb45-16"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">4</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">5</span>] <span class="op">~</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb45-17"><a href="vizedges.html#cb45-17"></a>  )</span>
+<span id="cb45-18"><a href="vizedges.html#cb45-18"></a>)</span>
+<span id="cb45-19"><a href="vizedges.html#cb45-19"></a></span>
+<span id="cb45-20"><a href="vizedges.html#cb45-20"></a><span class="co">#visualize nodes on top of the map from last section</span></span>
+<span id="cb45-21"><a href="vizedges.html#cb45-21"></a>map =<span class="st"> </span>map <span class="op">+</span><span class="st"> </span></span>
+<span id="cb45-22"><a href="vizedges.html#cb45-22"></a><span class="st">  </span><span class="kw">tm_shape</span>(nodes) <span class="op">+</span></span>
+<span id="cb45-23"><a href="vizedges.html#cb45-23"></a><span class="st">  </span><span class="kw">tm_symbols</span>(</span>
+<span id="cb45-24"><a href="vizedges.html#cb45-24"></a>    <span class="dt">size=</span><span class="st">&quot;size&quot;</span>, <span class="dt">scale=</span><span class="fl">0.8</span>, </span>
+<span id="cb45-25"><a href="vizedges.html#cb45-25"></a>    <span class="dt">alpha=</span><span class="dv">0</span>, <span class="dt">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="dt">border.alpha=</span><span class="fl">0.5</span>, </span>
+<span id="cb45-26"><a href="vizedges.html#cb45-26"></a>    <span class="co"># values in sizes.legend = relative size defined in &#39;size&#39; column * scale </span></span>
+<span id="cb45-27"><a href="vizedges.html#cb45-27"></a>    <span class="dt">sizes.legend =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="op">*</span><span class="fl">0.8</span>,</span>
+<span id="cb45-28"><a href="vizedges.html#cb45-28"></a>    <span class="co"># labels have rounded the break values</span></span>
+<span id="cb45-29"><a href="vizedges.html#cb45-29"></a>    <span class="dt">sizes.legend.labels=</span><span class="kw">c</span>(<span class="st">&#39;70-1000&#39;</span>,<span class="st">&#39;1001-2500&#39;</span>,<span class="st">&#39;2501-7000&#39;</span>,<span class="st">&#39;7001-250,000&#39;</span>),</span>
+<span id="cb45-30"><a href="vizedges.html#cb45-30"></a>    <span class="dt">title.size=</span><span class="kw">c</span>(<span class="st">&#39;Commutes Within Counties&#39;</span>),</span>
+<span id="cb45-31"><a href="vizedges.html#cb45-31"></a>    <span class="dt">legend.size.is.portrait =</span> <span class="ot">TRUE</span>) <span class="op">+</span></span>
+<span id="cb45-32"><a href="vizedges.html#cb45-32"></a><span class="st">  </span><span class="kw">tm_layout</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
+<span id="cb45-33"><a href="vizedges.html#cb45-33"></a>            <span class="dt">inner.margins =</span> <span class="kw">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.25</span>)) <span class="co">#added margins to accomodate legends</span></span>
+<span id="cb45-34"><a href="vizedges.html#cb45-34"></a></span>
+<span id="cb45-35"><a href="vizedges.html#cb45-35"></a>map</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p>To export the tmap object into a local folder, you can add:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="vizedges.html#cb46-1"></a><span class="kw">tmap_save</span>(map, <span class="dt">filename=</span><span class="st">&#39;YOUR_LOCAL_FOLDER_PATH/map.png&#39;</span>)</span></code></pre></div>
+<p>Here is the full code to replicate the map above</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="vizedges.html#cb47-1"></a><span class="kw">library</span>(sf)</span>
+<span id="cb47-2"><a href="vizedges.html#cb47-2"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb47-3"><a href="vizedges.html#cb47-3"></a><span class="kw">library</span>(tmap)</span>
+<span id="cb47-4"><a href="vizedges.html#cb47-4"></a><span class="kw">library</span>(tigris)</span>
+<span id="cb47-5"><a href="vizedges.html#cb47-5"></a><span class="kw">library</span>(lehdr)</span>
+<span id="cb47-6"><a href="vizedges.html#cb47-6"></a></span>
+<span id="cb47-7"><a href="vizedges.html#cb47-7"></a><span class="co">#counties is a function in tigris package</span></span>
+<span id="cb47-8"><a href="vizedges.html#cb47-8"></a>GA_county =<span class="st"> </span><span class="kw">counties</span>(<span class="dt">state =</span> <span class="st">&#39;GA&#39;</span>, <span class="dt">cb=</span><span class="ot">TRUE</span>, <span class="dt">year=</span><span class="dv">2018</span>, <span class="dt">progress_bar=</span><span class="ot">FALSE</span>) </span>
+<span id="cb47-9"><a href="vizedges.html#cb47-9"></a></span>
+<span id="cb47-10"><a href="vizedges.html#cb47-10"></a><span class="co">#grab_lodes is a function in lehdr package</span></span>
+<span id="cb47-11"><a href="vizedges.html#cb47-11"></a>data =<span class="st"> </span><span class="kw">grab_lodes</span>(<span class="dt">state=</span><span class="st">&#39;ga&#39;</span>, <span class="dt">year=</span><span class="dv">2018</span>, <span class="dt">lodes_type =</span> <span class="st">&#39;od&#39;</span>, <span class="dt">state_part =</span> <span class="st">&#39;main&#39;</span>, <span class="dt">agg_geo =</span> <span class="st">&#39;county&#39;</span>)</span>
+<span id="cb47-12"><a href="vizedges.html#cb47-12"></a></span>
+<span id="cb47-13"><a href="vizedges.html#cb47-13"></a><span class="co">#filter top 1000 county-to-county flows </span></span>
+<span id="cb47-14"><a href="vizedges.html#cb47-14"></a>ctc_commutes =<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(w_county, h_county, S000)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-15"><a href="vizedges.html#cb47-15"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">flow =</span> S000) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-16"><a href="vizedges.html#cb47-16"></a><span class="st">  </span><span class="kw">filter</span>(h_county <span class="op">!=</span><span class="st"> </span>w_county) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-17"><a href="vizedges.html#cb47-17"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(flow)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-18"><a href="vizedges.html#cb47-18"></a><span class="st">  </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) </span>
+<span id="cb47-19"><a href="vizedges.html#cb47-19"></a></span>
+<span id="cb47-20"><a href="vizedges.html#cb47-20"></a><span class="co">#--- Create lines from OD dataframe ---# </span></span>
+<span id="cb47-21"><a href="vizedges.html#cb47-21"></a>edges =<span class="st"> </span>ctc_commutes <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-22"><a href="vizedges.html#cb47-22"></a><span class="st">  </span><span class="kw">left_join</span>(GA_county <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_centroid</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(GEOID, geometry)), <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&#39;h_county&#39;</span> =<span class="st"> &#39;GEOID&#39;</span>), <span class="dt">copy=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-23"><a href="vizedges.html#cb47-23"></a><span class="st">  </span><span class="kw">left_join</span>(GA_county <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_centroid</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(GEOID, geometry)), <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&#39;w_county&#39;</span> =<span class="st"> &#39;GEOID&#39;</span>), <span class="dt">copy=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-24"><a href="vizedges.html#cb47-24"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">geometry =</span> <span class="kw">st_cast</span>(<span class="kw">st_union</span>(geometry.x, geometry.y), <span class="st">&quot;LINESTRING&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-25"><a href="vizedges.html#cb47-25"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(geometry.x, geometry.y)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_as_sf</span>()</span>
+<span id="cb47-26"><a href="vizedges.html#cb47-26"></a></span>
+<span id="cb47-27"><a href="vizedges.html#cb47-27"></a><span class="co"># --- Convert flows within county into point geometry --- #</span></span>
+<span id="cb47-28"><a href="vizedges.html#cb47-28"></a>nodes =<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-29"><a href="vizedges.html#cb47-29"></a><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(w_county, h_county, S000)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-30"><a href="vizedges.html#cb47-30"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">flow =</span> S000) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-31"><a href="vizedges.html#cb47-31"></a><span class="st">  </span><span class="kw">filter</span>(h_county <span class="op">==</span><span class="st"> </span>w_county) <span class="op">%&gt;%</span></span>
+<span id="cb47-32"><a href="vizedges.html#cb47-32"></a><span class="st">  </span><span class="kw">left_join</span>(GA_county <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">st_centroid</span>(), <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&#39;h_county&#39;</span> =<span class="st"> &#39;GEOID&#39;</span>), <span class="dt">copy=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb47-33"><a href="vizedges.html#cb47-33"></a><span class="st">  </span><span class="kw">st_as_sf</span>()</span>
+<span id="cb47-34"><a href="vizedges.html#cb47-34"></a></span>
+<span id="cb47-35"><a href="vizedges.html#cb47-35"></a><span class="co"># --- Create Breaks for edge width --- # </span></span>
+<span id="cb47-36"><a href="vizedges.html#cb47-36"></a>brks =<span class="st"> </span><span class="kw">round</span>(<span class="kw">quantile</span>(edges<span class="op">$</span>flow, <span class="dt">probs=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>)</span>
+<span id="cb47-37"><a href="vizedges.html#cb47-37"></a></span>
+<span id="cb47-38"><a href="vizedges.html#cb47-38"></a>edges =<span class="st"> </span>edges <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
+<span id="cb47-39"><a href="vizedges.html#cb47-39"></a>  <span class="dt">flow_width =</span> <span class="kw">case_when</span>(</span>
+<span id="cb47-40"><a href="vizedges.html#cb47-40"></a>    flow <span class="op">&gt;=</span><span class="st"> </span>brks[<span class="dv">1</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">2</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.1</span>,</span>
+<span id="cb47-41"><a href="vizedges.html#cb47-41"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">2</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">3</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.3</span>,</span>
+<span id="cb47-42"><a href="vizedges.html#cb47-42"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">3</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">4</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.5</span>,</span>
+<span id="cb47-43"><a href="vizedges.html#cb47-43"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks[<span class="dv">4</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks[<span class="dv">5</span>] <span class="op">~</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb47-44"><a href="vizedges.html#cb47-44"></a>  )</span>
+<span id="cb47-45"><a href="vizedges.html#cb47-45"></a>)</span>
+<span id="cb47-46"><a href="vizedges.html#cb47-46"></a></span>
+<span id="cb47-47"><a href="vizedges.html#cb47-47"></a><span class="co"># --- Create Breaks for node size --- # </span></span>
+<span id="cb47-48"><a href="vizedges.html#cb47-48"></a>brks2 =<span class="st"> </span><span class="kw">quantile</span>(nodes<span class="op">$</span>flow, <span class="dt">probs=</span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.25</span>))</span>
+<span id="cb47-49"><a href="vizedges.html#cb47-49"></a>nodes =<span class="st"> </span>nodes <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
+<span id="cb47-50"><a href="vizedges.html#cb47-50"></a>  <span class="dt">size =</span> <span class="kw">case_when</span>(</span>
+<span id="cb47-51"><a href="vizedges.html#cb47-51"></a>    flow <span class="op">&gt;=</span><span class="st"> </span>brks2[<span class="dv">1</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks2[<span class="dv">2</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.1</span>,</span>
+<span id="cb47-52"><a href="vizedges.html#cb47-52"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks2[<span class="dv">2</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks2[<span class="dv">3</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.3</span>,</span>
+<span id="cb47-53"><a href="vizedges.html#cb47-53"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks2[<span class="dv">3</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks2[<span class="dv">4</span>] <span class="op">~</span><span class="st"> </span><span class="fl">0.5</span>,</span>
+<span id="cb47-54"><a href="vizedges.html#cb47-54"></a>    flow <span class="op">&gt;</span><span class="st"> </span>brks2[<span class="dv">4</span>] <span class="op">&amp;</span><span class="st"> </span>flow <span class="op">&lt;=</span><span class="st"> </span>brks2[<span class="dv">5</span>] <span class="op">~</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb47-55"><a href="vizedges.html#cb47-55"></a>  )</span>
+<span id="cb47-56"><a href="vizedges.html#cb47-56"></a>)</span>
+<span id="cb47-57"><a href="vizedges.html#cb47-57"></a></span>
+<span id="cb47-58"><a href="vizedges.html#cb47-58"></a><span class="co"># --- Visualize the map ---- # </span></span>
+<span id="cb47-59"><a href="vizedges.html#cb47-59"></a><span class="kw">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb47-60"><a href="vizedges.html#cb47-60"></a></span>
+<span id="cb47-61"><a href="vizedges.html#cb47-61"></a>map =<span class="st"> </span><span class="kw">tm_shape</span>(GA_county) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb47-62"><a href="vizedges.html#cb47-62"></a><span class="st">  </span><span class="kw">tm_polygons</span>(<span class="dt">alpha=</span><span class="dv">0</span>, <span class="dt">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb47-63"><a href="vizedges.html#cb47-63"></a><span class="st">  </span><span class="kw">tm_shape</span>(<span class="kw">arrange</span>(edges, flow)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb47-64"><a href="vizedges.html#cb47-64"></a><span class="st">  </span><span class="kw">tm_lines</span>(</span>
+<span id="cb47-65"><a href="vizedges.html#cb47-65"></a>    <span class="co">#arguments that define the styles for color </span></span>
+<span id="cb47-66"><a href="vizedges.html#cb47-66"></a>    <span class="dt">col=</span><span class="st">&quot;flow&quot;</span>, <span class="dt">alpha=</span><span class="fl">0.8</span>, </span>
+<span id="cb47-67"><a href="vizedges.html#cb47-67"></a>    <span class="dt">breaks =</span> <span class="kw">round</span>(<span class="kw">quantile</span>(edges<span class="op">$</span>flow, <span class="dt">probs=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
+<span id="cb47-68"><a href="vizedges.html#cb47-68"></a>    <span class="dt">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="dt">n =</span> <span class="dv">4</span>, </span>
+<span id="cb47-69"><a href="vizedges.html#cb47-69"></a>    <span class="dt">palette=</span><span class="kw">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>),</span>
+<span id="cb47-70"><a href="vizedges.html#cb47-70"></a>    <span class="dt">legend.col.show =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb47-71"><a href="vizedges.html#cb47-71"></a>    <span class="co">#arguments that define the styles for line width </span></span>
+<span id="cb47-72"><a href="vizedges.html#cb47-72"></a>    <span class="dt">lwd=</span><span class="st">&quot;flow_width&quot;</span>, <span class="dt">scale=</span><span class="dv">2</span>,</span>
+<span id="cb47-73"><a href="vizedges.html#cb47-73"></a>    <span class="dt">legend.lwd.show =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb47-74"><a href="vizedges.html#cb47-74"></a><span class="st">  </span><span class="co">#add manual legends to combine color and line width schema </span></span>
+<span id="cb47-75"><a href="vizedges.html#cb47-75"></a><span class="st">  </span><span class="kw">tm_add_legend</span>(</span>
+<span id="cb47-76"><a href="vizedges.html#cb47-76"></a>    <span class="dt">type=</span><span class="kw">c</span>(<span class="st">&#39;line&#39;</span>), </span>
+<span id="cb47-77"><a href="vizedges.html#cb47-77"></a>    <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>), </span>
+<span id="cb47-78"><a href="vizedges.html#cb47-78"></a>    <span class="dt">lwd=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>), </span>
+<span id="cb47-79"><a href="vizedges.html#cb47-79"></a>    <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&#39;300-600&#39;</span>,<span class="st">&#39;601-3400&#39;</span>,<span class="st">&#39;3401-30,000&#39;</span>,<span class="st">&#39;30,001-130,000&#39;</span>),</span>
+<span id="cb47-80"><a href="vizedges.html#cb47-80"></a>    <span class="dt">title=</span><span class="st">&#39;Commutes Across Counties&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb47-81"><a href="vizedges.html#cb47-81"></a><span class="st">  </span><span class="co">#add inner margin to accomodate legend size </span></span>
+<span id="cb47-82"><a href="vizedges.html#cb47-82"></a><span class="st">  </span><span class="kw">tm_layout</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
+<span id="cb47-83"><a href="vizedges.html#cb47-83"></a>            <span class="dt">inner.margins =</span> <span class="kw">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.1</span>)) <span class="op">+</span></span>
+<span id="cb47-84"><a href="vizedges.html#cb47-84"></a><span class="st">  </span><span class="co"># visualize nodes </span></span>
+<span id="cb47-85"><a href="vizedges.html#cb47-85"></a><span class="st">  </span><span class="kw">tm_shape</span>(nodes) <span class="op">+</span></span>
+<span id="cb47-86"><a href="vizedges.html#cb47-86"></a><span class="st">  </span><span class="kw">tm_symbols</span>(</span>
+<span id="cb47-87"><a href="vizedges.html#cb47-87"></a>    <span class="dt">size=</span><span class="st">&quot;size&quot;</span>, <span class="dt">scale=</span><span class="fl">0.8</span>, </span>
+<span id="cb47-88"><a href="vizedges.html#cb47-88"></a>    <span class="dt">alpha=</span><span class="dv">0</span>, <span class="dt">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="dt">border.alpha=</span><span class="fl">0.5</span>, </span>
+<span id="cb47-89"><a href="vizedges.html#cb47-89"></a>    <span class="co"># values in sizes.legend = relative size defined in &#39;size&#39; column * scale </span></span>
+<span id="cb47-90"><a href="vizedges.html#cb47-90"></a>    <span class="dt">sizes.legend =</span> <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="op">*</span><span class="fl">0.8</span>,</span>
+<span id="cb47-91"><a href="vizedges.html#cb47-91"></a>    <span class="co"># labels have rounded the break values</span></span>
+<span id="cb47-92"><a href="vizedges.html#cb47-92"></a>    <span class="dt">sizes.legend.labels=</span><span class="kw">c</span>(<span class="st">&#39;70-1000&#39;</span>,<span class="st">&#39;1001-2500&#39;</span>,<span class="st">&#39;2501-7000&#39;</span>,<span class="st">&#39;7001-250,000&#39;</span>),</span>
+<span id="cb47-93"><a href="vizedges.html#cb47-93"></a>    <span class="dt">title.size=</span><span class="kw">c</span>(<span class="st">&#39;Commutes Within Counties&#39;</span>),</span>
+<span id="cb47-94"><a href="vizedges.html#cb47-94"></a>    <span class="dt">legend.size.is.portrait =</span> <span class="ot">TRUE</span>) <span class="op">+</span></span>
+<span id="cb47-95"><a href="vizedges.html#cb47-95"></a><span class="st">  </span><span class="co"># since the default layout is too small to accomodate both legends</span></span>
+<span id="cb47-96"><a href="vizedges.html#cb47-96"></a><span class="st">  </span><span class="kw">tm_layout</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
+<span id="cb47-97"><a href="vizedges.html#cb47-97"></a>            <span class="dt">inner.margins =</span> <span class="kw">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.25</span>))</span>
+<span id="cb47-98"><a href="vizedges.html#cb47-98"></a></span>
+<span id="cb47-99"><a href="vizedges.html#cb47-99"></a>map</span>
+<span id="cb47-100"><a href="vizedges.html#cb47-100"></a></span>
+<span id="cb47-101"><a href="vizedges.html#cb47-101"></a><span class="kw">tmap_save</span>(map, <span class="dt">filename=</span><span class="st">&#39;YOUR_LOCAL_FOLDER_PATH/map.png&#39;</span>)</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="nodes.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="advanced-aesthetics.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["SSN_tutorial.pdf", "SSN_tutorial.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
