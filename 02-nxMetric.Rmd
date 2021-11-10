@@ -109,10 +109,10 @@ V(g)$closeness_centrality = closeness(g, vids=V(g), mode='in') #add closeness ce
 V(g)$betweenness_centrality = betweenness(g, v=V(g), directed=TRUE) #add betweenness centrality to nodes in the network g
 ```
 
-**Eigenvector Centrality** measures the influence a node has on a network. A node has high influence if it is connected to many nodes who themselves have high influences. 
+**Eigenvector Centrality** (sometimes called PageRank Centrality) measures the influence a node has on a network. A node has high influence if it is connected to many nodes who themselves have high influences. 
 
 ```{r eval=FALSE}
-V(g)$eigenvector_centrality = eigen_centrality(g, directed=TRUE) #add eigenvector centrality to nodes in the network g
+V(g)$eigenvector_centrality = eigen_centrality(g, directed=TRUE)$vector #add eigenvector centrality to nodes in the network g
 ```
 
 **(Local) Clustering Coefficient** measures how close the neighbors of a node all connect to each other, and thus how embedded a node is in its local networks. It is also called the local clustering coefficient.  
