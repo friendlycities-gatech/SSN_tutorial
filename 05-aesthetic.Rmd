@@ -309,7 +309,9 @@ This technique may help reveal structures in your edges when there are many line
 * You have to manually tune the parameters (`thres` in our case) to find the best visual outcome. There is no shortcut to find the optimized parameters at once. 
 * Some edge bundling package may only be able to bend the lines, but not summarise the edge weights. It means that it is difficult to visualize the edge weight of the bundle. 
 
-The `edgebundle` package we used is still in development. We showed an example of applying the edgebundle package on the mafia map. To reduce the processing time, we filtered mafia connections to those that have more than 50km in euclidean distance, which results in 1668 edges. To filter by distance, we have to convert the coordinate system to **North America Equidistant Conic** (crs=102010), use `st_distance` to compute the distance between two point geometry, and lastly convert the `meter object` from `st_distance` into numeric numbers for filtering. This is a mafia connectivity map without the edge bundling. 
+The `edgebundle` package we used is still in development. We showed an example of applying the edgebundle package on the mafia map. To reduce the processing time, we filtered mafia connections to those that have more than 50km in euclidean distance, which results in 1668 edges. To filter by distance, we have to convert the coordinate system to **North America Equidistant Conic** (crs=102010), use `st_distance` to compute the distance between two point geometry, and lastly convert the `meter object` from `st_distance` into numeric numbers for filtering. **It is important to note that you set `by_element=TRUE` in `st_distance` so that the output of the function is a vector rather than a matrix. The unit of the distance also follows the coordinate projection system you use**.
+
+This is a mafia connectivity map without the edge bundling. 
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE}
 #MafiaEdges and MafiaNodes is a built-in dataset of SSNtools package 
@@ -386,7 +388,7 @@ node = node %>%
 #> 3 DEMARTINO-BENJAMIN  -72.9263 40.9530
 
 xy = cbind(node$LonX, node$LatY)
-fbundle = edge_bundle_force(g,xy,compatibility_threshold = 0.85)
+fbundle = edge_bundle_force(bundle_g,xy,compatibility_threshold = 0.85)
 
 #>           x        y      index group
 #> 1 -104.6270 38.24760 0.00000000     1
@@ -401,6 +403,12 @@ fbundle2 = fbundle %>%
   st_as_sf(coords=c('x', 'y'), crs=4326) %>%
   group_by(group) %>%
   summarise(do_union=FALSE) %>% st_cast("LINESTRING")
+
+#>   group geometry
+#>   <dbl> <LINESTRING [°]>
+#> 1     1 (-104.627 38.2476, -104.6506 38.30726, -104.6641 38.33735...)
+#> 2     2 (-87.7354 42.0154, -88.8135 41.62707, -89.64513 41.35496 ...)
+#> 3     3 (-72.9263 40.953, -72.95451 40.95169, -72.98361 40.94916 ...)
 ```
 
 Now the `fbundle2` is a line shapefile! We can either export to GIS for further editing or map it using `tmap` package. See [Base Map] on how to create `bg` background base map and `us_states` boundary shapefiles. 
