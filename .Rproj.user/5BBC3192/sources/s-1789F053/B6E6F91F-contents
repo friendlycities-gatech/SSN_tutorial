@@ -1,6 +1,6 @@
 # Advanced Aesthetics 
 
-```{css}
+```{css, echo=FALSE}
 .Code {
 background-color: grey;
 }
@@ -31,7 +31,7 @@ tmap_save(tm = TMAP_OBJECT, filename='PATH/FILENAME.png')
 With these formats, you can import the tmap maps into Adobe Illustrators or Photoshop to further edit the details. You can also export the shapefiles you created in R to experiment in GIS softwares through `sf` package. 
 
 ```{r, message=FALSE, eval=FALSE, class.source="Code"}
-#MafiaNodes is built-in dataset from SSNtools
+#MafiaNodes is a built-in dataset from SSNtools
 MafiaSpatial = MafiaNodes %>% 
   st_as_sf(coords=c("LonX", "LatY"), crs = 4326) 
 
@@ -54,7 +54,12 @@ Secondly, we convert the `metric` column into a factor column, so that the order
 Lastly, we also retrieve the state boundary shapefile from `tigris` as the background for the map.
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE, class.source="Code"}
-##### ---- Don't forget to load libraries at the top of the chapter ---- ####
+library(sf) 
+library(tidyverse) 
+library(tmap) 
+library(SSNtools) 
+library(igraph)
+library(tigris)
 
 #MafiaNodes and MafiaEdges are built-in dataset from SSNtools 
 MafiaSpatial = MafiaNodes %>% 
@@ -167,8 +172,20 @@ tm_shape(MafiaSpatial) +
 ```
 
 This is an [example publish](https://rpubs.com/xiaofanliang/831192) to RPub and what the output will look like. Click and hover your mouse in the map to explore the pop up labels and see the changing coordinates on the top left corner. You can also switch the base map style in the box below the zoom functions. 
-```{r, echo=FALSE, class.source="Code"}
-htmltools::includeHTML("interactive_tmap_to_web.html")
+```{r, echo=FALSE}
+htmltools::tags$iframe(src = "Interactive/interactive_tmap_to_web.html", width='100%', height='400vh')
+```
+
+You may notice in the tmap interactive map above that when you zoom in, the node size did not change, which makes it difficult to exam areas with clustered nodes (e.g., New York City). For more advanced interactive map functions, we suggest users swtich to `Leaflet`, which is an open-source library for web-based interactive maps. The following codes generate an interactive map in R and allows users to see the name of the Mafia members when hover over the nodes. The node size dynamically adjusts when you zoom and out of the map. For ideas to reduce node cluttering in the static map, refer to [Inset Map].
+
+```{r warning=FALSE, message=FALSE, echo=TRUE, eval=FALSE, class.source="Code"}
+library(leaflet)
+
+leaflet(MafiaSpatial) %>% addTiles() %>% 
+  addCircleMarkers(radius = ~ sqrt(degree), fillColor='#6698CC', fillOpacity = 0.8, label=~htmlEscape(NiceLabel)) 
+```
+```{r, echo=FALSE}
+htmltools::tags$iframe(src = "Interactive/Leaflet.html", width='100%', height='400vh')
 ```
 
 ## Base Map 

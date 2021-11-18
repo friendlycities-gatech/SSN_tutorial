@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1637246625491.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "23DC988",
+    "lastKnownWriteTime" : 1636074077,
+    "last_content_update" : 1636074077,
+    "path" : "~/Dropbox (GaTech)/GT_Research/Spatial_Networks_R/SSN_tutorial/04-edges.Rmd",
+    "project_path" : "04-edges.Rmd",
+    "properties" : {
+        "cursorPosition" : "6,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
