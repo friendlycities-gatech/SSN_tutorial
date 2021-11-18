@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1637245951140.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "5EBED202",
+    "lastKnownWriteTime" : 1636074301,
+    "last_content_update" : 1636074301,
+    "path" : "~/Dropbox (GaTech)/GT_Research/Spatial_Networks_R/SSN_tutorial/06-metrics.Rmd",
+    "project_path" : "06-metrics.Rmd",
+    "properties" : {
+        "cursorPosition" : "3,0",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
