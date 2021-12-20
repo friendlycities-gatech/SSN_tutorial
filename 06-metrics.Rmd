@@ -1,5 +1,3 @@
 # Advanced SSN Metrics 
 
-## Network Modularity 
-
 ## SSN Hot Spot Detection

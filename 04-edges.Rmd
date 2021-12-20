@@ -21,11 +21,12 @@ knitr::include_graphics("Figs/04-edges-6.png")
 
 Before proceeding to the codes, please load the following packages:
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
-library(sf)
-library(tidyverse)
-library(tmap)
-library(tigris)
-library(lehdr)
+library(sf) #for using spatial objects 
+library(tidyverse) #for using tidy syntax 
+library(tmap) #for visualizing maps 
+library(tigris) #for downloading TIGER boundary shapefiles 
+library(lehdr) #for downloading LODES commute data
+library(stplanr) #for using od2line function to convert points to lines
 ``` 
 
 ## Convert Points into Lines
@@ -51,12 +52,24 @@ head(ctc_commutes, 3)
 
 Columns `h_county` and `w_county` contain the county FIPS (or GEOID) codes. `S000` contains the total number of job flows between the home county and the work county. We also only want to create lines between counties, so we will filter out flows that have the same `h_county` and `w_county`. 
 
-There are two ways to convert points into a line geometry. 
+There are THREE ways to convert points into a line geometry. 
 
-### Method 1: Group by lineID and Summarize Points into Line  
-**The first one** is to group the points coordinates by line ID, summarize the flow values, and then use `st_cast` in the `sf` package to turn the grouped point coordinates into a line geometry. This method is particularly useful if you start with a file that only contain coordinates but no geometry. It is also convenient GPS trajectory data because each row is a point data associated with a line ID and you want to connect all the points that represent one trajectory. 
+### Method 1: Use `od2line` function in `stplanr` package. 
 
-For our data, we have a flow dataframe that contains the origin and destination ID and the flow volumn, and a separate county centroid shapefile that can be joined to the flow dataframe. To leverage method 1, we have to split one OD pair into two rows so that the first row contains the point geometry of the origin and the second row contains the point geometry of the destination. To do that, we perform a little trick: we swap the position of the `h_county` and `w_county` of `ctc_commutes` and bind it to the existing `ctc_commutes` dataframe. Then when we join county shapefiles by `h_county`, we actually join the shapefiles for both the origin county and the destination county. Then we can use the group_by and summarise method to create lines. Noted that column `ID` needs to be created before and during binding the `ctc_commutes`, so that group_by knows which OD is one the same line. You also need to ensure the dataframe is an `sf` object after doing `left_join` through `st_as_sf()`. 
+`od2line` takes in an OD dataframe that assumes the first two column contains the origin and destination variables that can be matched to the shapefile. In our case, those are the county GEOID. **This method is particularly useful if you stores your OD dataframe and your shapefiles separately**. This is the easiest way for our dataset to convert into lines. The only downside is you have one more package dependency. We encourage readers to explore other useful OD-related functions in the `stplanr` package, such as `dist_google()`, `od_coords2line()`, `od_to_odmatrix()` and so on.
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+library(stplanr)
+cnty_centroid = GA_county %>% st_centroid() %>% select(c(GEOID, geometry))
+edges = od2line(ctc_commutes, cnty_centroid)
+head(edges, 3)
+```
+
+### Method 2: Group by lineID and Summarize Points into Line  
+
+The second one is to group the points coordinates by line ID, summarize the flow values, and then use `st_cast` in the `sf` package to turn the grouped point coordinates into a line geometry. **This method is particularly useful if your points are organized by line ID and if you do not want to use extra packages**. It is also convenient GPS trajectory data because each row is a point data associated with a line ID and you want to connect all the points that represent one trajectory. 
+
+For our data, we do not have line ID for points, but we can create such ID with `row_number()`. To leverage method 1, we have to split one OD pair into two rows so that the first row contains the point geometry of the origin and the second row contains the point geometry of the destination. To do that, we perform a little trick: we swap the position of the `h_county` and `w_county` of `ctc_commutes` and bind it to the existing `ctc_commutes` dataframe. Then when we join county shapefiles by `h_county`, we actually join the shapefiles for both the origin county and the destination county. Then we can use the group_by and summarise method to create lines. Noted that column `ID` needs to be created before and during binding the `ctc_commutes`, so that group_by knows which OD is one the same line. You also need to ensure the dataframe is an `sf` object after doing `left_join` through `st_as_sf()`. 
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
 edges = ctc_commutes %>% 
@@ -71,8 +84,8 @@ edges = ctc_commutes %>%
 head(edges, 3)
 ```
 
-### Method 2: Join Two Point Geometry into One Row and Unite into Line
-**The second way** to convert points into lines is to join two point geometry in one row and cast them into a line. This method is particularly useful if you already have separate geometry files for origin and destination nodes, which is the case for our data. 
+### Method 3: Join Two Point Geometry into One Row and Unite into Line
+The third way to convert points into lines is to join two point geometry in one row and cast them into a line. **This method is particularly useful if you have coordinates of both origin and destination points in one dataframe**. In our case, we do not have coordinates, so we have to join `GA_county` to get the geometries to use this method. 
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
 edges = ctc_commutes %>% 
@@ -253,6 +266,7 @@ library(tidyverse)
 library(tmap)
 library(tigris)
 library(lehdr)
+library(stplanr)
 
 #counties is a function in tigris package
 GA_county = counties(state = 'GA', cb=TRUE, year=2018, progress_bar=FALSE) 
@@ -268,11 +282,8 @@ ctc_commutes = data %>% select(c(w_county, h_county, S000)) %>%
   slice(1:1000) 
 
 #--- Create lines from OD dataframe ---# 
-edges = ctc_commutes %>% 
-  left_join(GA_county %>% st_centroid() %>% select(c(GEOID, geometry)), by=c('h_county' = 'GEOID'), copy=FALSE) %>% 
-  left_join(GA_county %>% st_centroid() %>% select(c(GEOID, geometry)), by=c('w_county' = 'GEOID'), copy=FALSE) %>% 
-  mutate(geometry = st_cast(st_union(geometry.x, geometry.y), "LINESTRING")) %>% 
-  select(-c(geometry.x, geometry.y)) %>% st_as_sf()
+cnty_centroid = GA_county %>% st_centroid() %>% select(c(GEOID, geometry))
+edges = od2line(ctc_commutes, cnty_centroid)
 
 # --- Convert flows within county into point geometry --- #
 nodes = data %>% 

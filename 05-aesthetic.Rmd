@@ -6,6 +6,17 @@ background-color: grey;
 }
 ```
 
+In this chapter, we will continue to use default dataset `MafiaNodes` and `MafiaEdges` in `SSNtools` to illustrate examples. 
+
+This chapter covers the following topics: 
+
+* How to export tmap objects as static images 
+* How to create small multiples with tmap  
+* How to create an interactive map and publish it online
+* How to add a basemap to static tmap object in plot mode
+* How to add inset map to static tmap object in plot mode
+* How to apply edge bundling to non-planar networks in tmap
+
 You may need one or more of these libraries to complete the codes in this chapter. 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE, class.source="Code"}
 library(sf) #required for any functions start with`st_`
@@ -13,14 +24,14 @@ library(tidyverse) #required for any process that involves `%>%`
 library(tmap) #required for any map visualization 
 library(SSNtools) #required for any steps that involved MafiaNodes or MafiaEdges dataset 
 library(igraph) #required for creating network from graph_from_data_frame and calculating network metrics 
-library(OpenStreetMap) #required for loading base map 
-library(stars) #required for loading base map
+library(basemaps) #required for loading basemaps 
 library(tigris) #required for downloading boundary shapefiles 
-library(grid) #required for inset
+library(grid) #required for inset map
+library(stplanr) #optional for od2line function used to convert points to lines
 library(edgebundle) #required for edge bundling
 ```
 
-## Export for Editing
+## Export Maps
 
 `tmap` allows users to export `tmap object` as a static map in the format of pdf, eps, svg, wmf, png, jpg, bmp, or tiff. You can define the resolution, height, and width of the export in the `tmap_save` arguments. 
 
@@ -39,6 +50,8 @@ st_write(MafiaSpatial, "MafiaSpatial.shp")
 ```
 
 Unfortunately, there isn't a way to export tmap object to GIS softwares without losing the aesthetics yet (e.g., scale, size, color etc., see updates on this issue  [here](https://github.com/r-tmap/tmap/issues/510)). 
+
+Another thing to note is that graphics exported through `tmap_save` may look different from the Plots panel in RStudio. This is because the size of the graphic elements may be scaled dependent on the attributes you put in `tmap_save`. 
 
 ## Small Multiples
 In our case of the Mafia connectivity map, the power of the Mafia members can be represented by different network metrics. For example, **degree centrality** (i.e. degree connections) measures power as the number of connections to a Mafia member. **Eigenvector centrality** (i.e., PageRank centrality) measures power by not only the count of connections, but also the quality of connections so that connecting to other powerful members increases the weight of the link. **Betweeness centrality** measures power by the ability of a Mafia member to be the "middle-man/middle-woman" and connect groups of other members that would not be connected otherwise. (Local) **Clustering coefficient** measures whether a Mafia member's friends tend to connect with each others (i.e., whether your friends are also your friends' friends). 
@@ -130,7 +143,17 @@ tm_shape(us_states) +
 
 ## Interactive Maps
 
-`tmap` allows users to view their maps in interactive modes with pre-defined Leaflet basemap styles, such as OpenStreetMap, Esri.WorldGrayCanvas, and Esri.WorldTopoMap. This is a quick and easy way to generate preliminary maps with base maps for presentations and illustrations. The interactive mode can also help you examine your data in a spatial context by adding pop up labels or hover labels.
+`tmap` allows users to view their maps in interactive modes with pre-defined Leaflet basemap styles, such as OpenStreetMap, Esri.WorldGrayCanvas, and Esri.WorldTopoMap. You can change basemap styles through widgets in the RStudio Plots panel, or defined through `tm_basemap()` argument. This is a quick and easy way to generate preliminary maps with base maps for presentations and illustrations. The interactive mode can also help you examine your data in a spatial context by adding pop up labels or hover labels.
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE, class.source="Code"}
+MafiaSpatial = MafiaNodes %>% 
+  st_as_sf(coords=c("LonX", "LatY"), crs = 4326) 
+
+tmap_mode('view')
+tm_shape(MafiaSpatial) + 
+  tm_symbols(col='lightblue', scale=3) + 
+  tm_basemap(server = "OpenTopoMap")
+```
 
 You can also publish your `tmap` interactive map to web through RPub under your account. As an example, copy and paste the following code in a `Rmd` file. You can create `Rmd` file from Rstudio File->New File->R Markdown. In R Markdown, `Knit` the file and the option to `Publish` should appear. You can select the RPub option and create a free account. See [this post](https://nceas.github.io/oss-lessons/publishing-maps-to-the-web-in-r/publishing-maps-to-the-web-in-r.html) for more details. At the moment, the interactive map from `tmap` did not have the function to adapt the node size with the zoom level. This function exists in `Leaflet` package with `addCircleMarkers()` function (more details see this [tutorial](https://rstudio.github.io/leaflet/markers.html))
 
@@ -192,44 +215,27 @@ htmltools::tags$iframe(src = "Interactive/Leaflet.html", width='100%', height='4
 
 While interactive map comes with base maps, you can manually add base map into static maps in `tmap`. This section shows you how to add **Mapbox base map** to `tmap` map in the plot mode. To use Mapbox base map, you need to create a token on Mapbox. Follow the instructions on [Mapbox Docs](https://docs.mapbox.com/help/getting-started/access-tokens/) to create your access token. You should keep this token private. 
 
-We use `st_bbox` to find the bounding box of U.S. states and use the `get_Mapbox` function to retrieve Mapbox base map based on the input bounding box information. This base map raster can be visualized by `tmap` through `tm_rgb()`. 
+We use `st_bbox` to find the bounding box of U.S. states and use `st_as_sfc()` to transform it into a sfc object for retrieving stars object. Then we use the `basemap_stars` function in `basemaps` package to retrieve Mapbox base map based on the input bounding box information. `basemaps` support basemaps from OpenStreetMaps, Mapbox, Carto, and ESRI. Please refer to [basemaps document](https://cran.r-project.org/web/packages/basemaps/basemaps.pdf) for more examples on using other basemaps. The base map raster can be visualized by `tmap` through `tm_rgb()`. 
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE, class.source="Code"}
 library(tigris)
-library(OpenStreetMap)
-library(stars)
 library(sf)
 library(tidyverse)
-
-#bb: bounding box in st_bbox format. 
-#token: your Mapbox token 
-#style: Mapbox base map style. You can also insert customized style from Mapbox. 
-
-token = 'YOUR MAPBOX TOKEN'
-
-get_Mapbox = function(bb, token, style) {
-  apiKey <- paste0("?access_token=", token)
-  baseUrl <- paste0("https://api.mapbox.com/styles/v1/mapbox/", style,
-                    "/tiles/256/{z}/{x}/{y}")
-  #coordinate for upper left
-  ul  <- c(attributes(bb)$bbox$ymax,attributes(bb)$bbox$xmin) 
-  #coordinate for lower right 
-  lr <- c(attributes(bb)$bbox$ymin,attributes(bb)$bbox$xmax) 
-  map <- openmap(ul,lr, minNumTiles=10, type=paste0(baseUrl,apiKey))
-  #process map into stars to be mapped in tmap 
-  map = st_as_stars(map)
-  return(map)
-}
+library(basemaps)
 
 #states is a function in tigris to download U.S. state boundary shapefile
 us_states = states(cb=TRUE, progress_bar = FALSE) %>%
   filter(!STUSPS %in% c('PR','AS', 'AK', 'GU','MP','VI', 'HI')) 
 
-box = st_bbox(us_states, crs=4326) 
-bg = get_Mapbox(box %>% st_as_sfc(), token, 'light-v10')
+token = 'YOUR MAPBOX TOKEN' #see how to apply for token in Mapbox Docs.
+
+#Decide which basemap service to use and what map styles. 
+set_defaults(map_service = "mapbox", map_type = "light", map_token = token)
+bgbox = st_bbox(us_states, crs=4326) %>% st_as_sfc()
+bg = basemap_stars(bgbox)
 
 tmap_mode('plot')
-map = tm_shape(bg) + 
+map = tm_shape(bg) + #add base map
   tm_rgb() + 
   tm_shape(us_states) + 
   tm_polygons(alpha=0) + 
@@ -242,7 +248,10 @@ map = tm_shape(bg) +
 map
 ```
 
-You can find all the available Mapbox style [here](https://docs.mapbox.com/api/maps/styles/). You can also customize your Mapbox basemap in [Mapbox Studio](https://studio.mapbox.com/). To use the customized base map, replace the baseUrl in the function with your customized style URL (only replace path after https://api.mapbox.com/styles/), which you can find if you click "share" button for your customized style. This shows the output of the code above with Mapbox style: `light-v10` (top left), `dark-v10` (top right), `outdoors-v11` (bottom left), `satellite-v9` (bottom right).   
+```{r echo=FALSE, fig.cap="", out.width = '100%', fig.show = "hold", class.source="Code"}
+knitr::include_graphics("Figs/05-aesthetics-1.png")
+```
+You can find all the available Mapbox style [here](https://docs.mapbox.com/api/maps/styles/). You can also customize your Mapbox basemap in [Mapbox Studio](https://studio.mapbox.com/). To use the customized base map, replace the `map_type` in the `set_defaults` function with your customized style URL ID (can be found after the path https://api.mapbox.com/styles/), which you can find if you click "share" button for your customized style. The following figures shows the effects of `map` object under `map_type = 'light'` (top left), `map_type = 'dark'` (top right), `map_type = 'outdoors'` (bottom left), `map_type = 'satellite'` (bottom right).   
 
 ```{r echo=FALSE, fig.cap="", out.width = '50%', fig.show = "hold", class.source="Code"}
 knitr::include_graphics("Figs/05-aesthetics-1.png")
@@ -267,10 +276,12 @@ To decide on the Inset Map bounding box, you can either use the measurement from
 First, we need to create the inset map. We pick a bounding box around the central New York City including where the most connected mafia member (in degree of connections) locates. We also calculate *aspect_ratio* for the inset map so that when plugged into the background map, we can preserve the inset map's natural ratio of height and width.  
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE, class.source="Code"}
+token = 'YOUR MAPBOX TOKEN' #see how to apply for token in Mapbox Docs.
+set_defaults(map_service = "mapbox", map_type = "light", map_token = token)
 
 #Create the bounding box for the inset map and retrieve corresponding base map 
 bgbox = st_bbox(c(xmin=-74.065141, xmax=-73.537727, ymin=40.558198, ymax=40.882353), crs=4326) 
-inset_bg = get_Mapbox(bgbox %>% st_as_sfc(), token, 'light-v10')
+inset_bg = basemap_stars(bgbox)
 
 #Calculate aspect ratio.  
 aspect_ratio = unname((bgbox$ymax - bgbox$ymin)/(bgbox$xmax - bgbox$xmin))
@@ -355,11 +366,10 @@ g = graph_from_data_frame(MafiaEdges, directed = FALSE)
 MafiaSpatial$degree = degree(g)
 
 #Convert FilteredEdges dataframe to line geometry. 
-EdgeSpatial = FilteredEdges %>% 
-  left_join(MafiaSpatial %>% select(c(NODE, geometry)), by = c('Source' = 'NODE')) %>%
-  left_join(MafiaSpatial %>% select(c(NODE, geometry)), by = c('Target' = 'NODE')) %>%
-  mutate(geometry = st_cast(st_union(geometry.x, geometry.y), "LINESTRING")) %>% 
-  select(-c(geometry.x, geometry.y)) %>% st_as_sf()
+cnty_centroid = GA_county %>% st_centroid() %>% select(c(GEOID, geometry))
+edges = od2line(ctc_commutes, cnty_centroid)
+
+EdgeSpatial = od2line(FilteredEdges, MafiaSpatial %>% select(c(NODE, geometry)))
 
 tmap_mode('plot')
 map = tm_shape(bg) + 
