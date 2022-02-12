@@ -1,3 +1,25 @@
 # Advanced SSN Metrics 
 
 ## SSN Hot Spot Detection
+
+In this chapter we show two GIS methods, **EdgeScan** and **NDScan**, for capturing areas with high and low levels of number of edges or network density respectively. Both methods are moving window processes that count the number of edges and network density, respectively, for each node in a given focal area (window area). 
+
+We will show how to use **EdgeScan** and **NDScan** to find local social network hot spots in the 1960s New York City mafia social networks. We will also show some useful maps and analytic graphs that are helpful to determine the optimal parameters. 
+
+To begin, let us introduce the basic ideas behind the **EdgeScan** and **NDScan** methods. Both methods are based on spatial scan approaches, which summarised statistics in a moving window for a focal node. Therefore, for each node in the network, EdgeScan and NDScan calculate the number of edges and network density in the area centered by the focal node. Network density is the ratio of actual number of edges and the potential number of edges. A high network density (=1) means that nodes in the moving window have maximize all the possible combinations of connections. 
+
+```{r echo=FALSE, fig.cap="", out.width = '100%', fig.show = "hold"}
+knitr::include_graphics("Figs/06-metrics-hotspot-schema.jpg")
+```
+
+Our EdgeScan and NDScan methods provide three different window definitions: Euclidean distance, Manhattan distance, and K-nearest neighbors. The users can decide on the window size, in the unit of meters (or miles) or the number of nearest neighbors. The graphic below shows a schematic diagram of how the EdgeScan and NDScan value for a focal node is calculated. The window in the first circle simultaneously represents a potential window size of euclidean distance of 400m, manhattan distance of 500m, and 7-nearest neighbors. 
+
+To load the sample dataset and the functions, go to GitHub [SSNtool](https://github.com/friendlycities-gatech/SSNtools) to download the development R package, or type the following lines in your R console. See the GitHub page for more detailed description of all the functions available in the package.
+
+```{r warning=FALSE, message=FALSE, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("friendlycities-gatech/SSNtools")
+```
+
+The sample node table **NYCMafiaNodes** is a node table with label and spatial coordinates for each node. The sample edge list **NYCMafiaeEdges** contains pairs of node labels (corresponding to node table label). To get EdgeScan and NDScan value for each node, you just need to run your node table and edge list through the following codes: 
+

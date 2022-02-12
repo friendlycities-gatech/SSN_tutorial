@@ -143,15 +143,19 @@ tm_shape(us_states) +
 
 ## Interactive Maps
 
-`tmap` allows users to view their maps in interactive modes with pre-defined Leaflet basemap styles, such as OpenStreetMap, Esri.WorldGrayCanvas, and Esri.WorldTopoMap. You can change basemap styles through widgets in the RStudio Plots panel, or defined through `tm_basemap()` argument. This is a quick and easy way to generate preliminary maps with base maps for presentations and illustrations. The interactive mode can also help you examine your data in a spatial context by adding pop up labels or hover labels.
+`tmap` allows users to view their maps in interactive modes with pre-defined Leaflet basemap styles, such as OpenStreetMap, Esri.WorldGrayCanvas, and Esri.WorldTopoMap. To view tmap object in interactive mode, set `tmap_mode('view')`. You also can change basemap styles through the layer widget in the RStudio Plots panel, or defined through `tm_basemap()` argument. This is a quick and easy way to generate preliminary maps with base maps for presentations and illustrations. The interactive mode can also help you examine your data in a spatial context by adding pop up labels or hover labels.
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE, class.source="Code"}
 MafiaSpatial = MafiaNodes %>% 
   st_as_sf(coords=c("LonX", "LatY"), crs = 4326) 
+g = graph_from_data_frame(MafiaEdges, directed = FALSE, vertices=MafiaSpatial)
+MafiaSpatial$degree = degree(g)
 
 tmap_mode('view')
 tm_shape(MafiaSpatial) + 
-  tm_symbols(col='lightblue', scale=3) + 
+  tm_symbols(size="degree", scale=2,  
+             col='lightblue', border.col='#6698CC', 
+             title.size=c('Degree of Connections')) + 
   tm_basemap(server = "OpenTopoMap")
 ```
 
