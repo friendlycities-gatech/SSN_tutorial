@@ -4,19 +4,12 @@ The development of this tutorial is funded under NSF Career Grant: A Research an
 
 The future development of the tutorial includes: 
 
-* Advanced Aesthetics 
-  + Export 
-  + Small Multiples 
-  + Base Map 
-  + Inset Map 
-  + Edge Arc 
-  + Edge Bundling 
-
 * Advanced Metrics 
-  + Community Detection 
-  + Compare Nx Range and Density 
-  + Network HotSpot Detection  
-  + Clustering of Connected Nodes
-  + Isochrome 
-  + Flatterning Ratio 
-  + Linked Activity Space
+  + Regional Modularity
+  + Linked Activity Spaces
+  + Global Flatterning Ratio
+  + Missed Opportunities
+  + Cluster/Cluster Plots
+  + Route Factor Diagrams
+  
+We are also considering more examples of topic applications using the same visualization codes and metrics. 
