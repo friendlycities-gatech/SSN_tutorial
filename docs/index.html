@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Spatial Social Networks (SSN) Visualization and Metrics with R</title>
   <meta name="description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Spatial Social Networks (SSN) Visualization and Metrics with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2022-11-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 
 <link rel="next" href="metrics.html"/>
-<script src="libs/header-attrs-2.1/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,13 +51,15 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -117,6 +120,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -156,8 +160,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="4.1" data-path="vizedges.html"><a href="vizedges.html#convert-points-into-lines"><i class="fa fa-check"></i><b>4.1</b> Convert Points into Lines</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="vizedges.html"><a href="vizedges.html#method-1-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Group by lineID and Summarize Points into Line</a></li>
-<li class="chapter" data-level="4.1.2" data-path="vizedges.html"><a href="vizedges.html#method-2-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Join Two Point Geometry into One Row and Unite into Line</a></li>
+<li class="chapter" data-level="4.1.1" data-path="vizedges.html"><a href="vizedges.html#method-1-use-od2line-function-in-stplanr-package."><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Use <code>od2line</code> function in <code>stplanr</code> package.</a></li>
+<li class="chapter" data-level="4.1.2" data-path="vizedges.html"><a href="vizedges.html#method-2-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Group by lineID and Summarize Points into Line</a></li>
+<li class="chapter" data-level="4.1.3" data-path="vizedges.html"><a href="vizedges.html#method-3-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.3</b> Method 3: Join Two Point Geometry into One Row and Unite into Line</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges"><i class="fa fa-check"></i><b>4.2</b> Visualizing Edges</a></li>
 <li class="chapter" data-level="4.3" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-line-width"><i class="fa fa-check"></i><b>4.3</b> Visualizing Edges by Line Width</a></li>
@@ -166,7 +171,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html"><i class="fa fa-check"></i><b>5</b> Advanced Aesthetics</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#export-for-editing"><i class="fa fa-check"></i><b>5.1</b> Export for Editing</a></li>
+<li class="chapter" data-level="5.1" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#export-maps"><i class="fa fa-check"></i><b>5.1</b> Export Maps</a></li>
 <li class="chapter" data-level="5.2" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#small-multiples"><i class="fa fa-check"></i><b>5.2</b> Small Multiples</a></li>
 <li class="chapter" data-level="5.3" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#interactive-maps"><i class="fa fa-check"></i><b>5.3</b> Interactive Maps</a></li>
 <li class="chapter" data-level="5.4" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#base-map"><i class="fa fa-check"></i><b>5.4</b> Base Map</a></li>
@@ -175,8 +180,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html"><i class="fa fa-check"></i><b>6</b> Advanced SSN Metrics</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html#network-modularity"><i class="fa fa-check"></i><b>6.1</b> Network Modularity</a></li>
-<li class="chapter" data-level="6.2" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html#ssn-hot-spot-detection"><i class="fa fa-check"></i><b>6.2</b> SSN Hot Spot Detection</a></li>
+<li class="chapter" data-level="6.1" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html#ssn-hot-spot-detection"><i class="fa fa-check"></i><b>6.1</b> SSN Hot Spot Detection</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="edges.html"><a href="edges.html"><i class="fa fa-check"></i><b>7</b> Future Development</a></li>
 <li class="divider"></li>
@@ -202,7 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Spatial Social Networks (SSN) Visualization and Metrics with R</h1>
 <p class="author"><em>Xiaofan Liang, Clio Andris, Dipto Sarkar</em></p>
-<p class="date"><em>2021-11-18</em></p>
+<p class="date"><em>2022-11-30</em></p>
 </div>
 <div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
@@ -212,16 +216,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>All the data you need to complete the tutorial will be downloaded from <a href="https://github.com/friendlycities-gatech/Mapping_Networks_R">Friendly Cities Lab GitHub page</a>.</p>
 <p><strong>Required Packages</strong></p>
 <p>We use <code>igraph</code> package to calculate network metrics, <code>sf</code> package to create geospatial objects from dataframe, <code>tmap</code> package to create both static and interactive maps, <code>tmaptools</code> package to extract OpenStreetMap basemaps, and <code>tidyverse</code> package as the syntax to process data. You can download the packages using the following codes:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;igraph&quot;</span>) <span class="co">#for network analysis</span></span>
-<span id="cb1-2"><a href="index.html#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">&quot;sf&quot;</span>) <span class="co">#for spatial objects operation</span></span>
-<span id="cb1-3"><a href="index.html#cb1-3"></a><span class="kw">install.packages</span>(<span class="st">&quot;tmap&quot;</span>) <span class="co">#for mapping </span></span>
-<span id="cb1-4"><a href="index.html#cb1-4"></a><span class="kw">install.packages</span>(<span class="st">&quot;tmaptools&quot;</span>) <span class="co">#for using read.osm to extract basemaps</span></span>
-<span id="cb1-5"><a href="index.html#cb1-5"></a><span class="kw">install.packages</span>(<span class="st">&quot;stars&quot;</span>) <span class="co">#for using Mapbox to extract basemaps </span></span>
-<span id="cb1-6"><a href="index.html#cb1-6"></a><span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>) <span class="co">#for data processing </span></span>
-<span id="cb1-7"><a href="index.html#cb1-7"></a><span class="kw">install.packages</span>(<span class="st">&#39;tigris&#39;</span>) <span class="co">#for loading TIGRR shapefiles</span></span>
-<span id="cb1-8"><a href="index.html#cb1-8"></a></span>
-<span id="cb1-9"><a href="index.html#cb1-9"></a><span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) <span class="co">#to download R package on GitHub</span></span>
-<span id="cb1-10"><a href="index.html#cb1-10"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;igraph&quot;</span>) <span class="co">#for network analysis</span></span>
+<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;sf&quot;</span>) <span class="co">#for spatial objects operation</span></span>
+<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tmap&quot;</span>) <span class="co">#for mapping </span></span>
+<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tmaptools&quot;</span>) <span class="co">#for using read.osm to extract basemaps</span></span>
+<span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;stars&quot;</span>) <span class="co">#for using Mapbox to extract basemaps </span></span>
+<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>) <span class="co">#for data processing </span></span>
+<span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;tigris&#39;</span>) <span class="co">#for loading TIGRR shapefiles</span></span>
+<span id="cb1-8"><a href="index.html#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="index.html#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) <span class="co">#to download R package on GitHub</span></span>
+<span id="cb1-10"><a href="index.html#cb1-10" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>)</span></code></pre></div>
 <p>There are a few packages for visualizing maps. We chose <code>tmap</code> in the end for its flexibility to switch between interactive maps and static plots.</p>
 <p><code>ggpplot2</code> has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of <code>ggpplot2</code> is that it can easily add high-resolution Google Maps as basemaps using <code>ggmap</code> package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to <a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html">map planar networks</a> and <a href="https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/">produce basic elements of a map</a>. However, you need to convert spatial objects to dataframe for <code>ggpplot2</code> to draw on.</p>
 <p><code>cartography</code> has limited mapping functions, but can come in handy when you only need to draw a few simple types of maps. It has some functions that are very friendly for mapping spatial networks, such as <code>getLinkLayer</code> that takes in point shapefiles and edge tables and return edge shapefiles. You can also overlay proportional symbols and proportional links layers. However, you may not get to control the details of the maps in the most desirable ways.</p>
@@ -243,7 +247,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -262,6 +265,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -282,6 +286,10 @@ gitbook.start({
 "text": null
 },
 "download": ["SSN_tutorial.pdf", "SSN_tutorial.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
