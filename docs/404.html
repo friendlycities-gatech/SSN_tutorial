@@ -53,6 +53,16 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
 
 
 <style type="text/css">
@@ -93,7 +103,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -106,7 +116,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -137,52 +147,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">SSN Tutorial</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="metrics.html"><a href="metrics.html"><i class="fa fa-check"></i><b>2</b> Network Metrics</a>
+<li><a href="index.html#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="metrics.html#metrics" id="toc-metrics"><span class="toc-section-number">2</span> Network Metrics</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="metrics.html"><a href="metrics.html#network-data-formats"><i class="fa fa-check"></i><b>2.1</b> Network Data Formats</a></li>
-<li class="chapter" data-level="2.2" data-path="metrics.html"><a href="metrics.html#network-metrics"><i class="fa fa-check"></i><b>2.2</b> Network Metrics</a>
+<li><a href="metrics.html#network-data-formats" id="toc-network-data-formats"><span class="toc-section-number">2.1</span> Network Data Formats</a></li>
+<li><a href="metrics.html#network-metrics" id="toc-network-metrics"><span class="toc-section-number">2.2</span> Network Metrics</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="metrics.html"><a href="metrics.html#network-metrics-for-nodes"><i class="fa fa-check"></i><b>2.2.1</b> Network Metrics for Nodes</a></li>
-<li class="chapter" data-level="2.2.2" data-path="metrics.html"><a href="metrics.html#network-metrics-for-edges"><i class="fa fa-check"></i><b>2.2.2</b> Network Metrics for Edges</a></li>
+<li><a href="metrics.html#network-metrics-for-nodes" id="toc-network-metrics-for-nodes"><span class="toc-section-number">2.2.1</span> Network Metrics for Nodes</a></li>
+<li><a href="metrics.html#network-metrics-for-edges" id="toc-network-metrics-for-edges"><span class="toc-section-number">2.2.2</span> Network Metrics for Edges</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="metrics.html"><a href="metrics.html#igraph-visualization"><i class="fa fa-check"></i><b>2.3</b> igraph Visualization</a></li>
+<li><a href="metrics.html#igraph-visualization" id="toc-igraph-visualization"><span class="toc-section-number">2.3</span> igraph Visualization</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="nodes.html"><a href="nodes.html"><i class="fa fa-check"></i><b>3</b> Visualizing Nodes</a>
+<li><a href="nodes.html#nodes" id="toc-nodes"><span class="toc-section-number">3</span> Visualizing Nodes</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="nodes.html"><a href="nodes.html#convert-coordinates-to-points"><i class="fa fa-check"></i><b>3.1</b> Convert Coordinates to Points</a></li>
-<li class="chapter" data-level="3.2" data-path="nodes.html"><a href="nodes.html#visualize-nodes"><i class="fa fa-check"></i><b>3.2</b> Visualize Nodes</a></li>
-<li class="chapter" data-level="3.3" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-color"><i class="fa fa-check"></i><b>3.3</b> Visualize Nodes by Node Color</a></li>
-<li class="chapter" data-level="3.4" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-size"><i class="fa fa-check"></i><b>3.4</b> Visualize Nodes by Node Size</a></li>
-<li class="chapter" data-level="3.5" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-size-and-color"><i class="fa fa-check"></i><b>3.5</b> Visualize Nodes by Size and Color</a></li>
+<li><a href="nodes.html#convert-coordinates-to-points" id="toc-convert-coordinates-to-points"><span class="toc-section-number">3.1</span> Convert Coordinates to Points</a></li>
+<li><a href="nodes.html#visualize-nodes" id="toc-visualize-nodes"><span class="toc-section-number">3.2</span> Visualize Nodes</a></li>
+<li><a href="nodes.html#visualize-nodes-by-node-color" id="toc-visualize-nodes-by-node-color"><span class="toc-section-number">3.3</span> Visualize Nodes by Node Color</a></li>
+<li><a href="nodes.html#visualize-nodes-by-node-size" id="toc-visualize-nodes-by-node-size"><span class="toc-section-number">3.4</span> Visualize Nodes by Node Size</a></li>
+<li><a href="nodes.html#visualize-nodes-by-size-and-color" id="toc-visualize-nodes-by-size-and-color"><span class="toc-section-number">3.5</span> Visualize Nodes by Size and Color</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="vizedges.html"><a href="vizedges.html"><i class="fa fa-check"></i><b>4</b> Visualizing Edges</a>
+<li><a href="vizedges.html#vizedges" id="toc-vizedges"><span class="toc-section-number">4</span> Visualizing Edges</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="vizedges.html"><a href="vizedges.html#convert-points-into-lines"><i class="fa fa-check"></i><b>4.1</b> Convert Points into Lines</a>
+<li><a href="vizedges.html#convert-points-into-lines" id="toc-convert-points-into-lines"><span class="toc-section-number">4.1</span> Convert Points into Lines</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="vizedges.html"><a href="vizedges.html#method-1-use-od2line-function-in-stplanr-package."><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Use <code>od2line</code> function in <code>stplanr</code> package.</a></li>
-<li class="chapter" data-level="4.1.2" data-path="vizedges.html"><a href="vizedges.html#method-2-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Group by lineID and Summarize Points into Line</a></li>
-<li class="chapter" data-level="4.1.3" data-path="vizedges.html"><a href="vizedges.html#method-3-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.3</b> Method 3: Join Two Point Geometry into One Row and Unite into Line</a></li>
+<li><a href="vizedges.html#method-1-use-od2line-function-in-stplanr-package." id="toc-method-1-use-od2line-function-in-stplanr-package."><span class="toc-section-number">4.1.1</span> Method 1: Use <code>od2line</code> function in <code>stplanr</code> package.</a></li>
+<li><a href="vizedges.html#method-2-group-by-lineid-and-summarize-points-into-line" id="toc-method-2-group-by-lineid-and-summarize-points-into-line"><span class="toc-section-number">4.1.2</span> Method 2: Group by lineID and Summarize Points into Line</a></li>
+<li><a href="vizedges.html#method-3-join-two-point-geometry-into-one-row-and-unite-into-line" id="toc-method-3-join-two-point-geometry-into-one-row-and-unite-into-line"><span class="toc-section-number">4.1.3</span> Method 3: Join Two Point Geometry into One Row and Unite into Line</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges"><i class="fa fa-check"></i><b>4.2</b> Visualizing Edges</a></li>
-<li class="chapter" data-level="4.3" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-line-width"><i class="fa fa-check"></i><b>4.3</b> Visualizing Edges by Line Width</a></li>
-<li class="chapter" data-level="4.4" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-color"><i class="fa fa-check"></i><b>4.4</b> Visualizing Edges by Color</a></li>
-<li class="chapter" data-level="4.5" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-width-and-color"><i class="fa fa-check"></i><b>4.5</b> Visualizing Edges by Width and Color</a></li>
+<li><a href="vizedges.html#visualizing-edges" id="toc-visualizing-edges"><span class="toc-section-number">4.2</span> Visualizing Edges</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-line-width" id="toc-visualizing-edges-by-line-width"><span class="toc-section-number">4.3</span> Visualizing Edges by Line Width</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-color" id="toc-visualizing-edges-by-color"><span class="toc-section-number">4.4</span> Visualizing Edges by Color</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-width-and-color" id="toc-visualizing-edges-by-width-and-color"><span class="toc-section-number">4.5</span> Visualizing Edges by Width and Color</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html"><i class="fa fa-check"></i><b>5</b> Advanced Aesthetics</a>
+<li><a href="advanced-aesthetics.html#advanced-aesthetics" id="toc-advanced-aesthetics"><span class="toc-section-number">5</span> Advanced Aesthetics</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#export-maps"><i class="fa fa-check"></i><b>5.1</b> Export Maps</a></li>
-<li class="chapter" data-level="5.2" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#small-multiples"><i class="fa fa-check"></i><b>5.2</b> Small Multiples</a></li>
-<li class="chapter" data-level="5.3" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#interactive-maps"><i class="fa fa-check"></i><b>5.3</b> Interactive Maps</a></li>
-<li class="chapter" data-level="5.4" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#base-map"><i class="fa fa-check"></i><b>5.4</b> Base Map</a></li>
-<li class="chapter" data-level="5.5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#inset-map"><i class="fa fa-check"></i><b>5.5</b> Inset Map</a></li>
-<li class="chapter" data-level="5.6" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#edge-bundling"><i class="fa fa-check"></i><b>5.6</b> Edge Bundling</a></li>
+<li><a href="advanced-aesthetics.html#export-maps" id="toc-export-maps"><span class="toc-section-number">5.1</span> Export Maps</a></li>
+<li><a href="advanced-aesthetics.html#small-multiples" id="toc-small-multiples"><span class="toc-section-number">5.2</span> Small Multiples</a></li>
+<li><a href="advanced-aesthetics.html#interactive-maps" id="toc-interactive-maps"><span class="toc-section-number">5.3</span> Interactive Maps</a></li>
+<li><a href="advanced-aesthetics.html#base-map" id="toc-base-map"><span class="toc-section-number">5.4</span> Base Map</a></li>
+<li><a href="advanced-aesthetics.html#inset-map" id="toc-inset-map"><span class="toc-section-number">5.5</span> Inset Map</a></li>
+<li><a href="advanced-aesthetics.html#edge-bundling" id="toc-edge-bundling"><span class="toc-section-number">5.6</span> Edge Bundling</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html"><i class="fa fa-check"></i><b>6</b> Advanced SSN Metrics</a>
+<li><a href="advanced-ssn-metrics.html#advanced-ssn-metrics" id="toc-advanced-ssn-metrics"><span class="toc-section-number">6</span> Advanced SSN Metrics</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html#ssn-hot-spot-detection"><i class="fa fa-check"></i><b>6.1</b> SSN Hot Spot Detection</a></li>
+<li><a href="advanced-ssn-metrics.html#ssn-hotspots-detection" id="toc-ssn-hotspots-detection"><span class="toc-section-number">6.1</span> SSN Hotspots Detection</a>
+<ul>
+<li><a href="advanced-ssn-metrics.html#calculate-ssn-hotspots-using-radius-or-k-nearest-neighbor-window-sizes" id="toc-calculate-ssn-hotspots-using-radius-or-k-nearest-neighbor-window-sizes"><span class="toc-section-number">6.1.1</span> Calculate SSN hotspots using radius or K-nearest neighbor window sizes</a></li>
+<li><a href="advanced-ssn-metrics.html#how-to-visualize-ssn-hotspots" id="toc-how-to-visualize-ssn-hotspots"><span class="toc-section-number">6.1.2</span> How to visualize SSN hotspots</a></li>
+<li><a href="advanced-ssn-metrics.html#how-to-find-optimal-window-sizes-for-ssn-hotspots" id="toc-how-to-find-optimal-window-sizes-for-ssn-hotspots"><span class="toc-section-number">6.1.3</span> How to find optimal window sizes for SSN hotspots</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm" id="toc-calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm"><span class="toc-section-number">6.1.4</span> Calculate SSN hotspots using a user-defined walking distance matrix extracted from OSM</a></li>
+<li><a href="advanced-ssn-metrics.html#application-to-a-weighted-and-bipartite-network" id="toc-application-to-a-weighted-and-bipartite-network"><span class="toc-section-number">6.1.5</span> Application to a weighted and bipartite network</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="edges.html"><a href="edges.html"><i class="fa fa-check"></i><b>7</b> Future Development</a></li>
+</ul></li>
+<li><a href="edges.html#edges" id="toc-edges"><span class="toc-section-number">7</span> Future Development</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 

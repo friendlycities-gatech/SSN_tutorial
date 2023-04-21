@@ -48,17 +48,17 @@ head(MafiaSpatial, 3)
 
 **First step**, we download the U.S. state shapefile through `tigris` package as the background for visualization and transform the shapefile and the dataframe data to the appropriate crs (coordinate reference system). 
 
-The coordinate information can be stored in other projection system other than the commonly used WGS84. Users need to find out what crs is used before transforming the data to another system. Only when crs are the same for two or more shapefiles (or geometry) can we overlay them correctly on each other. Since we are mapping the data on U.S. mainland, we exclude U.S. territories and further transform the node table into `sf` spatial objects with *North America Equidistant Conic projection* (crs=102010). 
+The coordinate information can be stored in other projection system other than the commonly used WGS84. Users need to find out what crs is used before transforming the data to another system. Only when crs are the same for two or more shapefiles (or geometry) can we overlay them correctly on each other. Since we are mapping the data on U.S. mainland, we exclude U.S. territories and further transform the node table into `sf` spatial objects with *North America Equidistant Conic projection* (crs="ESRI:102010"). 
 
 ```{r message=FALSE, warning=FALSE}
 #Convert coordinate system
 MafiaSpatial = MafiaSpatial %>%
-  st_transform(MafiaSpatioal, crs=102010)
+  st_transform(MafiaSpatioal, crs="ESRI:102010")
 
 #states is a function in tigris to download U.S. state boundary shapefile
 us_states = states(cb=TRUE, progress_bar = FALSE) %>%
   filter(!STUSPS %in% c('PR','AS', 'AK', 'GU','MP','VI', 'HI')) %>%
-  st_transform(crs=102010)
+  st_transform(crs="ESRI:102010")
 ```
 
 **Second step**: visualize the nodes on the US state map! 
@@ -202,7 +202,7 @@ MafiaSpatial = MafiaNodes %>%
 
 us_states = states(cb=TRUE, progress_bar=FALSE) %>%
   filter(!STUSPS %in% c('PR','AS', 'AK', 'GU','MP','VI', 'HI')) %>%
-  st_transform(crs=102010)
+  st_transform(crs="ESRI:102010")
 
 # Construct a network and calculate the degree for each node.
 g = graph_from_data_frame(MafiaEdges, directed = FALSE, vertices=MafiaSpatial)

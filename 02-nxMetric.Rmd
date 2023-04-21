@@ -201,6 +201,9 @@ g <- graph_from_data_frame(MafiaEdges, directed = FALSE, vertices=MafiaNodes)
 #set the node size to base on clustering coefficients 
 V(g)$size <- transitivity(g, type='local') 
 
+#delete vertices that do not have clustering coefficients
+g = delete_vertices(g, is.na(V(g)$size))
+
 #Set the node color to vary by mafia family group.  
 # ---- get all color from a color device 
 color = grDevices::colors()[grep('gr(a|e)y', grDevices::colors(), invert = T)] 

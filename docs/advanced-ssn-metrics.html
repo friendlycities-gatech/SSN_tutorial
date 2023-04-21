@@ -24,7 +24,7 @@
 <meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
 
 
-<meta name="date" content="2022-11-29" />
+<meta name="date" content="2022-11-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,6 +53,16 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
 
 
 <style type="text/css">
@@ -93,7 +103,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -106,7 +116,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -137,52 +147,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">SSN Tutorial</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="metrics.html"><a href="metrics.html"><i class="fa fa-check"></i><b>2</b> Network Metrics</a>
+<li><a href="index.html#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="metrics.html#metrics" id="toc-metrics"><span class="toc-section-number">2</span> Network Metrics</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="metrics.html"><a href="metrics.html#network-data-formats"><i class="fa fa-check"></i><b>2.1</b> Network Data Formats</a></li>
-<li class="chapter" data-level="2.2" data-path="metrics.html"><a href="metrics.html#network-metrics"><i class="fa fa-check"></i><b>2.2</b> Network Metrics</a>
+<li><a href="metrics.html#network-data-formats" id="toc-network-data-formats"><span class="toc-section-number">2.1</span> Network Data Formats</a></li>
+<li><a href="metrics.html#network-metrics" id="toc-network-metrics"><span class="toc-section-number">2.2</span> Network Metrics</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="metrics.html"><a href="metrics.html#network-metrics-for-nodes"><i class="fa fa-check"></i><b>2.2.1</b> Network Metrics for Nodes</a></li>
-<li class="chapter" data-level="2.2.2" data-path="metrics.html"><a href="metrics.html#network-metrics-for-edges"><i class="fa fa-check"></i><b>2.2.2</b> Network Metrics for Edges</a></li>
+<li><a href="metrics.html#network-metrics-for-nodes" id="toc-network-metrics-for-nodes"><span class="toc-section-number">2.2.1</span> Network Metrics for Nodes</a></li>
+<li><a href="metrics.html#network-metrics-for-edges" id="toc-network-metrics-for-edges"><span class="toc-section-number">2.2.2</span> Network Metrics for Edges</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="metrics.html"><a href="metrics.html#igraph-visualization"><i class="fa fa-check"></i><b>2.3</b> igraph Visualization</a></li>
+<li><a href="metrics.html#igraph-visualization" id="toc-igraph-visualization"><span class="toc-section-number">2.3</span> igraph Visualization</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="nodes.html"><a href="nodes.html"><i class="fa fa-check"></i><b>3</b> Visualizing Nodes</a>
+<li><a href="nodes.html#nodes" id="toc-nodes"><span class="toc-section-number">3</span> Visualizing Nodes</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="nodes.html"><a href="nodes.html#convert-coordinates-to-points"><i class="fa fa-check"></i><b>3.1</b> Convert Coordinates to Points</a></li>
-<li class="chapter" data-level="3.2" data-path="nodes.html"><a href="nodes.html#visualize-nodes"><i class="fa fa-check"></i><b>3.2</b> Visualize Nodes</a></li>
-<li class="chapter" data-level="3.3" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-color"><i class="fa fa-check"></i><b>3.3</b> Visualize Nodes by Node Color</a></li>
-<li class="chapter" data-level="3.4" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-size"><i class="fa fa-check"></i><b>3.4</b> Visualize Nodes by Node Size</a></li>
-<li class="chapter" data-level="3.5" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-size-and-color"><i class="fa fa-check"></i><b>3.5</b> Visualize Nodes by Size and Color</a></li>
+<li><a href="nodes.html#convert-coordinates-to-points" id="toc-convert-coordinates-to-points"><span class="toc-section-number">3.1</span> Convert Coordinates to Points</a></li>
+<li><a href="nodes.html#visualize-nodes" id="toc-visualize-nodes"><span class="toc-section-number">3.2</span> Visualize Nodes</a></li>
+<li><a href="nodes.html#visualize-nodes-by-node-color" id="toc-visualize-nodes-by-node-color"><span class="toc-section-number">3.3</span> Visualize Nodes by Node Color</a></li>
+<li><a href="nodes.html#visualize-nodes-by-node-size" id="toc-visualize-nodes-by-node-size"><span class="toc-section-number">3.4</span> Visualize Nodes by Node Size</a></li>
+<li><a href="nodes.html#visualize-nodes-by-size-and-color" id="toc-visualize-nodes-by-size-and-color"><span class="toc-section-number">3.5</span> Visualize Nodes by Size and Color</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="vizedges.html"><a href="vizedges.html"><i class="fa fa-check"></i><b>4</b> Visualizing Edges</a>
+<li><a href="vizedges.html#vizedges" id="toc-vizedges"><span class="toc-section-number">4</span> Visualizing Edges</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="vizedges.html"><a href="vizedges.html#convert-points-into-lines"><i class="fa fa-check"></i><b>4.1</b> Convert Points into Lines</a>
+<li><a href="vizedges.html#convert-points-into-lines" id="toc-convert-points-into-lines"><span class="toc-section-number">4.1</span> Convert Points into Lines</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="vizedges.html"><a href="vizedges.html#method-1-use-od2line-function-in-stplanr-package."><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Use <code>od2line</code> function in <code>stplanr</code> package.</a></li>
-<li class="chapter" data-level="4.1.2" data-path="vizedges.html"><a href="vizedges.html#method-2-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Group by lineID and Summarize Points into Line</a></li>
-<li class="chapter" data-level="4.1.3" data-path="vizedges.html"><a href="vizedges.html#method-3-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.3</b> Method 3: Join Two Point Geometry into One Row and Unite into Line</a></li>
+<li><a href="vizedges.html#method-1-use-od2line-function-in-stplanr-package." id="toc-method-1-use-od2line-function-in-stplanr-package."><span class="toc-section-number">4.1.1</span> Method 1: Use <code>od2line</code> function in <code>stplanr</code> package.</a></li>
+<li><a href="vizedges.html#method-2-group-by-lineid-and-summarize-points-into-line" id="toc-method-2-group-by-lineid-and-summarize-points-into-line"><span class="toc-section-number">4.1.2</span> Method 2: Group by lineID and Summarize Points into Line</a></li>
+<li><a href="vizedges.html#method-3-join-two-point-geometry-into-one-row-and-unite-into-line" id="toc-method-3-join-two-point-geometry-into-one-row-and-unite-into-line"><span class="toc-section-number">4.1.3</span> Method 3: Join Two Point Geometry into One Row and Unite into Line</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges"><i class="fa fa-check"></i><b>4.2</b> Visualizing Edges</a></li>
-<li class="chapter" data-level="4.3" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-line-width"><i class="fa fa-check"></i><b>4.3</b> Visualizing Edges by Line Width</a></li>
-<li class="chapter" data-level="4.4" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-color"><i class="fa fa-check"></i><b>4.4</b> Visualizing Edges by Color</a></li>
-<li class="chapter" data-level="4.5" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-width-and-color"><i class="fa fa-check"></i><b>4.5</b> Visualizing Edges by Width and Color</a></li>
+<li><a href="vizedges.html#visualizing-edges" id="toc-visualizing-edges"><span class="toc-section-number">4.2</span> Visualizing Edges</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-line-width" id="toc-visualizing-edges-by-line-width"><span class="toc-section-number">4.3</span> Visualizing Edges by Line Width</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-color" id="toc-visualizing-edges-by-color"><span class="toc-section-number">4.4</span> Visualizing Edges by Color</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-width-and-color" id="toc-visualizing-edges-by-width-and-color"><span class="toc-section-number">4.5</span> Visualizing Edges by Width and Color</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html"><i class="fa fa-check"></i><b>5</b> Advanced Aesthetics</a>
+<li><a href="advanced-aesthetics.html#advanced-aesthetics" id="toc-advanced-aesthetics"><span class="toc-section-number">5</span> Advanced Aesthetics</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#export-maps"><i class="fa fa-check"></i><b>5.1</b> Export Maps</a></li>
-<li class="chapter" data-level="5.2" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#small-multiples"><i class="fa fa-check"></i><b>5.2</b> Small Multiples</a></li>
-<li class="chapter" data-level="5.3" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#interactive-maps"><i class="fa fa-check"></i><b>5.3</b> Interactive Maps</a></li>
-<li class="chapter" data-level="5.4" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#base-map"><i class="fa fa-check"></i><b>5.4</b> Base Map</a></li>
-<li class="chapter" data-level="5.5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#inset-map"><i class="fa fa-check"></i><b>5.5</b> Inset Map</a></li>
-<li class="chapter" data-level="5.6" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#edge-bundling"><i class="fa fa-check"></i><b>5.6</b> Edge Bundling</a></li>
+<li><a href="advanced-aesthetics.html#export-maps" id="toc-export-maps"><span class="toc-section-number">5.1</span> Export Maps</a></li>
+<li><a href="advanced-aesthetics.html#small-multiples" id="toc-small-multiples"><span class="toc-section-number">5.2</span> Small Multiples</a></li>
+<li><a href="advanced-aesthetics.html#interactive-maps" id="toc-interactive-maps"><span class="toc-section-number">5.3</span> Interactive Maps</a></li>
+<li><a href="advanced-aesthetics.html#base-map" id="toc-base-map"><span class="toc-section-number">5.4</span> Base Map</a></li>
+<li><a href="advanced-aesthetics.html#inset-map" id="toc-inset-map"><span class="toc-section-number">5.5</span> Inset Map</a></li>
+<li><a href="advanced-aesthetics.html#edge-bundling" id="toc-edge-bundling"><span class="toc-section-number">5.6</span> Edge Bundling</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html"><i class="fa fa-check"></i><b>6</b> Advanced SSN Metrics</a>
+<li><a href="advanced-ssn-metrics.html#advanced-ssn-metrics" id="toc-advanced-ssn-metrics"><span class="toc-section-number">6</span> Advanced SSN Metrics</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html#ssn-hot-spot-detection"><i class="fa fa-check"></i><b>6.1</b> SSN Hot Spot Detection</a></li>
+<li><a href="advanced-ssn-metrics.html#ssn-hotspots-detection" id="toc-ssn-hotspots-detection"><span class="toc-section-number">6.1</span> SSN Hotspots Detection</a>
+<ul>
+<li><a href="advanced-ssn-metrics.html#calculate-ssn-hotspots-using-radius-or-k-nearest-neighbor-window-sizes" id="toc-calculate-ssn-hotspots-using-radius-or-k-nearest-neighbor-window-sizes"><span class="toc-section-number">6.1.1</span> Calculate SSN hotspots using radius or K-nearest neighbor window sizes</a></li>
+<li><a href="advanced-ssn-metrics.html#how-to-visualize-ssn-hotspots" id="toc-how-to-visualize-ssn-hotspots"><span class="toc-section-number">6.1.2</span> How to visualize SSN hotspots</a></li>
+<li><a href="advanced-ssn-metrics.html#how-to-find-optimal-window-sizes-for-ssn-hotspots" id="toc-how-to-find-optimal-window-sizes-for-ssn-hotspots"><span class="toc-section-number">6.1.3</span> How to find optimal window sizes for SSN hotspots</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm" id="toc-calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm"><span class="toc-section-number">6.1.4</span> Calculate SSN hotspots using a user-defined walking distance matrix extracted from OSM</a></li>
+<li><a href="advanced-ssn-metrics.html#application-to-a-weighted-and-bipartite-network" id="toc-application-to-a-weighted-and-bipartite-network"><span class="toc-section-number">6.1.5</span> Application to a weighted and bipartite network</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="edges.html"><a href="edges.html"><i class="fa fa-check"></i><b>7</b> Future Development</a></li>
+</ul></li>
+<li><a href="edges.html#edges" id="toc-edges"><span class="toc-section-number">7</span> Future Development</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -205,18 +222,508 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="advanced-ssn-metrics" class="section level1" number="6">
 <h1><span class="header-section-number">Chapter 6</span> Advanced SSN Metrics</h1>
-<div id="ssn-hot-spot-detection" class="section level2" number="6.1">
-<h2><span class="header-section-number">6.1</span> SSN Hot Spot Detection</h2>
-<p>In this chapter we show two GIS methods, <strong>EdgeScan</strong> and <strong>NDScan</strong>, for capturing areas with high and low levels of number of edges or network density respectively. Both methods are moving window processes that count the number of edges and network density, respectively, for each node in a given focal area (window area).</p>
-<p>We will show how to use <strong>EdgeScan</strong> and <strong>NDScan</strong> to find local social network hot spots in the 1960s New York City mafia social networks. We will also show some useful maps and analytic graphs that are helpful to determine the optimal parameters.</p>
-<p>To begin, let us introduce the basic ideas behind the <strong>EdgeScan</strong> and <strong>NDScan</strong> methods. Both methods are based on spatial scan approaches, which summarised statistics in a moving window for a focal node. Therefore, for each node in the network, EdgeScan and NDScan calculate the number of edges and network density in the area centered by the focal node. Network density is the ratio of actual number of edges and the potential number of edges. A high network density (=1) means that nodes in the moving window have maximize all the possible combinations of connections.</p>
-<p><img src="Figs/06-metrics-hotspot-schema.jpg" width="100%" /></p>
-<p>Our EdgeScan and NDScan methods provide three different window definitions: Euclidean distance, Manhattan distance, and K-nearest neighbors. The users can decide on the window size, in the unit of meters (or miles) or the number of nearest neighbors. The graphic below shows a schematic diagram of how the EdgeScan and NDScan value for a focal node is calculated. The window in the first circle simultaneously represents a potential window size of euclidean distance of 400m, manhattan distance of 500m, and 7-nearest neighbors.</p>
-<p>To load the sample dataset and the functions, go to GitHub <a href="https://github.com/friendlycities-gatech/SSNtools">SSNtool</a> to download the development R package, or type the following lines in your R console. See the GitHub page for more detailed description of all the functions available in the package.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="advanced-ssn-metrics.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
-<span id="cb1-2"><a href="advanced-ssn-metrics.html#cb1-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>)</span></code></pre></div>
-<p>The sample node table <strong>NYCMafiaNodes</strong> is a node table with label and spatial coordinates for each node. The sample edge list <strong>NYCMafiaeEdges</strong> contains pairs of node labels (corresponding to node table label). To get EdgeScan and NDScan value for each node, you just need to run your node table and edge list through the following codes:</p>
+<p>The following subchapters will introduce advanced SSN metrics. <strong>Spatial Social Network (SSN)</strong> refers to social networks where the nodes are also geolocated. They can be collaborations between organizations, economic hiring between individuals, trades between companies, and friendships. Different from social network metrics or spatial methods, these metrics tend to focus on the interaction between the networks and geographic space. While the metrics are designed for small-scale SSNs, some can also be applied to analyze origin-destination flows, POI visits, and mobility data.</p>
+<div id="ssn-hotspots-detection" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> SSN Hotspots Detection</h2>
+<p>In this chapter we show two GIS methods, <strong>EdgeScan</strong> and <strong>NDScan</strong>, for capturing areas with high and low levels of number of edges or network density respectively. Both methods are moving window processes that count the number of edges and network density, respectively, for each node in a given focal area (window area). The contents below come from this paper published in <em>Transactions in GIS</em>: <a href="https://onlinelibrary.wiley.com/doi/10.1111/tgis.13050">Is Your Neighbor Your Friend? Scan Methods for Spatial Social Network (SSN) Hotspot Detection (Liang et al., 2023)</a>.</p>
+<p>Here are some example research questions that will benefit from <strong>EdgeScan</strong> and <strong>NDScan</strong> metrics:</p>
+<ul>
+<li>(Mafia members SSN) Where do mafia members both cluster in geographic proximity and connect in network space?</li>
+<li>(Restaurant POI visits SSN) Where do restaurants cluster and serve local clientele (i.e., heavy-weighted connections to nearby census block groups)?</li>
+<li>(Food sharing SSN) Where are organizations that locate close-by but do not collaborate or share resources with each other?</li>
+</ul>
+<p>Our tutorial will cover the following topics:</p>
+<ul>
+<li>How to calculate SSN hotspots using default dataset <strong>NYCMafiaNodes</strong> and <strong>NYCMafiaEdges</strong> in <code>SSNtools</code>.</li>
+<li>How to visualize SSN hotspots</li>
+<li>(Advanced) How to find optimal window sizes for SSN hotspots</li>
+<li>(Advanced) How to calculate SSN hotspots within a walking distance radius, using OSM (OpenStreetMap) data as an input matrix.</li>
+<li>(Advanced) Application to a weighted and bipartite network (POI visits)</li>
+</ul>
+<p>To begin, let us introduce the basic ideas behind the <strong>EdgeScan</strong> and <strong>NDScan</strong> methods. Both methods are based on spatial scan approaches, which summarised statistics in a moving window for a focal node. Therefore, for each node in the network, EdgeScan and NDScan calculate <strong>the number of edges</strong> and <strong>network density</strong> in the area centered by the focal node. Network density is the ratio of actual number of edges and the potential number of edges. A high network density (=1) means that nodes in the moving window have maximize all the possible combinations of connections.</p>
+<p>Our EdgeScan and NDScan methods provide four different <strong>neighborhood definitions</strong>:</p>
+<ul>
+<li>Euclidean distance</li>
+<li>Manhattan distance</li>
+<li>User-defined distance (e.g., walking distance)</li>
+<li>K-nearest neighbors</li>
+</ul>
+<p>The users can input the following <strong>window size</strong></p>
+<ul>
+<li>distance in the unit of coordinate systems (meter in our example)</li>
+<li>a user-defined distance matrix</li>
+<li>the number of nearest neighbors.</li>
+</ul>
+<p>The graphic below shows a schematic diagram of how the EdgeScan and NDScan value for a focal node is calculated. The window in the first circle simultaneously represents a potential window size of Euclidean distance of 400m, Manhattan distance of 500m, and 7-nearest neighbors.</p>
+<p><img src="Figs/06-metrics-hotspot-schema.png" width="100%" /></p>
+<p>We will continue to use sample dataset <strong>NYCMafiaNodes</strong> and <strong>NYCMafiaEdges</strong> in <code>SSNtools</code> to illustrate examples. To load the sample dataset and the functions, go to GitHub <a href="https://github.com/friendlycities-gatech/SSNtools">SSNtool</a> to download the development R package, or type the following lines in your R console. Click the GitHub page for more detailed description of all the functions available in the package and the input formats for each function.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="advanced-ssn-metrics.html#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb68-2"><a href="advanced-ssn-metrics.html#cb68-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>)</span></code></pre></div>
+<p>The sample node table <strong>NYCMafiaNodes</strong> is a node table with label and spatial coordinates for each node. The sample edge list <strong>NYCMafiaeEdges</strong> contains pairs of node labels (corresponding to node table label). This is a unweighted and undirected network. The coordinate system crs is 32118, in the unit of meters. Functions in <code>SSNtools</code> run on base R syntax, though wrangling data may require additional package dependencies. Based on the definitions of EdgeScan and NDScan, <code>directed</code> argument is only implemented for ND-functions, while <code>weighted</code> argument is only implemented for the Edge-functions.</p>
+<div id="calculate-ssn-hotspots-using-radius-or-k-nearest-neighbor-window-sizes" class="section level3" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> Calculate SSN hotspots using radius or K-nearest neighbor window sizes</h3>
+<p>To get EdgeScan and NDScan value for each node, you just need to run your node and edge tables through the following codes:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="advanced-ssn-metrics.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SSNtools)</span>
+<span id="cb69-2"><a href="advanced-ssn-metrics.html#cb69-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-3"><a href="advanced-ssn-metrics.html#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(NYCMafiaNodes)</span>
+<span id="cb69-4"><a href="advanced-ssn-metrics.html#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(NYCMafiaEdges)</span>
+<span id="cb69-5"><a href="advanced-ssn-metrics.html#cb69-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-6"><a href="advanced-ssn-metrics.html#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ----process dataframe into a list of lists </span></span>
+<span id="cb69-7"><a href="advanced-ssn-metrics.html#cb69-7" aria-hidden="true" tabindex="-1"></a><span class="co"># params:</span></span>
+<span id="cb69-8"><a href="advanced-ssn-metrics.html#cb69-8" aria-hidden="true" tabindex="-1"></a><span class="co">#     nodes - a R dataframe containing node label, longitude, and latitude</span></span>
+<span id="cb69-9"><a href="advanced-ssn-metrics.html#cb69-9" aria-hidden="true" tabindex="-1"></a><span class="co">#     label_name - the name of the column for node label</span></span>
+<span id="cb69-10"><a href="advanced-ssn-metrics.html#cb69-10" aria-hidden="true" tabindex="-1"></a><span class="co">#     lon_name - the name of the column for node longitude </span></span>
+<span id="cb69-11"><a href="advanced-ssn-metrics.html#cb69-11" aria-hidden="true" tabindex="-1"></a><span class="co">#     lat_name - the name of the column for node latitude</span></span>
+<span id="cb69-12"><a href="advanced-ssn-metrics.html#cb69-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     bipartite_name - (optional) the name of the column that indicates the bipartite set of the nodes. The set of nodes that EdgeScan or NDScan should report on should be coded as 1 in the biparite column, and 0 otherwise.  </span></span>
+<span id="cb69-13"><a href="advanced-ssn-metrics.html#cb69-13" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">=</span> <span class="fu">processNode</span>(NYCMafiaNodes, <span class="st">&#39;label&#39;</span>, <span class="st">&#39;LonX&#39;</span>, <span class="st">&#39;LatY&#39;</span>)</span>
+<span id="cb69-14"><a href="advanced-ssn-metrics.html#cb69-14" aria-hidden="true" tabindex="-1"></a><span class="co"># params:</span></span>
+<span id="cb69-15"><a href="advanced-ssn-metrics.html#cb69-15" aria-hidden="true" tabindex="-1"></a><span class="co">#     edges - a R dataframe containing source node label and target node label</span></span>
+<span id="cb69-16"><a href="advanced-ssn-metrics.html#cb69-16" aria-hidden="true" tabindex="-1"></a><span class="co">#     source_name - the name of the column for source node label</span></span>
+<span id="cb69-17"><a href="advanced-ssn-metrics.html#cb69-17" aria-hidden="true" tabindex="-1"></a><span class="co">#     target_name - the name of the column for target node label</span></span>
+<span id="cb69-18"><a href="advanced-ssn-metrics.html#cb69-18" aria-hidden="true" tabindex="-1"></a><span class="co">#     weight_name - (optional) the name of the column for edge weight </span></span>
+<span id="cb69-19"><a href="advanced-ssn-metrics.html#cb69-19" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> <span class="fu">processEdge</span>(NYCMafiaEdges, <span class="st">&#39;Source&#39;</span>, <span class="st">&#39;Target&#39;</span>)</span>
+<span id="cb69-20"><a href="advanced-ssn-metrics.html#cb69-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-21"><a href="advanced-ssn-metrics.html#cb69-21" aria-hidden="true" tabindex="-1"></a><span class="co">#-----calculates network density within a radius (500 meters - Euclidean distance) of each node in a network</span></span>
+<span id="cb69-22"><a href="advanced-ssn-metrics.html#cb69-22" aria-hidden="true" tabindex="-1"></a><span class="co"># params:</span></span>
+<span id="cb69-23"><a href="advanced-ssn-metrics.html#cb69-23" aria-hidden="true" tabindex="-1"></a><span class="co">#     nodes - a list of named lists. Each sublist contains a node.</span></span>
+<span id="cb69-24"><a href="advanced-ssn-metrics.html#cb69-24" aria-hidden="true" tabindex="-1"></a><span class="co">#     edges - a list of list. Each sublist contains an edge.</span></span>
+<span id="cb69-25"><a href="advanced-ssn-metrics.html#cb69-25" aria-hidden="true" tabindex="-1"></a><span class="co">#     radius - radius (in the coordinate unit) of the scanning window. </span></span>
+<span id="cb69-26"><a href="advanced-ssn-metrics.html#cb69-26" aria-hidden="true" tabindex="-1"></a><span class="co">#     (optional) min - minimum number of points required to be in the search window. Default to 3.</span></span>
+<span id="cb69-27"><a href="advanced-ssn-metrics.html#cb69-27" aria-hidden="true" tabindex="-1"></a><span class="co"># return:</span></span>
+<span id="cb69-28"><a href="advanced-ssn-metrics.html#cb69-28" aria-hidden="true" tabindex="-1"></a><span class="co">#     list(heat, edgeWithin) - a list of two dataframe for node and edge table. </span></span>
+<span id="cb69-29"><a href="advanced-ssn-metrics.html#cb69-29" aria-hidden="true" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">NDScanRadius</span>(nodes, edges, <span class="dv">500</span>, <span class="at">min=</span><span class="dv">3</span>)</span>
+<span id="cb69-30"><a href="advanced-ssn-metrics.html#cb69-30" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> result[[<span class="dv">1</span>]]</span>
+<span id="cb69-31"><a href="advanced-ssn-metrics.html#cb69-31" aria-hidden="true" tabindex="-1"></a>edgeWithin <span class="ot">=</span> result[[<span class="dv">2</span>]]</span></code></pre></div>
+<p>All the SSNhotspot main functions (e.g, edgeScanRadius and NDScanRadius) will return a list of two dataframes. The first dataframe is a node table that has the node label and the heat, presenting the number of edges in EdgeScan and network density in NDScan respectively. The second dataframe is an edge table that has the edge pair and a binary column edgeWithin indicating whether the edge is within the scanning window. Below are example outputs of the <strong>heat</strong> and <strong>edgeWithin</strong> dataframes. If the nodes (e.g., AMAROSA-ALEXANDER) do not meet the <strong>min</strong> argument requirement (in this case, min=3 and thus three nodes in the moving window), the <strong>heat</strong> value will be NA. Zero has practical meaning in the outputs: it means that there are no connections within the center node’s searching window despite having at least three nodes.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="advanced-ssn-metrics.html#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co">#----- print example outputs at selected rows ------</span></span>
+<span id="cb70-2"><a href="advanced-ssn-metrics.html#cb70-2" aria-hidden="true" tabindex="-1"></a>heat[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">93</span>,<span class="dv">102</span>), ]</span></code></pre></div>
+<pre><code>##                 label heat
+## 1   AMAROSA-ALEXANDER   NA
+## 93        SIANO-FIORE  0.0
+## 102   POLIZZANO-RALPH  0.6</code></pre>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="advanced-ssn-metrics.html#cb72-1" aria-hidden="true" tabindex="-1"></a>edgeWithin[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">254</span>,<span class="dv">259</span>), ]</span></code></pre></div>
+<pre><code>##              Source            Target WithinWindow
+## 1   SALERNO-ANTHONY    ALBERO-CHARLES            0
+## 254     SIANO-FIORE   PAGANO-PASQUALE            0
+## 259 POLIZZANO-RALPH DIPALERMO-CHARLES            1</code></pre>
+<p>Here are other SSN hotspots functions using various window size definitions:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="advanced-ssn-metrics.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co">#-----calculates network density within 10 nearest neighbors of each node in a network</span></span>
+<span id="cb74-2"><a href="advanced-ssn-metrics.html#cb74-2" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> <span class="fu">NDScanKNearest</span>(nodes, edges, <span class="dv">10</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb74-3"><a href="advanced-ssn-metrics.html#cb74-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-4"><a href="advanced-ssn-metrics.html#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="co">#-----calculates network density within a radius (500 meters - Manhattan distance) of each node in a network</span></span>
+<span id="cb74-5"><a href="advanced-ssn-metrics.html#cb74-5" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> <span class="fu">NDScanManhattan</span>(nodes, edges, <span class="dv">500</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb74-6"><a href="advanced-ssn-metrics.html#cb74-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-7"><a href="advanced-ssn-metrics.html#cb74-7" aria-hidden="true" tabindex="-1"></a><span class="co">#----calculate the density of edges within a radius (500 meters - Euclidean distance) of every node in a graph</span></span>
+<span id="cb74-8"><a href="advanced-ssn-metrics.html#cb74-8" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> <span class="fu">edgeScanRadius</span>(nodes, edges, <span class="dv">500</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb74-9"><a href="advanced-ssn-metrics.html#cb74-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-10"><a href="advanced-ssn-metrics.html#cb74-10" aria-hidden="true" tabindex="-1"></a><span class="co">#-----calculates the density of edges within 10 nearest neighbors of each node in a network</span></span>
+<span id="cb74-11"><a href="advanced-ssn-metrics.html#cb74-11" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> <span class="fu">edgeScanKNearest</span>(nodes, edges, <span class="dv">10</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb74-12"><a href="advanced-ssn-metrics.html#cb74-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-13"><a href="advanced-ssn-metrics.html#cb74-13" aria-hidden="true" tabindex="-1"></a><span class="co">#-----calculates the density of edges within a radius (500 meters - Manhattan distance) of each node in a network</span></span>
+<span id="cb74-14"><a href="advanced-ssn-metrics.html#cb74-14" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> <span class="fu">edgeScanManhattan</span>(nodes, edges, <span class="dv">500</span>)[[<span class="dv">1</span>]]</span></code></pre></div>
+</div>
+<div id="how-to-visualize-ssn-hotspots" class="section level3" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> How to visualize SSN hotspots</h3>
+<p>To visualize SSN hotspots, we need to attach spatial information to nodes in the <strong>heat</strong> dataframe and visualize nodes based on the hotspot values (i.e., column heat). If the codes below are foreign to you, review <a href="https://friendlycities-gatech.github.io/SSN_tutorial/advanced-aesthetics.html">Chapter 5: Advanced Aesthetics</a> for more details.</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="advanced-ssn-metrics.html#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb75-2"><a href="advanced-ssn-metrics.html#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(basemaps)</span>
+<span id="cb75-3"><a href="advanced-ssn-metrics.html#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb75-4"><a href="advanced-ssn-metrics.html#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb75-5"><a href="advanced-ssn-metrics.html#cb75-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stplanr)</span>
+<span id="cb75-6"><a href="advanced-ssn-metrics.html#cb75-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SSNtools)</span>
+<span id="cb75-7"><a href="advanced-ssn-metrics.html#cb75-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-8"><a href="advanced-ssn-metrics.html#cb75-8" aria-hidden="true" tabindex="-1"></a><span class="co"># we will use NDScanRadius as an example</span></span>
+<span id="cb75-9"><a href="advanced-ssn-metrics.html#cb75-9" aria-hidden="true" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">NDScanRadius</span>(nodes, edges, <span class="dv">500</span>, <span class="at">min=</span><span class="dv">3</span>)</span>
+<span id="cb75-10"><a href="advanced-ssn-metrics.html#cb75-10" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> result[[<span class="dv">1</span>]]</span>
+<span id="cb75-11"><a href="advanced-ssn-metrics.html#cb75-11" aria-hidden="true" tabindex="-1"></a>edgeWithin <span class="ot">=</span> result[[<span class="dv">2</span>]]</span>
+<span id="cb75-12"><a href="advanced-ssn-metrics.html#cb75-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-13"><a href="advanced-ssn-metrics.html#cb75-13" aria-hidden="true" tabindex="-1"></a><span class="co"># convert heat dataframe to a spatial sf object</span></span>
+<span id="cb75-14"><a href="advanced-ssn-metrics.html#cb75-14" aria-hidden="true" tabindex="-1"></a>MafiaSpatial <span class="ot">=</span> heat <span class="sc">%&gt;%</span> </span>
+<span id="cb75-15"><a href="advanced-ssn-metrics.html#cb75-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(NYCMafiaNodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;label&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&#39;LonX&#39;</span>, <span class="st">&#39;LatY&#39;</span>), <span class="at">crs=</span><span class="dv">32118</span>)</span>
+<span id="cb75-16"><a href="advanced-ssn-metrics.html#cb75-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-17"><a href="advanced-ssn-metrics.html#cb75-17" aria-hidden="true" tabindex="-1"></a><span class="co"># convert edgeWithin dataframe to line geometry and filter those that are within the window radius.</span></span>
+<span id="cb75-18"><a href="advanced-ssn-metrics.html#cb75-18" aria-hidden="true" tabindex="-1"></a>NYCMafiaEdges_shp <span class="ot">=</span> <span class="fu">od2line</span>(edgeWithin, MafiaSpatial) <span class="sc">%&gt;%</span> </span>
+<span id="cb75-19"><a href="advanced-ssn-metrics.html#cb75-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(WithinWindow <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb75-20"><a href="advanced-ssn-metrics.html#cb75-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-21"><a href="advanced-ssn-metrics.html#cb75-21" aria-hidden="true" tabindex="-1"></a><span class="co"># create basemap with functions from basemaps library</span></span>
+<span id="cb75-22"><a href="advanced-ssn-metrics.html#cb75-22" aria-hidden="true" tabindex="-1"></a><span class="fu">set_defaults</span>(<span class="at">map_service =</span> <span class="st">&quot;carto&quot;</span>, <span class="at">map_type =</span> <span class="st">&quot;light&quot;</span>)</span>
+<span id="cb75-23"><a href="advanced-ssn-metrics.html#cb75-23" aria-hidden="true" tabindex="-1"></a>bgbox <span class="ot">=</span> <span class="fu">st_bbox</span>(MafiaSpatial) <span class="sc">%&gt;%</span> <span class="fu">st_as_sfc</span>()</span>
+<span id="cb75-24"><a href="advanced-ssn-metrics.html#cb75-24" aria-hidden="true" tabindex="-1"></a>bg <span class="ot">=</span> <span class="fu">basemap_stars</span>(bgbox)</span></code></pre></div>
+<pre><code>## Loading basemap &#39;light&#39; from map service &#39;carto&#39;...</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="advanced-ssn-metrics.html#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create hotspot map with functions from tmap library</span></span>
+<span id="cb77-2"><a href="advanced-ssn-metrics.html#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb77-3"><a href="advanced-ssn-metrics.html#cb77-3" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> </span>
+<span id="cb77-4"><a href="advanced-ssn-metrics.html#cb77-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bg) <span class="sc">+</span></span>
+<span id="cb77-5"><a href="advanced-ssn-metrics.html#cb77-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_rgb</span>(<span class="at">alpha=</span><span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb77-6"><a href="advanced-ssn-metrics.html#cb77-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#map edges within searching window </span></span>
+<span id="cb77-7"><a href="advanced-ssn-metrics.html#cb77-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(NYCMafiaEdges_shp) <span class="sc">+</span> </span>
+<span id="cb77-8"><a href="advanced-ssn-metrics.html#cb77-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">lwd=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb77-9"><a href="advanced-ssn-metrics.html#cb77-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#map nodes with NA values </span></span>
+<span id="cb77-10"><a href="advanced-ssn-metrics.html#cb77-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(MafiaSpatial <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(heat))) <span class="sc">+</span> </span>
+<span id="cb77-11"><a href="advanced-ssn-metrics.html#cb77-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">col=</span><span class="st">&#39;white&#39;</span>, <span class="at">size=</span><span class="fl">0.05</span>) <span class="sc">+</span>  </span>
+<span id="cb77-12"><a href="advanced-ssn-metrics.html#cb77-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#map nodes with heat values, allowing nodes with higher heat values to be mapped on top</span></span>
+<span id="cb77-13"><a href="advanced-ssn-metrics.html#cb77-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(MafiaSpatial <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(heat) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(heat)) <span class="sc">+</span> </span>
+<span id="cb77-14"><a href="advanced-ssn-metrics.html#cb77-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">col=</span><span class="st">&#39;heat&#39;</span>, <span class="at">size=</span><span class="fl">0.1</span>, <span class="at">style=</span><span class="st">&#39;fixed&#39;</span>, <span class="at">legend.col.show =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb77-15"><a href="advanced-ssn-metrics.html#cb77-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&#39;#FBD977&#39;</span>, <span class="st">&#39;#F78D3D&#39;</span>, <span class="st">&#39;#E3211B&#39;</span>, <span class="st">&#39;#800F26&#39;</span>), </span>
+<span id="cb77-16"><a href="advanced-ssn-metrics.html#cb77-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.00001</span>, <span class="fl">0.10</span>, <span class="fl">0.25</span>, <span class="fl">0.667</span>)) <span class="sc">+</span></span>
+<span id="cb77-17"><a href="advanced-ssn-metrics.html#cb77-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#customize legend and layout</span></span>
+<span id="cb77-18"><a href="advanced-ssn-metrics.html#cb77-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(<span class="at">type=</span><span class="st">&#39;symbol&#39;</span>, </span>
+<span id="cb77-19"><a href="advanced-ssn-metrics.html#cb77-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&#39;0&#39;</span>, <span class="st">&#39;(0, 0.10]&#39;</span>, <span class="st">&#39;(0.10, 0.25]&#39;</span>, <span class="st">&#39;(0.25, 0.667]&#39;</span>, <span class="st">&#39;NA (Less than MinPts)&#39;</span>), </span>
+<span id="cb77-20"><a href="advanced-ssn-metrics.html#cb77-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;#FBD977&#39;</span>, <span class="st">&#39;#F78D3D&#39;</span>, <span class="st">&#39;#E3211B&#39;</span>, <span class="st">&#39;#800F26&#39;</span>, <span class="st">&#39;white&#39;</span>), </span>
+<span id="cb77-21"><a href="advanced-ssn-metrics.html#cb77-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">is.portrait =</span> T, <span class="at">title=</span><span class="fu">c</span>(<span class="st">&#39;Network Density&#39;</span>), <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb77-22"><a href="advanced-ssn-metrics.html#cb77-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(<span class="at">type=</span><span class="st">&#39;line&#39;</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&#39;Edges within window size&#39;</span>)), </span>
+<span id="cb77-23"><a href="advanced-ssn-metrics.html#cb77-23" aria-hidden="true" tabindex="-1"></a>                <span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">lwd=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb77-24"><a href="advanced-ssn-metrics.html#cb77-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>), <span class="at">text.size =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  </span>
+<span id="cb77-25"><a href="advanced-ssn-metrics.html#cb77-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.title.size =</span> <span class="fl">0.9</span>, <span class="at">legend.text.size =</span> <span class="fl">0.7</span>, <span class="at">legend.width =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb77-26"><a href="advanced-ssn-metrics.html#cb77-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">&#39;NYC 1960s Mafia SSN Hotspots&#39;</span>,</span>
+<span id="cb77-27"><a href="advanced-ssn-metrics.html#cb77-27" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.position =</span> <span class="fu">c</span>(<span class="st">&#39;center&#39;</span>),</span>
+<span id="cb77-28"><a href="advanced-ssn-metrics.html#cb77-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.5</span>)</span>
+<span id="cb77-29"><a href="advanced-ssn-metrics.html#cb77-29" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
+<p>You may wonder why edges are invisible: that is because the edges within the window size (500m) are short-ranged and thus may be hidden under the nodes! The following codes add an inset map to highlight an area with dense SSN hotspots.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="advanced-ssn-metrics.html#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a bounding box in crs=32118 to retrieve basemap </span></span>
+<span id="cb78-2"><a href="advanced-ssn-metrics.html#cb78-2" aria-hidden="true" tabindex="-1"></a>Inset <span class="ot">=</span> <span class="fu">st_bbox</span>(<span class="fu">data.frame</span>(<span class="at">lon=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.00434</span>, <span class="sc">-</span><span class="fl">73.98125</span>), <span class="at">lat=</span><span class="fu">c</span>(<span class="fl">40.73080</span>, <span class="fl">40.71109</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb78-3"><a href="advanced-ssn-metrics.html#cb78-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&#39;lon&#39;</span>, <span class="st">&#39;lat&#39;</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="dv">32118</span>)) </span>
+<span id="cb78-4"><a href="advanced-ssn-metrics.html#cb78-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-5"><a href="advanced-ssn-metrics.html#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a basemap for the inset map</span></span>
+<span id="cb78-6"><a href="advanced-ssn-metrics.html#cb78-6" aria-hidden="true" tabindex="-1"></a>Inset_bg <span class="ot">=</span> <span class="fu">basemap_stars</span>(Inset)</span>
+<span id="cb78-7"><a href="advanced-ssn-metrics.html#cb78-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-8"><a href="advanced-ssn-metrics.html#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create the inset map</span></span>
+<span id="cb78-9"><a href="advanced-ssn-metrics.html#cb78-9" aria-hidden="true" tabindex="-1"></a>InsetMap <span class="ot">=</span> <span class="fu">tm_shape</span>(inset_bg) <span class="sc">+</span> </span>
+<span id="cb78-10"><a href="advanced-ssn-metrics.html#cb78-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_rgb</span>() <span class="sc">+</span> </span>
+<span id="cb78-11"><a href="advanced-ssn-metrics.html#cb78-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_shape</span>(NYCMafiaEdges_shp ) <span class="sc">+</span> </span>
+<span id="cb78-12"><a href="advanced-ssn-metrics.html#cb78-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">lwd=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb78-13"><a href="advanced-ssn-metrics.html#cb78-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_shape</span>(MafiaSpatial) <span class="sc">+</span> </span>
+<span id="cb78-14"><a href="advanced-ssn-metrics.html#cb78-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_symbols</span>(<span class="at">col=</span><span class="st">&#39;white&#39;</span>, <span class="at">size=</span><span class="fl">0.05</span>) <span class="sc">+</span> </span>
+<span id="cb78-15"><a href="advanced-ssn-metrics.html#cb78-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_shape</span>(MafiaSpatial <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(heat)) <span class="sc">+</span> </span>
+<span id="cb78-16"><a href="advanced-ssn-metrics.html#cb78-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_symbols</span>(<span class="at">col=</span><span class="st">&#39;heat&#39;</span>, <span class="at">size=</span><span class="fl">0.2</span>, <span class="at">style=</span><span class="st">&#39;fixed&#39;</span>, </span>
+<span id="cb78-17"><a href="advanced-ssn-metrics.html#cb78-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.00001</span>, <span class="fl">0.10</span>, <span class="fl">0.25</span>, <span class="fl">0.667</span>), <span class="at">legend.col.show =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb78-18"><a href="advanced-ssn-metrics.html#cb78-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&#39;#FBD977&#39;</span>, <span class="st">&#39;#F78D3D&#39;</span>, <span class="st">&#39;#E3211B&#39;</span>, <span class="st">&#39;#800F26&#39;</span>)) <span class="sc">+</span> </span>
+<span id="cb78-19"><a href="advanced-ssn-metrics.html#cb78-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_layout</span>(<span class="at">frame=</span><span class="fu">c</span>(<span class="st">&#39;black&#39;</span>), <span class="at">frame.lwd =</span> <span class="dv">2</span>, <span class="at">main.title =</span> <span class="fu">c</span>(<span class="st">&#39;Little Italy&#39;</span>), </span>
+<span id="cb78-20"><a href="advanced-ssn-metrics.html#cb78-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">main.title.position =</span> <span class="fu">c</span>(<span class="st">&#39;center&#39;</span>),</span>
+<span id="cb78-21"><a href="advanced-ssn-metrics.html#cb78-21" aria-hidden="true" tabindex="-1"></a>              <span class="at">main.title.size =</span> <span class="fl">0.8</span>, <span class="at">fontface =</span> <span class="dv">2</span>)</span>
+<span id="cb78-22"><a href="advanced-ssn-metrics.html#cb78-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-23"><a href="advanced-ssn-metrics.html#cb78-23" aria-hidden="true" tabindex="-1"></a><span class="co"># create the bounding box map</span></span>
+<span id="cb78-24"><a href="advanced-ssn-metrics.html#cb78-24" aria-hidden="true" tabindex="-1"></a>box <span class="ot">=</span> <span class="fu">tm_shape</span>(<span class="fu">st_bbox</span>(Inset) <span class="sc">%&gt;%</span> <span class="fu">st_as_sfc</span>()) <span class="sc">+</span> <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span>
+<span id="cb78-25"><a href="advanced-ssn-metrics.html#cb78-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-26"><a href="advanced-ssn-metrics.html#cb78-26" aria-hidden="true" tabindex="-1"></a><span class="co"># create aspect ratio to preserve the height and width ratio in the inset map</span></span>
+<span id="cb78-27"><a href="advanced-ssn-metrics.html#cb78-27" aria-hidden="true" tabindex="-1"></a>aspect_ratio <span class="ot">=</span> <span class="fu">unname</span>((Inset<span class="sc">$</span>ymax <span class="sc">-</span> Inset<span class="sc">$</span>ymin)<span class="sc">/</span>(Inset<span class="sc">$</span>xmax <span class="sc">-</span> Inset<span class="sc">$</span>xmin))</span>
+<span id="cb78-28"><a href="advanced-ssn-metrics.html#cb78-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-29"><a href="advanced-ssn-metrics.html#cb78-29" aria-hidden="true" tabindex="-1"></a><span class="co"># export the background map g with the inset map.</span></span>
+<span id="cb78-30"><a href="advanced-ssn-metrics.html#cb78-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(grid)</span>
+<span id="cb78-31"><a href="advanced-ssn-metrics.html#cb78-31" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(g <span class="sc">+</span> box, <span class="at">insets_tm=</span>InsetMap, </span>
+<span id="cb78-32"><a href="advanced-ssn-metrics.html#cb78-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">insets_vp =</span> <span class="fu">viewport</span>(<span class="fl">0.21</span>, <span class="fl">0.54</span>, <span class="at">width =</span> <span class="fl">0.3</span>, <span class="at">height =</span> aspect_ratio<span class="sc">*</span><span class="fl">0.5</span>),</span>
+<span id="cb78-33"><a href="advanced-ssn-metrics.html#cb78-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">filename=</span><span class="st">&#39;PATH&#39;</span>, <span class="at">dpi=</span><span class="dv">600</span>)</span></code></pre></div>
+<p><img src="Figs/06-metrics-hotspot-inset.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="how-to-find-optimal-window-sizes-for-ssn-hotspots" class="section level3" number="6.1.3">
+<h3><span class="header-section-number">6.1.3</span> How to find optimal window sizes for SSN hotspots</h3>
+<p>SSN hotspots are sensitive to <strong>neighborhood definition</strong> and <strong>window sizes</strong>. Neighborhood definition should match theoretical questions, such as: Is distance between nodes meaningful; is travel time a factor in the study; or do events form natural clusters of varying radii? As such, there may not be an optimal window size, but visualizing outputs can help with decisions.</p>
+<p>Here, we shows how to create a graphic reporting the sensitivity of NDScan results (y values) by window sizes (x values) at the DBSCAN (Density-based Spatial Clustering of Applications with Noise) cluster level. We are interested to see how the <strong>average values of EdgeScan and NDScan</strong> vary for each SSN hotspots cluster, wherein consistent y values across the x axis would signal a robust method that is not sensitive to change in window size. Conceptually, the codes below are doing the following:</p>
+<ul>
+<li>create an empty dataframe with three columns <code>cluster</code>, <code>Average Network Density</code>, and <code>Window Size</code>.</li>
+<li>loop through the window sizes and at each window size, do the following operation:
+<ul>
+<li>attach spatial information to the <code>NDScanRadius()</code> output</li>
+<li>assign the DBSCAN cluster ID back to each node</li>
+<li>calculate the average network density by DBSCAN cluster ID</li>
+</ul></li>
+<li>visualize average NDScan values (i.e., average network density) for each DBSCAN cluster at each window size through a raincloud plot</li>
+</ul>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="advanced-ssn-metrics.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SSNtools)</span>
+<span id="cb79-2"><a href="advanced-ssn-metrics.html#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb79-3"><a href="advanced-ssn-metrics.html#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggdist)</span>
+<span id="cb79-4"><a href="advanced-ssn-metrics.html#cb79-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fpc)</span>
+<span id="cb79-5"><a href="advanced-ssn-metrics.html#cb79-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-6"><a href="advanced-ssn-metrics.html#cb79-6" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">=</span> <span class="fu">processNode</span>(NYCMafiaNodes, <span class="st">&#39;label&#39;</span>, <span class="st">&#39;LonX&#39;</span>, <span class="st">&#39;LatY&#39;</span>)</span>
+<span id="cb79-7"><a href="advanced-ssn-metrics.html#cb79-7" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> <span class="fu">processEdge</span>(NYCMafiaEdges, <span class="st">&#39;Source&#39;</span>, <span class="st">&#39;Target&#39;</span>)</span>
+<span id="cb79-8"><a href="advanced-ssn-metrics.html#cb79-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-9"><a href="advanced-ssn-metrics.html#cb79-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create an empty dataframe to store values in the loop</span></span>
+<span id="cb79-10"><a href="advanced-ssn-metrics.html#cb79-10" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">matrix</span>(<span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">nrow =</span> <span class="dv">0</span>))</span>
+<span id="cb79-11"><a href="advanced-ssn-metrics.html#cb79-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;cluster&#39;</span>, <span class="st">&#39;Average Network Density&#39;</span>, <span class="st">&#39;Window Size&#39;</span>)</span>
+<span id="cb79-12"><a href="advanced-ssn-metrics.html#cb79-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-13"><a href="advanced-ssn-metrics.html#cb79-13" aria-hidden="true" tabindex="-1"></a><span class="co"># loop through each window size (meter)</span></span>
+<span id="cb79-14"><a href="advanced-ssn-metrics.html#cb79-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">100</span>, <span class="dv">2000</span>, <span class="dv">100</span>)) { </span>
+<span id="cb79-15"><a href="advanced-ssn-metrics.html#cb79-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate the heat values </span></span>
+<span id="cb79-16"><a href="advanced-ssn-metrics.html#cb79-16" aria-hidden="true" tabindex="-1"></a>  heat <span class="ot">=</span> <span class="fu">NDScanRadius</span>(nodes, edges, i, <span class="at">min=</span><span class="dv">3</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb79-17"><a href="advanced-ssn-metrics.html#cb79-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># attach spatial information to nodes whose heat is not NA</span></span>
+<span id="cb79-18"><a href="advanced-ssn-metrics.html#cb79-18" aria-hidden="true" tabindex="-1"></a>  MafiaSpatial <span class="ot">=</span> heat <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(heat) <span class="sc">%&gt;%</span> </span>
+<span id="cb79-19"><a href="advanced-ssn-metrics.html#cb79-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(NYCMafiaNodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;label&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>)</span>
+<span id="cb79-20"><a href="advanced-ssn-metrics.html#cb79-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># assign the DBSCAN cluster ID back to each node; </span></span>
+<span id="cb79-21"><a href="advanced-ssn-metrics.html#cb79-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># DBSCAN eps argument takes in the same reachability distance value (window size) and reachability minimum no. of points as the NDScanRadius()</span></span>
+<span id="cb79-22"><a href="advanced-ssn-metrics.html#cb79-22" aria-hidden="true" tabindex="-1"></a>  MafiaSpatial<span class="sc">$</span>cluster <span class="ot">=</span> fpc<span class="sc">::</span><span class="fu">dbscan</span>(MafiaSpatial <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(LonX, LatY)), <span class="at">eps =</span> i, <span class="at">MinPts =</span> <span class="dv">3</span>)<span class="sc">$</span>cluster</span>
+<span id="cb79-23"><a href="advanced-ssn-metrics.html#cb79-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter noise (fpc::dbscan classified noise into cluster 0) and calculate the average network density by DBSCAN cluster </span></span>
+<span id="cb79-24"><a href="advanced-ssn-metrics.html#cb79-24" aria-hidden="true" tabindex="-1"></a>  MafiaSpatial <span class="ot">=</span> MafiaSpatial <span class="sc">%&gt;%</span> <span class="fu">filter</span>(cluster <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(cluster) <span class="sc">%&gt;%</span> </span>
+<span id="cb79-25"><a href="advanced-ssn-metrics.html#cb79-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="st">`</span><span class="at">Average Network Density</span><span class="st">`</span><span class="ot">=</span><span class="fu">mean</span>(heat)) <span class="sc">%&gt;%</span></span>
+<span id="cb79-26"><a href="advanced-ssn-metrics.html#cb79-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Window Size</span><span class="st">`</span> <span class="ot">=</span> i)</span>
+<span id="cb79-27"><a href="advanced-ssn-metrics.html#cb79-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># merge output from one window size into the final dataframe </span></span>
+<span id="cb79-28"><a href="advanced-ssn-metrics.html#cb79-28" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">=</span> <span class="fu">rbind</span>(df, MafiaSpatial)</span>
+<span id="cb79-29"><a href="advanced-ssn-metrics.html#cb79-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb79-30"><a href="advanced-ssn-metrics.html#cb79-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-31"><a href="advanced-ssn-metrics.html#cb79-31" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize through a raincloud plot </span></span>
+<span id="cb79-32"><a href="advanced-ssn-metrics.html#cb79-32" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x=</span><span class="st">`</span><span class="at">Window Size</span><span class="st">`</span>, <span class="at">y=</span><span class="st">`</span><span class="at">Average Network Density</span><span class="st">`</span>, <span class="at">group=</span><span class="st">`</span><span class="at">Window Size</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb79-33"><a href="advanced-ssn-metrics.html#cb79-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">&quot;lightgrey&quot;</span>, <span class="at">outlier.color =</span> <span class="cn">NA</span>, <span class="at">width=</span><span class="fl">0.2</span>) <span class="sc">+</span> </span>
+<span id="cb79-34"><a href="advanced-ssn-metrics.html#cb79-34" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_dots</span>(<span class="at">side=</span><span class="st">&#39;left&#39;</span>, <span class="at">justification=</span><span class="fl">1.1</span>, <span class="at">binwidth=</span><span class="fl">0.01</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, </span>
+<span id="cb79-35"><a href="advanced-ssn-metrics.html#cb79-35" aria-hidden="true" tabindex="-1"></a>                    <span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">dotsize=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb79-36"><a href="advanced-ssn-metrics.html#cb79-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&#39;Avg. Network Density per DBSCAN Cluster&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb79-37"><a href="advanced-ssn-metrics.html#cb79-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&#39;Window Size (Euclidean Distance Meter)&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb79-38"><a href="advanced-ssn-metrics.html#cb79-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste0</span>(<span class="st">&#39;New York Optimal Window Size for NDScan&#39;</span>)) <span class="sc">+</span> </span>
+<span id="cb79-39"><a href="advanced-ssn-metrics.html#cb79-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
+<span id="cb79-40"><a href="advanced-ssn-metrics.html#cb79-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size=</span><span class="dv">20</span>),</span>
+<span id="cb79-41"><a href="advanced-ssn-metrics.html#cb79-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">15</span>))</span>
+<span id="cb79-42"><a href="advanced-ssn-metrics.html#cb79-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-43"><a href="advanced-ssn-metrics.html#cb79-43" aria-hidden="true" tabindex="-1"></a><span class="co"># manually added reference lines on g</span></span></code></pre></div>
+<p><img src="Figs/06-metrics-optimal-window.png" width="100%" /></p>
+<p>The graphic above highlights three interesting distance ranges for optimal window sizes. At a window size of 100-200 m, there is a fully connected cluster of Mafia members (labeled with arrow c). From 400-2000 m, a cluster is consistent with the network density of 0.67 despite the increasing window size, suggesting that the cluster is either spatially isolated from other Mafia members or any additional Mafia member within the increased scanning window is fully connected to existing cluster members (labeled with arrow d). From 500m-1.3 km, there are four to five medium-high density clusters that are stable across window sizes (labeled with arrow e). Therefore, these ranges may be optimal to reveal interesting or robust outcomes.</p>
+</div>
+<div id="calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm" class="section level3" number="6.1.4">
+<h3><span class="header-section-number">6.1.4</span> Calculate SSN hotspots using a user-defined walking distance matrix extracted from OSM</h3>
+<p>Euclidean and Manhattan are theoretical distances between two nodes, but in reality, travel distance (e.g., walking distance) can be mediated by geographic features. <strong>edgeScanMatrix</strong> and <strong>NDScanMatrix</strong> function take in:</p>
+<ul>
+<li><code>nodes</code>, a list of named lists. Each sublist contains a node.</li>
+<li><code>edges</code>, a list of list. Each sublist contains an edge.</li>
+<li>a full distance matrix (i.e., the column and row includes all nodes)
+** with column and row names
+** with symmetrical cell values being travel distance between OD
+** with the diagonal pairs (self pairs) coded with NA. When calculating the number of nodes within the window size (e.g., the first row for A1), cells with NA are automatically excluded. 0 represents zero distance.</li>
+<li>(optional) <code>min</code>, minimum number of points required to be in the search window. Default to 3.</li>
+<li>(optional) <code>bipartite</code>, TRUE or FALSE. If TRUE, bipartite column name should be identified in the <code>processNode()</code>.</li>
+<li>(optional) <code>weighted</code>, TRUE or FALSE. If TRUE, weight column name should be identified in the <code>processEdge()</code>.</li>
+</ul>
+<p>Below is an example of a full distance matrix with nodes A1, A2, A3:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="advanced-ssn-metrics.html#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co">#    A1 A2 A3</span></span>
+<span id="cb80-2"><a href="advanced-ssn-metrics.html#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="co"># A1 NA 0  1</span></span>
+<span id="cb80-3"><a href="advanced-ssn-metrics.html#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="co"># A2 0  NA 2</span></span>
+<span id="cb80-4"><a href="advanced-ssn-metrics.html#cb80-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A3 1  2  NA</span></span></code></pre></div>
+<p>This input format is also required for bipartite networks, even for nodes within the same set. For example, in a bipartite network, if you have 4 nodes and they are A1, A2, B1, B2, then your distance matrix should be 4 by 4 and self-pairs are coded as NA (see below). It is important to note that even though B1B2 (or B2B1) has no connections, they should still have a distance value (=3) in the distance matrix. This is because number of edges and network density needs to know all the nodes within the distance threshold.</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="advanced-ssn-metrics.html#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co">#     A1  A2  B1  B2</span></span>
+<span id="cb81-2"><a href="advanced-ssn-metrics.html#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="co"># A1  NA  0   1   2  </span></span>
+<span id="cb81-3"><a href="advanced-ssn-metrics.html#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="co"># A2  0   NA  1   2</span></span>
+<span id="cb81-4"><a href="advanced-ssn-metrics.html#cb81-4" aria-hidden="true" tabindex="-1"></a><span class="co"># B1  1   1   NA  3</span></span>
+<span id="cb81-5"><a href="advanced-ssn-metrics.html#cb81-5" aria-hidden="true" tabindex="-1"></a><span class="co"># B2  2   2   3   NA </span></span></code></pre></div>
+<p>To pull actual travel distance between OD pairs, we recommend using <code>osrm</code> package in R. <a href="https://github.com/riatelab/osrm">ORSM</a> is a routing service based on OpenStreetMap data, which allows travel distance calculated in walking, biking, or driving modes. We are most interested in its ability to calculate many-to-many routing distance quickly through <code>osrmTable()</code> function. Please read the <code>osrm</code> <a href="https://github.com/riatelab/osrm">documentation</a> carefully if you are applying it to a large amount of data, as it discourages heavy usage.</p>
+<p>Let’s say our goal is to get <strong>EdgeScan</strong> or <strong>NDScan</strong> values for <strong>NYCMafiaNodes</strong> and <strong>NYCMafiaEdges</strong> within a 1 mile walking distance (~1600m), using a <code>osrm</code> generated walking distance matrix. Here are the steps:</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>create a dataframe that contains all non-repetitive combinations of nodes (nrow = 44253). Our functions require this information to decide the number of nodes within the window size threshold (and calculate network density), even if the nodes are not connected.<br />
+</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>(optional) filter the dataframe to OD pairs within 2000 meters Euclidean distance to reduce workload for routing calculation.</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li>create a origin and destination table where each row is a node with coordinates.</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: decimal">
+<li>use <code>osrmTable</code> to calculate many-to-many routing distance for a subset of data (so that it does not overtax the <code>osrm</code> server, such as 99 rows). Iterate this process until all data are calculated.</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: decimal">
+<li>transform the OD dataframe to the input matrix format for <strong>edgeScanMatrix</strong> and <strong>NDScanMatrix</strong> functions.</li>
+</ol></li>
+</ul>
+<p>Step 1-3 are coded as the following:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="advanced-ssn-metrics.html#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb82-2"><a href="advanced-ssn-metrics.html#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create a dataframe that contains all non-repetitive combinations of nodes</span></span>
+<span id="cb82-3"><a href="advanced-ssn-metrics.html#cb82-3" aria-hidden="true" tabindex="-1"></a>allEdgesTable <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(<span class="fu">combn</span>(NYCMafiaNodes<span class="sc">$</span>label, <span class="dv">2</span>))) </span>
+<span id="cb82-4"><a href="advanced-ssn-metrics.html#cb82-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(allEdgesTable) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;Source&#39;</span>, <span class="st">&#39;Target&#39;</span>)</span>
+<span id="cb82-5"><a href="advanced-ssn-metrics.html#cb82-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-6"><a href="advanced-ssn-metrics.html#cb82-6" aria-hidden="true" tabindex="-1"></a>edgeDistance <span class="ot">=</span> allEdgesTable <span class="sc">%&gt;%</span> </span>
+<span id="cb82-7"><a href="advanced-ssn-metrics.html#cb82-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#attach coordinates to allEdgesTable</span></span>
+<span id="cb82-8"><a href="advanced-ssn-metrics.html#cb82-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(NYCMafiaNodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Source&#39;</span> <span class="ot">=</span> <span class="st">&#39;label&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb82-9"><a href="advanced-ssn-metrics.html#cb82-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(NYCMafiaNodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Target&#39;</span> <span class="ot">=</span> <span class="st">&#39;label&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb82-10"><a href="advanced-ssn-metrics.html#cb82-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#again, dist is in the unit of meter</span></span>
+<span id="cb82-11"><a href="advanced-ssn-metrics.html#cb82-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">sqrt</span>((LonX.x <span class="sc">-</span> LonX.y) <span class="sc">**</span> <span class="dv">2</span> <span class="sc">-</span> (LatY.x <span class="sc">-</span> LatY.y)<span class="sc">**</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb82-12"><a href="advanced-ssn-metrics.html#cb82-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(dist <span class="sc">&lt;=</span> <span class="dv">2000</span>) </span>
+<span id="cb82-13"><a href="advanced-ssn-metrics.html#cb82-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-14"><a href="advanced-ssn-metrics.html#cb82-14" aria-hidden="true" tabindex="-1"></a><span class="co"># print example outputs </span></span>
+<span id="cb82-15"><a href="advanced-ssn-metrics.html#cb82-15" aria-hidden="true" tabindex="-1"></a>edgeDistance[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), ]</span></code></pre></div>
+<pre><code>##              Source             Target   LonX.x   LatY.x   LonX.y   LatY.y
+## 1 AMAROSA-ALEXANDER      BIONDO-JOSEPH 302206.2 57958.61 309374.0 64916.18
+## 2 AMAROSA-ALEXANDER MANNARINO-GIACINTO 302206.2 57958.61 303457.1 58580.96
+## 3 AMAROSA-ALEXANDER   CARRUBBA-CORRADO 302206.2 57958.61 300557.9 56947.99
+##       dist
+## 1 1723.116
+## 2 1085.023
+## 3 1302.158</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="advanced-ssn-metrics.html#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create origin and destination table</span></span>
+<span id="cb84-2"><a href="advanced-ssn-metrics.html#cb84-2" aria-hidden="true" tabindex="-1"></a>origin <span class="ot">=</span> edgeDistance <span class="sc">%&gt;%</span> </span>
+<span id="cb84-3"><a href="advanced-ssn-metrics.html#cb84-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(Source, LonX.x, LatY.x)) <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&#39;LonX.x&#39;</span>, <span class="st">&#39;LatY.x&#39;</span>), <span class="at">crs=</span><span class="dv">32118</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb84-4"><a href="advanced-ssn-metrics.html#cb84-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb84-5"><a href="advanced-ssn-metrics.html#cb84-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">LonX =</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(.)[,<span class="dv">1</span>],</span>
+<span id="cb84-6"><a href="advanced-ssn-metrics.html#cb84-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">LatY =</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(.)[,<span class="dv">2</span>]) <span class="sc">%&gt;%</span> </span>
+<span id="cb84-7"><a href="advanced-ssn-metrics.html#cb84-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>()</span>
+<span id="cb84-8"><a href="advanced-ssn-metrics.html#cb84-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-9"><a href="advanced-ssn-metrics.html#cb84-9" aria-hidden="true" tabindex="-1"></a>des <span class="ot">=</span> edgeDistance <span class="sc">%&gt;%</span> </span>
+<span id="cb84-10"><a href="advanced-ssn-metrics.html#cb84-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(Target, LonX.y, LatY.y)) <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&#39;LonX.y&#39;</span>, <span class="st">&#39;LatY.y&#39;</span>), <span class="at">crs=</span><span class="dv">32118</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb84-11"><a href="advanced-ssn-metrics.html#cb84-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb84-12"><a href="advanced-ssn-metrics.html#cb84-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">LonX =</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(.)[,<span class="dv">1</span>],</span>
+<span id="cb84-13"><a href="advanced-ssn-metrics.html#cb84-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">LatY =</span> sf<span class="sc">::</span><span class="fu">st_coordinates</span>(.)[,<span class="dv">2</span>]) <span class="sc">%&gt;%</span> </span>
+<span id="cb84-14"><a href="advanced-ssn-metrics.html#cb84-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>()</span>
+<span id="cb84-15"><a href="advanced-ssn-metrics.html#cb84-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-16"><a href="advanced-ssn-metrics.html#cb84-16" aria-hidden="true" tabindex="-1"></a><span class="co"># print example outputs </span></span>
+<span id="cb84-17"><a href="advanced-ssn-metrics.html#cb84-17" aria-hidden="true" tabindex="-1"></a>origin[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), ]</span></code></pre></div>
+<pre><code>##              Source     LonX    LatY
+## 1 AMAROSA-ALEXANDER -73.9739 40.6886
+## 2 AMAROSA-ALEXANDER -73.9739 40.6886
+## 3 AMAROSA-ALEXANDER -73.9739 40.6886</code></pre>
+<p>For step 4, to avoid overtaxing the <code>osrm</code> backend, the following codes only show how to extract walking distance for the <strong>first 10 rows of data</strong> in <code>origin</code> and <code>des</code> dataframe. Note that <code>osrmTable()</code> assumes coordinate system crs to be 4326 and return distance in the unit of meters.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="advanced-ssn-metrics.html#cb86-1" aria-hidden="true" tabindex="-1"></a>origin_sub <span class="ot">=</span> origin[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>),]</span>
+<span id="cb86-2"><a href="advanced-ssn-metrics.html#cb86-2" aria-hidden="true" tabindex="-1"></a>des_sub <span class="ot">=</span> des[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>),]</span>
+<span id="cb86-3"><a href="advanced-ssn-metrics.html#cb86-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-4"><a href="advanced-ssn-metrics.html#cb86-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(osrm)</span>
+<span id="cb86-5"><a href="advanced-ssn-metrics.html#cb86-5" aria-hidden="true" tabindex="-1"></a><span class="co"># distances contains a list of outputs. </span></span>
+<span id="cb86-6"><a href="advanced-ssn-metrics.html#cb86-6" aria-hidden="true" tabindex="-1"></a>distances <span class="ot">&lt;-</span> <span class="fu">osrmTable</span>(</span>
+<span id="cb86-7"><a href="advanced-ssn-metrics.html#cb86-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">src =</span> origin_sub[<span class="fu">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>)],</span>
+<span id="cb86-8"><a href="advanced-ssn-metrics.html#cb86-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">dst =</span> des_sub[<span class="fu">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>)],</span>
+<span id="cb86-9"><a href="advanced-ssn-metrics.html#cb86-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">osrm.profile =</span> <span class="st">&quot;foot&quot;</span>,</span>
+<span id="cb86-10"><a href="advanced-ssn-metrics.html#cb86-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">measure =</span> <span class="fu">c</span>(<span class="st">&quot;distance&quot;</span>)</span>
+<span id="cb86-11"><a href="advanced-ssn-metrics.html#cb86-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb86-12"><a href="advanced-ssn-metrics.html#cb86-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-13"><a href="advanced-ssn-metrics.html#cb86-13" aria-hidden="true" tabindex="-1"></a><span class="co"># distances$distances returns a full distance matrix between all nodes in origin_sub and des_sub. We are only interested in the pairwise result and thus only take the diagonal values. Distance values are meters. </span></span>
+<span id="cb86-14"><a href="advanced-ssn-metrics.html#cb86-14" aria-hidden="true" tabindex="-1"></a>Distance_m <span class="ot">=</span> <span class="fu">diag</span>(distances<span class="sc">$</span>distances)</span>
+<span id="cb86-15"><a href="advanced-ssn-metrics.html#cb86-15" aria-hidden="true" tabindex="-1"></a>Distance_m</span></code></pre></div>
+<pre><code>##     1     2     3     4     5     6     7     8     9    10 
+## 11868  1815  2521  1220  5584  8237   941  1027  1027  4332</code></pre>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="advanced-ssn-metrics.html#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if you are running the sample codes above in loop, force the system to sleep 1s before running the next loop </span></span>
+<span id="cb88-2"><a href="advanced-ssn-metrics.html#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.sleep(1)</span></span></code></pre></div>
+<p>For step 5, we assume readers have acquired walking distance values for all rows of data. Here we filled the <code>Distance_m</code> vector with random values to demonstrate the codes.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="advanced-ssn-metrics.html#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fill Distance_m with random values </span></span>
+<span id="cb89-2"><a href="advanced-ssn-metrics.html#cb89-2" aria-hidden="true" tabindex="-1"></a>Distance_m <span class="ot">=</span> <span class="fu">sample.int</span>(<span class="dv">2000</span>, <span class="fu">nrow</span>(origin), <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb89-3"><a href="advanced-ssn-metrics.html#cb89-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-4"><a href="advanced-ssn-metrics.html#cb89-4" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Source =</span> origin<span class="sc">$</span>Source, <span class="at">Target =</span> des<span class="sc">$</span>Target, <span class="at">Distance_m =</span> Distance_m)</span>
+<span id="cb89-5"><a href="advanced-ssn-metrics.html#cb89-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-6"><a href="advanced-ssn-metrics.html#cb89-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create an edge table with walking distance </span></span>
+<span id="cb89-7"><a href="advanced-ssn-metrics.html#cb89-7" aria-hidden="true" tabindex="-1"></a>edgeDistance <span class="ot">=</span> edgeDistance <span class="sc">%&gt;%</span> </span>
+<span id="cb89-8"><a href="advanced-ssn-metrics.html#cb89-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dist, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Source&#39;</span>, <span class="st">&#39;Target&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb89-9"><a href="advanced-ssn-metrics.html#cb89-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(Source, Target, Distance_m)) <span class="sc">%&gt;%</span></span>
+<span id="cb89-10"><a href="advanced-ssn-metrics.html#cb89-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Distance_m =</span> <span class="fu">ifelse</span>(Distance_m <span class="sc">==</span> <span class="dv">0</span>, <span class="fl">0.001</span>, Distance_m))</span>
+<span id="cb89-11"><a href="advanced-ssn-metrics.html#cb89-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-12"><a href="advanced-ssn-metrics.html#cb89-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb89-13"><a href="advanced-ssn-metrics.html#cb89-13" aria-hidden="true" tabindex="-1"></a><span class="co"># create input full matrix from the edge table. </span></span>
+<span id="cb89-14"><a href="advanced-ssn-metrics.html#cb89-14" aria-hidden="true" tabindex="-1"></a><span class="co"># as_adjacency_matrix() fills empty sell with zeros.</span></span>
+<span id="cb89-15"><a href="advanced-ssn-metrics.html#cb89-15" aria-hidden="true" tabindex="-1"></a><span class="co"># zero has practical meaning in our example. </span></span>
+<span id="cb89-16"><a href="advanced-ssn-metrics.html#cb89-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Thus we convert 0 to NA </span></span>
+<span id="cb89-17"><a href="advanced-ssn-metrics.html#cb89-17" aria-hidden="true" tabindex="-1"></a><span class="co"># and converted those that have actual 0 in distance (converted to 0.001 in the code above) back to 0. </span></span>
+<span id="cb89-18"><a href="advanced-ssn-metrics.html#cb89-18" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">graph_from_data_frame</span>(edgeDistance, <span class="at">directed=</span><span class="cn">FALSE</span>, <span class="at">vertices=</span>NYCMafiaNodes)</span>
+<span id="cb89-19"><a href="advanced-ssn-metrics.html#cb89-19" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">=</span> <span class="fu">as_adjacency_matrix</span>(g, <span class="at">sparse=</span>F, <span class="at">attr=</span><span class="st">&quot;Distance_m&quot;</span>) </span>
+<span id="cb89-20"><a href="advanced-ssn-metrics.html#cb89-20" aria-hidden="true" tabindex="-1"></a>mat[mat<span class="sc">==</span><span class="dv">0</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb89-21"><a href="advanced-ssn-metrics.html#cb89-21" aria-hidden="true" tabindex="-1"></a>mat[mat<span class="sc">==</span><span class="fl">0.001</span>]<span class="ot">&lt;-</span><span class="dv">0</span></span>
+<span id="cb89-22"><a href="advanced-ssn-metrics.html#cb89-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-23"><a href="advanced-ssn-metrics.html#cb89-23" aria-hidden="true" tabindex="-1"></a><span class="co"># find SSN hotspots within 1 mile (~1600m) walking distance! </span></span>
+<span id="cb89-24"><a href="advanced-ssn-metrics.html#cb89-24" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">=</span> <span class="fu">processNode</span>(NYCMafiaNodes, <span class="st">&#39;label&#39;</span>, <span class="st">&#39;LonX&#39;</span>, <span class="st">&#39;LatY&#39;</span>)</span>
+<span id="cb89-25"><a href="advanced-ssn-metrics.html#cb89-25" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> <span class="fu">processEdge</span>(NYCMafiaEdges, <span class="st">&#39;Source&#39;</span>, <span class="st">&#39;Target&#39;</span>)</span>
+<span id="cb89-26"><a href="advanced-ssn-metrics.html#cb89-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-27"><a href="advanced-ssn-metrics.html#cb89-27" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> <span class="fu">edgeScanMatrix</span>(nodes, edges, <span class="dv">1600</span>, mat, <span class="at">min=</span><span class="dv">3</span>)[[<span class="dv">1</span>]]</span></code></pre></div>
+</div>
+<div id="application-to-a-weighted-and-bipartite-network" class="section level3" number="6.1.5">
+<h3><span class="header-section-number">6.1.5</span> Application to a weighted and bipartite network</h3>
+<p>We have applied the <strong>EdgeScan</strong> and <strong>NDScan</strong> functions to <strong>NYCMafiaNodes</strong> and <strong>NYCMafiaEdges</strong>, which is an unweighted, undirected, and non-bipartite network. We can apply the same functions to a weighted and/or bipartite network, using sample dataset <strong>POINodes</strong> and <strong>POIEdges</strong> in <code>SSNtools</code>.</p>
+<p>The data from <strong>POINodes</strong> and <strong>POIEdges</strong> are processed from SafeGraph with extra filters and coding to hide sensitive information. The dataset is meant to be educational and thus can be inaccurate for real implications. The nodes in the dataset are restaurants in Atlanta (set 0) and centroids of census block group (set 1). The edges in the dataset are visits from the census block group to restaurants. The weight of the edges represent the percentage of total visits coming from a particular census block group. You can call <strong>POINodes</strong> (n=1356) and <strong>POIEdges</strong> (n=7926) to directly access the sample dataset. The coordinates system is transformed with crs=26967 (unit meter).</p>
+<p>If you are using your own dataset, there should be a bipartite column that indicates which set the node is in. The set that would like have EdgeScan or NDScan values reported should be coded as 1, and 0 otherwise. In our <strong>POINodes</strong> sample dataset, restaurant POIs are coded as 1 and census block group centroids are coded as 0 in the bipartite network. Please reference the sample dataset if you are unclear of the input formats.</p>
+<p>We chose <strong>K-nearest neighbor</strong> as the neighborhood definition for analyzing the sample dataset and <strong>KNN=5</strong> as the window size. Here, the distance between the POI (restaurant) and census block group centroids vary across geographic space, because the size of the census block groups tend to be smaller in the city center than the suburbs. Thus, a KNN neighborhood definition is better because it searches for the five closest census block groups (CBGs) around the POI, ignoring distances between the two.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="advanced-ssn-metrics.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SSNtools)</span>
+<span id="cb90-2"><a href="advanced-ssn-metrics.html#cb90-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-3"><a href="advanced-ssn-metrics.html#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(POINodes)</span>
+<span id="cb90-4"><a href="advanced-ssn-metrics.html#cb90-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(POIEdges)</span>
+<span id="cb90-5"><a href="advanced-ssn-metrics.html#cb90-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-6"><a href="advanced-ssn-metrics.html#cb90-6" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">=</span> <span class="fu">processNode</span>(POINodes, <span class="st">&#39;label&#39;</span>, <span class="st">&#39;LonX&#39;</span>, <span class="st">&#39;LatY&#39;</span>, <span class="st">&#39;Bipartite&#39;</span>)</span>
+<span id="cb90-7"><a href="advanced-ssn-metrics.html#cb90-7" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> <span class="fu">processEdge</span>(POIEdges, <span class="st">&#39;Source&#39;</span>, <span class="st">&#39;Target&#39;</span>, <span class="st">&#39;Weight&#39;</span>)</span></code></pre></div>
+<p>The following codes use <code>edgeScanKnearest()</code>:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="advanced-ssn-metrics.html#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate edgeScan values for KNN = 5 in a weighted, bipartite network</span></span>
+<span id="cb91-2"><a href="advanced-ssn-metrics.html#cb91-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">edgeScanKNearest</span>(nodes, edges, <span class="dv">5</span>, <span class="at">weighted=</span><span class="cn">TRUE</span>, <span class="at">bipartite=</span><span class="cn">TRUE</span>)</span>
+<span id="cb91-3"><a href="advanced-ssn-metrics.html#cb91-3" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> result[[<span class="dv">1</span>]]</span>
+<span id="cb91-4"><a href="advanced-ssn-metrics.html#cb91-4" aria-hidden="true" tabindex="-1"></a>edgeWithin <span class="ot">=</span> result[[<span class="dv">2</span>]]</span>
+<span id="cb91-5"><a href="advanced-ssn-metrics.html#cb91-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-6"><a href="advanced-ssn-metrics.html#cb91-6" aria-hidden="true" tabindex="-1"></a>heat[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span>
+<span id="cb91-7"><a href="advanced-ssn-metrics.html#cb91-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-8"><a href="advanced-ssn-metrics.html#cb91-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   label      heat</span></span>
+<span id="cb91-9"><a href="advanced-ssn-metrics.html#cb91-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1  poi1  476.2827</span></span>
+<span id="cb91-10"><a href="advanced-ssn-metrics.html#cb91-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2  poi2 1250.8860</span></span>
+<span id="cb91-11"><a href="advanced-ssn-metrics.html#cb91-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3  poi3 1160.1423</span></span>
+<span id="cb91-12"><a href="advanced-ssn-metrics.html#cb91-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-13"><a href="advanced-ssn-metrics.html#cb91-13" aria-hidden="true" tabindex="-1"></a>edgeWithin[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span>
+<span id="cb91-14"><a href="advanced-ssn-metrics.html#cb91-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-15"><a href="advanced-ssn-metrics.html#cb91-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   Source       Target    Weight WithinWindow                       </span></span>
+<span id="cb91-16"><a href="advanced-ssn-metrics.html#cb91-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 1   poi1 130890204001 14.545455            1 </span></span>
+<span id="cb91-17"><a href="advanced-ssn-metrics.html#cb91-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 2   poi1 130890205002  7.272727            0  </span></span>
+<span id="cb91-18"><a href="advanced-ssn-metrics.html#cb91-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 3   poi1 131210001002  7.272727            0</span></span></code></pre></div>
+<p>The following codes use <code>NDScanKnearest()</code>:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="advanced-ssn-metrics.html#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate NDScan values for KNN = 5 in an undirected, bipartite network</span></span>
+<span id="cb92-2"><a href="advanced-ssn-metrics.html#cb92-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">=</span> <span class="fu">NDScanKNearest</span>(nodes, edges, <span class="dv">5</span>, <span class="at">directed=</span><span class="cn">FALSE</span>, <span class="at">bipartite=</span><span class="cn">TRUE</span>)</span>
+<span id="cb92-3"><a href="advanced-ssn-metrics.html#cb92-3" aria-hidden="true" tabindex="-1"></a>heat <span class="ot">=</span> result[[<span class="dv">1</span>]]</span>
+<span id="cb92-4"><a href="advanced-ssn-metrics.html#cb92-4" aria-hidden="true" tabindex="-1"></a>edgeWithin <span class="ot">=</span> result[[<span class="dv">2</span>]]</span>
+<span id="cb92-5"><a href="advanced-ssn-metrics.html#cb92-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-6"><a href="advanced-ssn-metrics.html#cb92-6" aria-hidden="true" tabindex="-1"></a>heat[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span>
+<span id="cb92-7"><a href="advanced-ssn-metrics.html#cb92-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-8"><a href="advanced-ssn-metrics.html#cb92-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   label      heat</span></span>
+<span id="cb92-9"><a href="advanced-ssn-metrics.html#cb92-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1  poi1 0.2758621</span></span>
+<span id="cb92-10"><a href="advanced-ssn-metrics.html#cb92-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2  poi2 0.2254428</span></span>
+<span id="cb92-11"><a href="advanced-ssn-metrics.html#cb92-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 3  poi3 0.3029557</span></span>
+<span id="cb92-12"><a href="advanced-ssn-metrics.html#cb92-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-13"><a href="advanced-ssn-metrics.html#cb92-13" aria-hidden="true" tabindex="-1"></a>edgeWithin[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span>
+<span id="cb92-14"><a href="advanced-ssn-metrics.html#cb92-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-15"><a href="advanced-ssn-metrics.html#cb92-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   Source       Target WithinWindow</span></span>
+<span id="cb92-16"><a href="advanced-ssn-metrics.html#cb92-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 1   poi1 130890204001            1</span></span>
+<span id="cb92-17"><a href="advanced-ssn-metrics.html#cb92-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 2   poi1 130890205002            0</span></span>
+<span id="cb92-18"><a href="advanced-ssn-metrics.html#cb92-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 3   poi1 131210001002            0</span></span></code></pre></div>
+<p>Note that when the network is weighted, <strong>edgeScan</strong> related functions report <strong>the sum of edge weights</strong> instead of <strong>the number of edges</strong>. If the network is bipartite, only nodes whose bipartite value is coded as 0 (in this case, POI) will report values. Based on the definitions of <strong>EdgeScan</strong> and <strong>NDScan</strong>, <strong>directed</strong> argument is only implemented for ND-functions, while <strong>weighted</strong> is only implemented for the Edge-functions.</p>
+<p>To visualize the POI visits hotspots, you can use the following codes as a reference.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="advanced-ssn-metrics.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb93-2"><a href="advanced-ssn-metrics.html#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb93-3"><a href="advanced-ssn-metrics.html#cb93-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(basemaps)</span>
+<span id="cb93-4"><a href="advanced-ssn-metrics.html#cb93-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-5"><a href="advanced-ssn-metrics.html#cb93-5" aria-hidden="true" tabindex="-1"></a><span class="co"># convert heat dataframe to a spatial sf object</span></span>
+<span id="cb93-6"><a href="advanced-ssn-metrics.html#cb93-6" aria-hidden="true" tabindex="-1"></a>POISpatial <span class="ot">=</span> heat <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(POINodes, <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&#39;LonX&#39;</span>, <span class="st">&#39;LatY&#39;</span>), <span class="at">crs=</span><span class="dv">26967</span>)</span>
+<span id="cb93-7"><a href="advanced-ssn-metrics.html#cb93-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-8"><a href="advanced-ssn-metrics.html#cb93-8" aria-hidden="true" tabindex="-1"></a><span class="co"># attach spatial information to edgeWithin and convert edgeWithin dataframe to line geometry </span></span>
+<span id="cb93-9"><a href="advanced-ssn-metrics.html#cb93-9" aria-hidden="true" tabindex="-1"></a>edgeWithin <span class="ot">=</span> edgeWithin <span class="sc">%&gt;%</span> <span class="fu">left_join</span>(POINodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Source&#39;</span> <span class="ot">=</span> <span class="st">&#39;label&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-10"><a href="advanced-ssn-metrics.html#cb93-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(POINodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Target&#39;</span> <span class="ot">=</span> <span class="st">&#39;label&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) </span>
+<span id="cb93-11"><a href="advanced-ssn-metrics.html#cb93-11" aria-hidden="true" tabindex="-1"></a><span class="co"># convert points to lines without stplanar package. See Chapter 4.1.3.</span></span>
+<span id="cb93-12"><a href="advanced-ssn-metrics.html#cb93-12" aria-hidden="true" tabindex="-1"></a>st_segment <span class="ot">=</span> <span class="cf">function</span>(r){<span class="fu">st_linestring</span>(<span class="fu">t</span>(<span class="fu">matrix</span>(<span class="fu">unlist</span>(r), <span class="dv">2</span>, <span class="dv">2</span>)))}</span>
+<span id="cb93-13"><a href="advanced-ssn-metrics.html#cb93-13" aria-hidden="true" tabindex="-1"></a>edgeWithin<span class="sc">$</span>geometry <span class="ot">=</span> <span class="fu">st_sfc</span>(</span>
+<span id="cb93-14"><a href="advanced-ssn-metrics.html#cb93-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(edgeWithin), </span>
+<span id="cb93-15"><a href="advanced-ssn-metrics.html#cb93-15" aria-hidden="true" tabindex="-1"></a>         <span class="cf">function</span>(i){<span class="fu">st_segment</span>(edgeWithin[i,][<span class="fu">c</span>(<span class="st">&#39;LonX.x&#39;</span>, <span class="st">&#39;LatY.x&#39;</span>, <span class="st">&#39;LonX.y&#39;</span>, <span class="st">&#39;LatY.y&#39;</span>)])},</span>
+<span id="cb93-16"><a href="advanced-ssn-metrics.html#cb93-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">simplify=</span><span class="cn">FALSE</span>)) </span>
+<span id="cb93-17"><a href="advanced-ssn-metrics.html#cb93-17" aria-hidden="true" tabindex="-1"></a><span class="co"># convert edgeWithin back to sf object and filter edges to be within the window </span></span>
+<span id="cb93-18"><a href="advanced-ssn-metrics.html#cb93-18" aria-hidden="true" tabindex="-1"></a>edgeWithin <span class="ot">=</span> edgeWithin <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> <span class="fu">st_set_crs</span>(<span class="dv">26967</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-19"><a href="advanced-ssn-metrics.html#cb93-19" aria-hidden="true" tabindex="-1"></a>   <span class="fu">filter</span>(WithinWindow <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb93-20"><a href="advanced-ssn-metrics.html#cb93-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-21"><a href="advanced-ssn-metrics.html#cb93-21" aria-hidden="true" tabindex="-1"></a><span class="co"># create basemap</span></span>
+<span id="cb93-22"><a href="advanced-ssn-metrics.html#cb93-22" aria-hidden="true" tabindex="-1"></a><span class="fu">set_defaults</span>(<span class="at">map_service =</span> <span class="st">&quot;carto&quot;</span>, <span class="at">map_type =</span> <span class="st">&quot;light&quot;</span>)</span>
+<span id="cb93-23"><a href="advanced-ssn-metrics.html#cb93-23" aria-hidden="true" tabindex="-1"></a>bgbox <span class="ot">=</span> <span class="fu">st_bbox</span>(POISpatial)</span>
+<span id="cb93-24"><a href="advanced-ssn-metrics.html#cb93-24" aria-hidden="true" tabindex="-1"></a>bg <span class="ot">=</span> <span class="fu">basemap_stars</span>(bgbox, <span class="at">map_service =</span> <span class="st">&#39;carto&#39;</span>)</span>
+<span id="cb93-25"><a href="advanced-ssn-metrics.html#cb93-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-26"><a href="advanced-ssn-metrics.html#cb93-26" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters for visualization</span></span>
+<span id="cb93-27"><a href="advanced-ssn-metrics.html#cb93-27" aria-hidden="true" tabindex="-1"></a>legend_name <span class="ot">=</span> <span class="st">&#39;Network Density&#39;</span></span>
+<span id="cb93-28"><a href="advanced-ssn-metrics.html#cb93-28" aria-hidden="true" tabindex="-1"></a>k <span class="ot">=</span> <span class="st">&#39;5&#39;</span></span>
+<span id="cb93-29"><a href="advanced-ssn-metrics.html#cb93-29" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.07</span>, <span class="fl">0.30</span>, <span class="fl">0.40</span>, <span class="fl">0.50</span>, <span class="dv">1</span>)</span>
+<span id="cb93-30"><a href="advanced-ssn-metrics.html#cb93-30" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;[0.07, 0.30)&#39;</span>, <span class="st">&#39;[0.3, 0.4)&#39;</span>, <span class="st">&#39;[0.4, 0.50)&#39;</span>, <span class="st">&#39;[0.50, 0.75]&#39;</span>)</span>
+<span id="cb93-31"><a href="advanced-ssn-metrics.html#cb93-31" aria-hidden="true" tabindex="-1"></a>output <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;Atlanta POI Visits NDScan&#39;</span>)</span>
+<span id="cb93-32"><a href="advanced-ssn-metrics.html#cb93-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-33"><a href="advanced-ssn-metrics.html#cb93-33" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize the SSN hotspots</span></span>
+<span id="cb93-34"><a href="advanced-ssn-metrics.html#cb93-34" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb93-35"><a href="advanced-ssn-metrics.html#cb93-35" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">tm_shape</span>(bg) <span class="sc">+</span> </span>
+<span id="cb93-36"><a href="advanced-ssn-metrics.html#cb93-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_rgb</span>(<span class="at">alpha=</span><span class="fl">0.8</span>) <span class="sc">+</span> </span>
+<span id="cb93-37"><a href="advanced-ssn-metrics.html#cb93-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(edgeWithin) <span class="sc">+</span> </span>
+<span id="cb93-38"><a href="advanced-ssn-metrics.html#cb93-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb93-39"><a href="advanced-ssn-metrics.html#cb93-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(POISpatial) <span class="sc">+</span> </span>
+<span id="cb93-40"><a href="advanced-ssn-metrics.html#cb93-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">col=</span><span class="st">&#39;heat&#39;</span>, <span class="at">size=</span><span class="fl">0.05</span>, <span class="at">style=</span><span class="st">&#39;fixed&#39;</span>, <span class="at">legend.col.show =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb93-41"><a href="advanced-ssn-metrics.html#cb93-41" aria-hidden="true" tabindex="-1"></a>             <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">&#39;#FBD977&#39;</span>, <span class="st">&#39;#F78D3D&#39;</span>, <span class="st">&#39;#E3211B&#39;</span>, <span class="st">&#39;#800F26&#39;</span>), <span class="at">breaks=</span>breaks) <span class="sc">+</span></span>
+<span id="cb93-42"><a href="advanced-ssn-metrics.html#cb93-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(<span class="at">type=</span><span class="st">&#39;symbol&#39;</span>, <span class="at">labels=</span>labels, <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;#FBD977&#39;</span>, <span class="st">&#39;#F78D3D&#39;</span>, <span class="st">&#39;#E3211B&#39;</span>, <span class="st">&#39;#800F26&#39;</span>),</span>
+<span id="cb93-43"><a href="advanced-ssn-metrics.html#cb93-43" aria-hidden="true" tabindex="-1"></a>                <span class="at">title=</span><span class="fu">paste0</span>(legend_name, <span class="st">&#39; (KNN = &#39;</span>, k, <span class="st">&#39;)&#39;</span>), <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb93-44"><a href="advanced-ssn-metrics.html#cb93-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(<span class="at">type=</span><span class="st">&#39;line&#39;</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&#39;Edges within window size&#39;</span>)), <span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">lwd=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb93-45"><a href="advanced-ssn-metrics.html#cb93-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>), <span class="at">text.size =</span> <span class="dv">1</span>) <span class="sc">+</span>  </span>
+<span id="cb93-46"><a href="advanced-ssn-metrics.html#cb93-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.title.size =</span> <span class="fl">1.3</span>, <span class="at">legend.text.size =</span> <span class="dv">1</span>, <span class="at">legend.width =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb93-47"><a href="advanced-ssn-metrics.html#cb93-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.bg.color =</span> <span class="st">&#39;white&#39;</span>, <span class="at">legend.bg.alpha =</span> <span class="fl">0.7</span>,</span>
+<span id="cb93-48"><a href="advanced-ssn-metrics.html#cb93-48" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title =</span> output,</span>
+<span id="cb93-49"><a href="advanced-ssn-metrics.html#cb93-49" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.position =</span> <span class="fu">c</span>(<span class="st">&#39;center&#39;</span>)) </span></code></pre></div>
+<p><img src="Figs/06-metrics-POIvisits.png" width="70%" style="display: block; margin: auto;" /></p>
+<div id="reference" class="section level4" number="6.1.5.1">
+<h4><span class="header-section-number">6.1.5.1</span> Reference</h4>
+<p>Liang, X., Baker, J., DellaPosta, D., &amp; Andris, C. (2023). Is your neighbor your friend? Scan methods for spatial social network hotspot detection. <em>Transctions in GIS</em>. <a href="https://doi.org/10.1111/tgis.13050" class="uri">https://doi.org/10.1111/tgis.13050</a></p>
 
+</div>
+</div>
 </div>
 </div>
             </section>

@@ -1,3 +1,6 @@
+tab:matrix
+tab:nodetable
+tab:edgetable
 introduction
 metrics
 network-data-formats
@@ -28,5 +31,11 @@ base-map
 inset-map
 edge-bundling
 advanced-ssn-metrics
-ssn-hot-spot-detection
+ssn-hotspots-detection
+calculate-ssn-hotspots-using-radius-or-k-nearest-neighbor-window-sizes
+how-to-visualize-ssn-hotspots
+how-to-find-optimal-window-sizes-for-ssn-hotspots
+calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm
+application-to-a-weighted-and-bipartite-network
+reference
 edges

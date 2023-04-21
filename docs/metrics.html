@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Network Metrics | Spatial Social Networks (SSN) Visualization and Metrics with R</title>
   <meta name="description" content="This book describes the basic concepts, theories, methods, and visualizations involved to map and analyze spatial networks in R." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Network Metrics | Spatial Social Networks (SSN) Visualization and Metrics with R" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2022-11-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="index.html"/>
 <link rel="next" href="nodes.html"/>
-<script src="libs/header-attrs-2.1/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,13 +51,25 @@
 
 
 
-
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
 
 
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
@@ -90,7 +103,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -103,7 +116,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -116,6 +129,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -133,52 +147,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">SSN Tutorial</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="metrics.html"><a href="metrics.html"><i class="fa fa-check"></i><b>2</b> Network Metrics</a>
+<li><a href="index.html#introduction" id="toc-introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="metrics.html#metrics" id="toc-metrics"><span class="toc-section-number">2</span> Network Metrics</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="metrics.html"><a href="metrics.html#network-data-formats"><i class="fa fa-check"></i><b>2.1</b> Network Data Formats</a></li>
-<li class="chapter" data-level="2.2" data-path="metrics.html"><a href="metrics.html#network-metrics"><i class="fa fa-check"></i><b>2.2</b> Network Metrics</a>
+<li><a href="metrics.html#network-data-formats" id="toc-network-data-formats"><span class="toc-section-number">2.1</span> Network Data Formats</a></li>
+<li><a href="metrics.html#network-metrics" id="toc-network-metrics"><span class="toc-section-number">2.2</span> Network Metrics</a>
 <ul>
-<li class="chapter" data-level="2.2.1" data-path="metrics.html"><a href="metrics.html#network-metrics-for-nodes"><i class="fa fa-check"></i><b>2.2.1</b> Network Metrics for Nodes</a></li>
-<li class="chapter" data-level="2.2.2" data-path="metrics.html"><a href="metrics.html#network-metrics-for-edges"><i class="fa fa-check"></i><b>2.2.2</b> Network Metrics for Edges</a></li>
+<li><a href="metrics.html#network-metrics-for-nodes" id="toc-network-metrics-for-nodes"><span class="toc-section-number">2.2.1</span> Network Metrics for Nodes</a></li>
+<li><a href="metrics.html#network-metrics-for-edges" id="toc-network-metrics-for-edges"><span class="toc-section-number">2.2.2</span> Network Metrics for Edges</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="metrics.html"><a href="metrics.html#igraph-visualization"><i class="fa fa-check"></i><b>2.3</b> igraph Visualization</a></li>
+<li><a href="metrics.html#igraph-visualization" id="toc-igraph-visualization"><span class="toc-section-number">2.3</span> igraph Visualization</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="nodes.html"><a href="nodes.html"><i class="fa fa-check"></i><b>3</b> Visualizing Nodes</a>
+<li><a href="nodes.html#nodes" id="toc-nodes"><span class="toc-section-number">3</span> Visualizing Nodes</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="nodes.html"><a href="nodes.html#convert-coordinates-to-points"><i class="fa fa-check"></i><b>3.1</b> Convert Coordinates to Points</a></li>
-<li class="chapter" data-level="3.2" data-path="nodes.html"><a href="nodes.html#visualize-nodes"><i class="fa fa-check"></i><b>3.2</b> Visualize Nodes</a></li>
-<li class="chapter" data-level="3.3" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-color"><i class="fa fa-check"></i><b>3.3</b> Visualize Nodes by Node Color</a></li>
-<li class="chapter" data-level="3.4" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-node-size"><i class="fa fa-check"></i><b>3.4</b> Visualize Nodes by Node Size</a></li>
-<li class="chapter" data-level="3.5" data-path="nodes.html"><a href="nodes.html#visualize-nodes-by-size-and-color"><i class="fa fa-check"></i><b>3.5</b> Visualize Nodes by Size and Color</a></li>
+<li><a href="nodes.html#convert-coordinates-to-points" id="toc-convert-coordinates-to-points"><span class="toc-section-number">3.1</span> Convert Coordinates to Points</a></li>
+<li><a href="nodes.html#visualize-nodes" id="toc-visualize-nodes"><span class="toc-section-number">3.2</span> Visualize Nodes</a></li>
+<li><a href="nodes.html#visualize-nodes-by-node-color" id="toc-visualize-nodes-by-node-color"><span class="toc-section-number">3.3</span> Visualize Nodes by Node Color</a></li>
+<li><a href="nodes.html#visualize-nodes-by-node-size" id="toc-visualize-nodes-by-node-size"><span class="toc-section-number">3.4</span> Visualize Nodes by Node Size</a></li>
+<li><a href="nodes.html#visualize-nodes-by-size-and-color" id="toc-visualize-nodes-by-size-and-color"><span class="toc-section-number">3.5</span> Visualize Nodes by Size and Color</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="vizedges.html"><a href="vizedges.html"><i class="fa fa-check"></i><b>4</b> Visualizing Edges</a>
+<li><a href="vizedges.html#vizedges" id="toc-vizedges"><span class="toc-section-number">4</span> Visualizing Edges</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="vizedges.html"><a href="vizedges.html#convert-points-into-lines"><i class="fa fa-check"></i><b>4.1</b> Convert Points into Lines</a>
+<li><a href="vizedges.html#convert-points-into-lines" id="toc-convert-points-into-lines"><span class="toc-section-number">4.1</span> Convert Points into Lines</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="vizedges.html"><a href="vizedges.html#method-1-group-by-lineid-and-summarize-points-into-line"><i class="fa fa-check"></i><b>4.1.1</b> Method 1: Group by lineID and Summarize Points into Line</a></li>
-<li class="chapter" data-level="4.1.2" data-path="vizedges.html"><a href="vizedges.html#method-2-join-two-point-geometry-into-one-row-and-unite-into-line"><i class="fa fa-check"></i><b>4.1.2</b> Method 2: Join Two Point Geometry into One Row and Unite into Line</a></li>
+<li><a href="vizedges.html#method-1-use-od2line-function-in-stplanr-package." id="toc-method-1-use-od2line-function-in-stplanr-package."><span class="toc-section-number">4.1.1</span> Method 1: Use <code>od2line</code> function in <code>stplanr</code> package.</a></li>
+<li><a href="vizedges.html#method-2-group-by-lineid-and-summarize-points-into-line" id="toc-method-2-group-by-lineid-and-summarize-points-into-line"><span class="toc-section-number">4.1.2</span> Method 2: Group by lineID and Summarize Points into Line</a></li>
+<li><a href="vizedges.html#method-3-join-two-point-geometry-into-one-row-and-unite-into-line" id="toc-method-3-join-two-point-geometry-into-one-row-and-unite-into-line"><span class="toc-section-number">4.1.3</span> Method 3: Join Two Point Geometry into One Row and Unite into Line</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges"><i class="fa fa-check"></i><b>4.2</b> Visualizing Edges</a></li>
-<li class="chapter" data-level="4.3" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-line-width"><i class="fa fa-check"></i><b>4.3</b> Visualizing Edges by Line Width</a></li>
-<li class="chapter" data-level="4.4" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-color"><i class="fa fa-check"></i><b>4.4</b> Visualizing Edges by Color</a></li>
-<li class="chapter" data-level="4.5" data-path="vizedges.html"><a href="vizedges.html#visualizing-edges-by-width-and-color"><i class="fa fa-check"></i><b>4.5</b> Visualizing Edges by Width and Color</a></li>
+<li><a href="vizedges.html#visualizing-edges" id="toc-visualizing-edges"><span class="toc-section-number">4.2</span> Visualizing Edges</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-line-width" id="toc-visualizing-edges-by-line-width"><span class="toc-section-number">4.3</span> Visualizing Edges by Line Width</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-color" id="toc-visualizing-edges-by-color"><span class="toc-section-number">4.4</span> Visualizing Edges by Color</a></li>
+<li><a href="vizedges.html#visualizing-edges-by-width-and-color" id="toc-visualizing-edges-by-width-and-color"><span class="toc-section-number">4.5</span> Visualizing Edges by Width and Color</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html"><i class="fa fa-check"></i><b>5</b> Advanced Aesthetics</a>
+<li><a href="advanced-aesthetics.html#advanced-aesthetics" id="toc-advanced-aesthetics"><span class="toc-section-number">5</span> Advanced Aesthetics</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#export-for-editing"><i class="fa fa-check"></i><b>5.1</b> Export for Editing</a></li>
-<li class="chapter" data-level="5.2" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#small-multiples"><i class="fa fa-check"></i><b>5.2</b> Small Multiples</a></li>
-<li class="chapter" data-level="5.3" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#interactive-maps"><i class="fa fa-check"></i><b>5.3</b> Interactive Maps</a></li>
-<li class="chapter" data-level="5.4" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#base-map"><i class="fa fa-check"></i><b>5.4</b> Base Map</a></li>
-<li class="chapter" data-level="5.5" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#inset-map"><i class="fa fa-check"></i><b>5.5</b> Inset Map</a></li>
-<li class="chapter" data-level="5.6" data-path="advanced-aesthetics.html"><a href="advanced-aesthetics.html#edge-bundling"><i class="fa fa-check"></i><b>5.6</b> Edge Bundling</a></li>
+<li><a href="advanced-aesthetics.html#export-maps" id="toc-export-maps"><span class="toc-section-number">5.1</span> Export Maps</a></li>
+<li><a href="advanced-aesthetics.html#small-multiples" id="toc-small-multiples"><span class="toc-section-number">5.2</span> Small Multiples</a></li>
+<li><a href="advanced-aesthetics.html#interactive-maps" id="toc-interactive-maps"><span class="toc-section-number">5.3</span> Interactive Maps</a></li>
+<li><a href="advanced-aesthetics.html#base-map" id="toc-base-map"><span class="toc-section-number">5.4</span> Base Map</a></li>
+<li><a href="advanced-aesthetics.html#inset-map" id="toc-inset-map"><span class="toc-section-number">5.5</span> Inset Map</a></li>
+<li><a href="advanced-aesthetics.html#edge-bundling" id="toc-edge-bundling"><span class="toc-section-number">5.6</span> Edge Bundling</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html"><i class="fa fa-check"></i><b>6</b> Advanced SSN Metrics</a>
+<li><a href="advanced-ssn-metrics.html#advanced-ssn-metrics" id="toc-advanced-ssn-metrics"><span class="toc-section-number">6</span> Advanced SSN Metrics</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html#network-modularity"><i class="fa fa-check"></i><b>6.1</b> Network Modularity</a></li>
-<li class="chapter" data-level="6.2" data-path="advanced-ssn-metrics.html"><a href="advanced-ssn-metrics.html#ssn-hot-spot-detection"><i class="fa fa-check"></i><b>6.2</b> SSN Hot Spot Detection</a></li>
+<li><a href="advanced-ssn-metrics.html#ssn-hotspots-detection" id="toc-ssn-hotspots-detection"><span class="toc-section-number">6.1</span> SSN Hotspots Detection</a>
+<ul>
+<li><a href="advanced-ssn-metrics.html#calculate-ssn-hotspots-using-radius-or-k-nearest-neighbor-window-sizes" id="toc-calculate-ssn-hotspots-using-radius-or-k-nearest-neighbor-window-sizes"><span class="toc-section-number">6.1.1</span> Calculate SSN hotspots using radius or K-nearest neighbor window sizes</a></li>
+<li><a href="advanced-ssn-metrics.html#how-to-visualize-ssn-hotspots" id="toc-how-to-visualize-ssn-hotspots"><span class="toc-section-number">6.1.2</span> How to visualize SSN hotspots</a></li>
+<li><a href="advanced-ssn-metrics.html#how-to-find-optimal-window-sizes-for-ssn-hotspots" id="toc-how-to-find-optimal-window-sizes-for-ssn-hotspots"><span class="toc-section-number">6.1.3</span> How to find optimal window sizes for SSN hotspots</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm" id="toc-calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm"><span class="toc-section-number">6.1.4</span> Calculate SSN hotspots using a user-defined walking distance matrix extracted from OSM</a></li>
+<li><a href="advanced-ssn-metrics.html#application-to-a-weighted-and-bipartite-network" id="toc-application-to-a-weighted-and-bipartite-network"><span class="toc-section-number">6.1.5</span> Application to a weighted and bipartite network</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="edges.html"><a href="edges.html"><i class="fa fa-check"></i><b>7</b> Future Development</a></li>
+</ul></li>
+<li><a href="edges.html#edges" id="toc-edges"><span class="toc-section-number">7</span> Future Development</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -215,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <caption><span id="tab:matrix">Table 2.1: </span>Adjacency Matrix</caption>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="left">China</th>
 <th align="left">Mexico</th>
 <th align="left">Canada</th>
@@ -223,19 +244,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </thead>
 <tbody>
 <tr class="odd">
-<td>China</td>
+<td align="left">China</td>
 <td align="left">0</td>
 <td align="left">48520</td>
 <td align="left">4144020</td>
 </tr>
 <tr class="even">
-<td>Mexico</td>
+<td align="left">Mexico</td>
 <td align="left">2520</td>
 <td align="left">0</td>
 <td align="left">155790</td>
 </tr>
 <tr class="odd">
-<td>Canada</td>
+<td align="left">Canada</td>
 <td align="left">19650</td>
 <td align="left">8980</td>
 <td align="left">0</td>
@@ -348,49 +369,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="network-metrics" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Network Metrics</h2>
 <p><code>igraph</code> package provides functions that calculate a few network metrics for nodes and edges in an network. It can construct a network from the two common data formats: using <code>graph_from_data_frame</code> with a node table and an edgelist (edgelist alone works too) or <code>graph_from_incident_matrix</code> with an adjacency matrix.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="metrics.html#cb2-1"></a>g =<span class="st"> </span><span class="kw">graph_from_data_frame</span>(YOUR_EDGELIST, <span class="dt">directed=</span><span class="ot">TRUE</span>)</span>
-<span id="cb2-2"><a href="metrics.html#cb2-2"></a>g =<span class="st"> </span><span class="kw">graph_from_data_frame</span>(YOUR_EDGELIST, <span class="dt">vertices=</span>YOUR_NODETABLE, <span class="dt">directed=</span><span class="ot">TRUE</span>)</span>
-<span id="cb2-3"><a href="metrics.html#cb2-3"></a>g =<span class="st"> </span><span class="kw">graph_from_incident_matrix</span>(YOUR_MATRIX, <span class="dt">directed=</span><span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="metrics.html#cb2-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">graph_from_data_frame</span>(YOUR_EDGELIST, <span class="at">directed=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-2"><a href="metrics.html#cb2-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">graph_from_data_frame</span>(YOUR_EDGELIST, <span class="at">vertices=</span>YOUR_NODETABLE, <span class="at">directed=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="metrics.html#cb2-3" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">graph_from_incident_matrix</span>(YOUR_MATRIX, <span class="at">directed=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Here are some common network metrics that are used to measure properties of nodes, edges, and network structure as a whole:</p>
 <div id="network-metrics-for-nodes" class="section level3" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Network Metrics for Nodes</h3>
 <p><strong>Degree</strong>: measures the total connections of a node, regardless of the direction of the connections.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="metrics.html#cb3-1"></a><span class="kw">V</span>(g)<span class="op">$</span>degree =<span class="st"> </span><span class="kw">degree</span>(g, <span class="dt">v=</span><span class="kw">V</span>(g), <span class="dt">mode=</span><span class="kw">c</span>(<span class="st">&#39;all&#39;</span>)) <span class="co">#add degree to nodes in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="metrics.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g, <span class="at">v=</span><span class="fu">V</span>(g), <span class="at">mode=</span><span class="fu">c</span>(<span class="st">&#39;all&#39;</span>)) <span class="co">#add degree to nodes in the network g</span></span></code></pre></div>
 <p><strong>In Degree</strong> measures the total connections that flow to a node.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="metrics.html#cb4-1"></a><span class="kw">V</span>(g)<span class="op">$</span>degree =<span class="st"> </span><span class="kw">degree</span>(g, <span class="dt">v=</span><span class="kw">V</span>(g), <span class="dt">mode=</span><span class="kw">c</span>(<span class="st">&#39;in&#39;</span>)) <span class="co">#add in degree to nodes in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="metrics.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g, <span class="at">v=</span><span class="fu">V</span>(g), <span class="at">mode=</span><span class="fu">c</span>(<span class="st">&#39;in&#39;</span>)) <span class="co">#add in degree to nodes in the network g</span></span></code></pre></div>
 <p><strong>Out Degree</strong> measures the total connections that flow out from a node.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="metrics.html#cb5-1"></a><span class="kw">V</span>(g)<span class="op">$</span>degree =<span class="st"> </span><span class="kw">degree</span>(g, <span class="dt">v=</span><span class="kw">V</span>(g), <span class="dt">mode=</span><span class="kw">c</span>(<span class="st">&#39;out&#39;</span>)) <span class="co">#add out degree to nodes in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="metrics.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g, <span class="at">v=</span><span class="fu">V</span>(g), <span class="at">mode=</span><span class="fu">c</span>(<span class="st">&#39;out&#39;</span>)) <span class="co">#add out degree to nodes in the network g</span></span></code></pre></div>
 <p><strong>Weighted Degree</strong> measures the sum of the edge weights to a node, which is correlated with the degree of a node but weighted. The weighted in degree and weighted out degree use the same code, but change the mode to “in” and “out”.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="metrics.html#cb6-1"></a><span class="co">#Edgelist should include weight column for the code to work.</span></span>
-<span id="cb6-2"><a href="metrics.html#cb6-2"></a><span class="kw">V</span>(g)<span class="op">$</span>weighted_degree =<span class="st"> </span><span class="kw">strength</span>(g, <span class="dt">v=</span><span class="kw">V</span>(g), <span class="dt">mode=</span><span class="kw">c</span>(<span class="st">&#39;all&#39;</span>)) <span class="co">#add weighted degree to nodes in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="metrics.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Edgelist should include weight column for the code to work.</span></span>
+<span id="cb6-2"><a href="metrics.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>weighted_degree <span class="ot">=</span> <span class="fu">strength</span>(g, <span class="at">v=</span><span class="fu">V</span>(g), <span class="at">mode=</span><span class="fu">c</span>(<span class="st">&#39;all&#39;</span>)) <span class="co">#add weighted degree to nodes in the network g</span></span></code></pre></div>
 <p><strong>Closeness Centrality</strong> measures the closeness of one node to all other nodes in the network. A high value means that a node, on average, can reach all other nodes in a few steps. It is calculated as the reciprocal of the sum of the length of the shortest path between a node and all other nodes in the graph.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="metrics.html#cb7-1"></a><span class="kw">V</span>(g)<span class="op">$</span>closeness_centrality =<span class="st"> </span><span class="kw">closeness</span>(g, <span class="dt">vids=</span><span class="kw">V</span>(g), <span class="dt">mode=</span><span class="st">&#39;in&#39;</span>) <span class="co">#add closeness centrality (mode = &#39;in&#39; uses in degree as paths to a node) to nodes in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="metrics.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>closeness_centrality <span class="ot">=</span> <span class="fu">closeness</span>(g, <span class="at">vids=</span><span class="fu">V</span>(g), <span class="at">mode=</span><span class="st">&#39;in&#39;</span>) <span class="co">#add closeness centrality (mode = &#39;in&#39; uses in degree as paths to a node) to nodes in the network g</span></span></code></pre></div>
 <p><strong>Betweenness Centrality</strong> measures the importance of a node in calculating the shortests paths of all nodes in a network. A high value means that a node, if removed from the network, will make the shortest path calculation longer for many other nodes in the network. It is calculated as the number of shortest paths that pass through the node.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="metrics.html#cb8-1"></a><span class="kw">V</span>(g)<span class="op">$</span>betweenness_centrality =<span class="st"> </span><span class="kw">betweenness</span>(g, <span class="dt">v=</span><span class="kw">V</span>(g), <span class="dt">directed=</span><span class="ot">TRUE</span>) <span class="co">#add betweenness centrality to nodes in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="metrics.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>betweenness_centrality <span class="ot">=</span> <span class="fu">betweenness</span>(g, <span class="at">v=</span><span class="fu">V</span>(g), <span class="at">directed=</span><span class="cn">TRUE</span>) <span class="co">#add betweenness centrality to nodes in the network g</span></span></code></pre></div>
 <p><strong>Eigenvector Centrality</strong> (sometimes called PageRank Centrality) measures the influence a node has on a network. A node has high influence if it is connected to many nodes who themselves have high influences.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="metrics.html#cb9-1"></a><span class="kw">V</span>(g)<span class="op">$</span>eigenvector_centrality =<span class="st"> </span><span class="kw">eigen_centrality</span>(g, <span class="dt">directed=</span><span class="ot">TRUE</span>)<span class="op">$</span>vector <span class="co">#add eigenvector centrality to nodes in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="metrics.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>eigenvector_centrality <span class="ot">=</span> <span class="fu">eigen_centrality</span>(g, <span class="at">directed=</span><span class="cn">TRUE</span>)<span class="sc">$</span>vector <span class="co">#add eigenvector centrality to nodes in the network g</span></span></code></pre></div>
 <p><strong>(Local) Clustering Coefficient</strong> measures how close the neighbors of a node all connect to each other, and thus how embedded a node is in its local networks. It is also called the local clustering coefficient.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="metrics.html#cb10-1"></a><span class="kw">V</span>(g)<span class="op">$</span>clustering_coefficient =<span class="st"> </span><span class="kw">transitivity</span>(g, <span class="dt">type=</span><span class="st">&#39;local&#39;</span>) <span class="co">#add local clustering coefficient to nodes in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="metrics.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>clustering_coefficient <span class="ot">=</span> <span class="fu">transitivity</span>(g, <span class="at">type=</span><span class="st">&#39;local&#39;</span>) <span class="co">#add local clustering coefficient to nodes in the network g</span></span></code></pre></div>
 <p><strong>Eccentricity</strong> measures the shortest path distance to the farthest other node in the network.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="metrics.html#cb11-1"></a><span class="kw">V</span>(g)<span class="op">$</span>eccentricity =<span class="st"> </span><span class="kw">eccentricity</span>(g, <span class="dt">vids=</span><span class="kw">V</span>(g), <span class="dt">mode=</span><span class="kw">c</span>(<span class="st">&#39;all&#39;</span>)) <span class="co">#add eccentricity to nodes (path calculated as undirected) in the network g</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="metrics.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>eccentricity <span class="ot">=</span> <span class="fu">eccentricity</span>(g, <span class="at">vids=</span><span class="fu">V</span>(g), <span class="at">mode=</span><span class="fu">c</span>(<span class="st">&#39;all&#39;</span>)) <span class="co">#add eccentricity to nodes (path calculated as undirected) in the network g</span></span></code></pre></div>
 <p><strong>Shortest Path</strong> is the shortest path from one node to another in the network. It contains a list of nodes that the path passes by.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="metrics.html#cb12-1"></a><span class="kw">get.shortest.paths</span>(g, <span class="dv">1</span>, <span class="dv">3</span>) <span class="co">#give you the shortest path from node 1 to node 3. The path will show the number or the name of the nodes passed. Igraph package labels every node with a number. </span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="metrics.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get.shortest.paths</span>(g, <span class="dv">1</span>, <span class="dv">3</span>) <span class="co">#give you the shortest path from node 1 to node 3. The path will show the number or the name of the nodes passed. Igraph package labels every node with a number. </span></span></code></pre></div>
 <p><strong>Hops</strong> is the number of steps for one node to jump to another node.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="metrics.html#cb13-1"></a><span class="kw">length</span>(<span class="kw">get.shortest.paths</span>(g, <span class="dv">1</span>, <span class="dv">3</span>)<span class="op">$</span>vpath[[<span class="dv">1</span>]]) <span class="co">#measure the number of hops from node 1 to node 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="metrics.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">get.shortest.paths</span>(g, <span class="dv">1</span>, <span class="dv">3</span>)<span class="sc">$</span>vpath[[<span class="dv">1</span>]]) <span class="co">#measure the number of hops from node 1 to node 3</span></span></code></pre></div>
 </div>
 <div id="network-metrics-for-edges" class="section level3" number="2.2.2">
 <h3><span class="header-section-number">2.2.2</span> Network Metrics for Edges</h3>
 <p><strong>Weight</strong> can represent the value of the connection, such as volumes of flows or the extent of strength (e.g., trust).</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metrics.html#cb14-1"></a><span class="kw">E</span>(g)<span class="op">$</span>weight =<span class="st"> </span>YOUR_WEIGHT_VECTOR <span class="co">#assign weights to edges</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="metrics.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(g)<span class="sc">$</span>weight <span class="ot">=</span> YOUR_WEIGHT_VECTOR <span class="co">#assign weights to edges</span></span></code></pre></div>
 <p><strong>Edge Betweenness</strong> measures the number of shortest paths pass through an edge.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="metrics.html#cb15-1"></a><span class="kw">E</span>(g)<span class="op">$</span>edge_betweenness =<span class="st"> </span><span class="kw">edge_betweenness</span>(g, <span class="dt">e=</span><span class="kw">E</span>(g), <span class="dt">directed=</span><span class="ot">TRUE</span>) <span class="co">#calculate edge_betweenness for all edges in a network</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="metrics.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(g)<span class="sc">$</span>edge_betweenness <span class="ot">=</span> <span class="fu">edge_betweenness</span>(g, <span class="at">e=</span><span class="fu">E</span>(g), <span class="at">directed=</span><span class="cn">TRUE</span>) <span class="co">#calculate edge_betweenness for all edges in a network</span></span></code></pre></div>
 <p>For network structures:</p>
 <p><strong>Diameter</strong> measures the maximum distance between any pairs of nodes in a network. In another word, it is the maximum eccentricity of any node.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="metrics.html#cb16-1"></a>d =<span class="st"> </span><span class="kw">diameter</span>(g, <span class="dt">directed=</span><span class="ot">FALSE</span>) <span class="co">#calculate diameter of a network </span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="metrics.html#cb16-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">diameter</span>(g, <span class="at">directed=</span><span class="cn">FALSE</span>) <span class="co">#calculate diameter of a network </span></span></code></pre></div>
 <p><strong>(Global) Clustering Coefficient</strong> measures the degree to which nodes in a network tend to cluster together. Global clustering coefficient is calculated as the ratio of the number of closed triplets and the total number of triplets.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="metrics.html#cb17-1"></a>global_clustering_coefficient =<span class="st"> </span><span class="kw">transitivity</span>(g, <span class="dt">type=</span><span class="st">&#39;average&#39;</span>) <span class="co">#calculate global clustering coefficient of a network </span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="metrics.html#cb17-1" aria-hidden="true" tabindex="-1"></a>global_clustering_coefficient <span class="ot">=</span> <span class="fu">transitivity</span>(g, <span class="at">type=</span><span class="st">&#39;average&#39;</span>) <span class="co">#calculate global clustering coefficient of a network </span></span></code></pre></div>
 <p><strong>Average Path Length</strong> measures the mean of the lengths of the shortest paths between all pairs of nodes in the network.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="metrics.html#cb18-1"></a>avg_path_length =<span class="st"> </span><span class="kw">average.path.length</span>(g, <span class="dt">directed=</span><span class="ot">FALSE</span>) <span class="co">#calculate the average path length of a undirected network </span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="metrics.html#cb18-1" aria-hidden="true" tabindex="-1"></a>avg_path_length <span class="ot">=</span> <span class="fu">average.path.length</span>(g, <span class="at">directed=</span><span class="cn">FALSE</span>) <span class="co">#calculate the average path length of a undirected network </span></span></code></pre></div>
 </div>
 </div>
 <div id="igraph-visualization" class="section level2" number="2.3">
@@ -409,54 +430,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Target (the name of a different member)</li>
 </ul>
 <p>The node size varies by the values of local clustering coefficient, and the node color varies by the mafia family the node belongs to.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="metrics.html#cb19-1"></a><span class="kw">library</span>(igraph)</span>
-<span id="cb19-2"><a href="metrics.html#cb19-2"></a><span class="kw">library</span>(SSNtools)</span>
-<span id="cb19-3"><a href="metrics.html#cb19-3"></a></span>
-<span id="cb19-4"><a href="metrics.html#cb19-4"></a><span class="co">#MafiaNodes and MafiaEdges are built-in datasets in SSNtools package</span></span>
-<span id="cb19-5"><a href="metrics.html#cb19-5"></a>g &lt;-<span class="st"> </span><span class="kw">graph_from_data_frame</span>(MafiaEdges, <span class="dt">directed =</span> <span class="ot">FALSE</span>, <span class="dt">vertices=</span>MafiaNodes)</span>
-<span id="cb19-6"><a href="metrics.html#cb19-6"></a></span>
-<span id="cb19-7"><a href="metrics.html#cb19-7"></a><span class="co">#set the node size to base on clustering coefficients </span></span>
-<span id="cb19-8"><a href="metrics.html#cb19-8"></a><span class="kw">V</span>(g)<span class="op">$</span>size &lt;-<span class="st"> </span><span class="kw">transitivity</span>(g, <span class="dt">type=</span><span class="st">&#39;local&#39;</span>) </span>
-<span id="cb19-9"><a href="metrics.html#cb19-9"></a></span>
-<span id="cb19-10"><a href="metrics.html#cb19-10"></a><span class="co">#Set the node color to vary by mafia family group.  </span></span>
-<span id="cb19-11"><a href="metrics.html#cb19-11"></a><span class="co"># ---- get all color from a color device </span></span>
-<span id="cb19-12"><a href="metrics.html#cb19-12"></a>color =<span class="st"> </span>grDevices<span class="op">::</span><span class="kw">colors</span>()[<span class="kw">grep</span>(<span class="st">&#39;gr(a|e)y&#39;</span>, grDevices<span class="op">::</span><span class="kw">colors</span>(), <span class="dt">invert =</span> T)] </span>
-<span id="cb19-13"><a href="metrics.html#cb19-13"></a><span class="co"># ---- sample n color, in which n = family groups</span></span>
-<span id="cb19-14"><a href="metrics.html#cb19-14"></a>colrs &lt;-<span class="st"> </span><span class="kw">sample</span>(color, <span class="kw">length</span>(<span class="kw">unique</span>(<span class="kw">V</span>(g)<span class="op">$</span>Family))) </span>
-<span id="cb19-15"><a href="metrics.html#cb19-15"></a><span class="co"># ---- #assign color to correpsonding mafia family member</span></span>
-<span id="cb19-16"><a href="metrics.html#cb19-16"></a><span class="kw">V</span>(g)<span class="op">$</span>color &lt;-<span class="st"> </span>colrs[<span class="kw">as.numeric</span>(<span class="kw">factor</span>(<span class="kw">V</span>(g)<span class="op">$</span>Family))] </span>
-<span id="cb19-17"><a href="metrics.html#cb19-17"></a></span>
-<span id="cb19-18"><a href="metrics.html#cb19-18"></a><span class="co">#Plot igraph network </span></span>
-<span id="cb19-19"><a href="metrics.html#cb19-19"></a><span class="kw">plot</span>(g,</span>
-<span id="cb19-20"><a href="metrics.html#cb19-20"></a>     <span class="dt">vertex.label =</span> <span class="ot">NA</span>,</span>
-<span id="cb19-21"><a href="metrics.html#cb19-21"></a>     <span class="dt">vertex.color =</span> <span class="kw">V</span>(g)<span class="op">$</span>color,</span>
-<span id="cb19-22"><a href="metrics.html#cb19-22"></a>     <span class="dt">vertex.size =</span> <span class="dv">50</span><span class="op">*</span><span class="kw">V</span>(g)<span class="op">$</span>size, <span class="co">#Scaled node size</span></span>
-<span id="cb19-23"><a href="metrics.html#cb19-23"></a>     <span class="dt">edge.width=</span><span class="fl">0.5</span>,</span>
-<span id="cb19-24"><a href="metrics.html#cb19-24"></a>     <span class="dt">layout=</span><span class="kw">layout_with_fr</span>(g)</span>
-<span id="cb19-25"><a href="metrics.html#cb19-25"></a>)</span>
-<span id="cb19-26"><a href="metrics.html#cb19-26"></a></span>
-<span id="cb19-27"><a href="metrics.html#cb19-27"></a><span class="co">#Add node color legend</span></span>
-<span id="cb19-28"><a href="metrics.html#cb19-28"></a>fname =<span class="st"> </span><span class="kw">sort</span>(<span class="kw">unique</span>(<span class="kw">V</span>(g)<span class="op">$</span>Family)) <span class="co">#sort the legend labels </span></span>
-<span id="cb19-29"><a href="metrics.html#cb19-29"></a><span class="kw">legend</span>(<span class="dt">x=</span><span class="op">-</span><span class="fl">2.2</span>, <span class="dt">y=</span><span class="fl">1.5</span>, <span class="co">#legend position </span></span>
-<span id="cb19-30"><a href="metrics.html#cb19-30"></a>       <span class="dt">legend=</span>fname,</span>
-<span id="cb19-31"><a href="metrics.html#cb19-31"></a>       <span class="dt">pch=</span><span class="dv">21</span>, <span class="co">#solid circle with one color </span></span>
-<span id="cb19-32"><a href="metrics.html#cb19-32"></a>       <span class="dt">pt.bg=</span>colrs[<span class="kw">as.numeric</span>(<span class="kw">factor</span>(fname))],</span>
-<span id="cb19-33"><a href="metrics.html#cb19-33"></a>       <span class="dt">pt.cex=</span><span class="dv">1</span>, <span class="dt">cex=</span>.<span class="dv">7</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>, <span class="dt">ncol=</span><span class="dv">1</span>,</span>
-<span id="cb19-34"><a href="metrics.html#cb19-34"></a>       <span class="dt">title =</span> <span class="st">&#39;Node Color: Family Group&#39;</span></span>
-<span id="cb19-35"><a href="metrics.html#cb19-35"></a>)</span>
-<span id="cb19-36"><a href="metrics.html#cb19-36"></a></span>
-<span id="cb19-37"><a href="metrics.html#cb19-37"></a><span class="co">#Add node size legend</span></span>
-<span id="cb19-38"><a href="metrics.html#cb19-38"></a><span class="co"># ---- quantile breaks to show node size</span></span>
-<span id="cb19-39"><a href="metrics.html#cb19-39"></a>breaks =<span class="st"> </span><span class="kw">round</span>(<span class="kw">quantile</span>(<span class="kw">V</span>(g)<span class="op">$</span>size, <span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)),<span class="dv">2</span>) </span>
-<span id="cb19-40"><a href="metrics.html#cb19-40"></a><span class="kw">legend</span>(<span class="dt">x =</span> <span class="fl">-2.2</span>, <span class="dt">y =</span> <span class="fl">-1.2</span>, <span class="co">#legend position </span></span>
-<span id="cb19-41"><a href="metrics.html#cb19-41"></a>       <span class="dt">legend=</span>breaks, <span class="dt">pch=</span><span class="dv">21</span>, </span>
-<span id="cb19-42"><a href="metrics.html#cb19-42"></a>       <span class="dt">pt.bg=</span><span class="ot">NA</span>, <span class="co">#no color background</span></span>
-<span id="cb19-43"><a href="metrics.html#cb19-43"></a>       <span class="dt">cex=</span><span class="fl">0.7</span>, <span class="co">#size of legend</span></span>
-<span id="cb19-44"><a href="metrics.html#cb19-44"></a>       <span class="dt">pt.cex=</span>breaks <span class="op">*</span><span class="st"> </span><span class="dv">10</span>, <span class="co">#Scaled node size </span></span>
-<span id="cb19-45"><a href="metrics.html#cb19-45"></a>       <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>, <span class="co">#node shape</span></span>
-<span id="cb19-46"><a href="metrics.html#cb19-46"></a>       <span class="dt">ncol=</span><span class="dv">5</span>, <span class="co">#number of column for legend</span></span>
-<span id="cb19-47"><a href="metrics.html#cb19-47"></a>       <span class="dt">text.width =</span> <span class="fl">0.27</span>, <span class="co">#adjust width of each column</span></span>
-<span id="cb19-48"><a href="metrics.html#cb19-48"></a>       <span class="dt">title =</span> <span class="st">&#39;Node Size: Local Clustering Coefficient&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="metrics.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb19-2"><a href="metrics.html#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SSNtools)</span>
+<span id="cb19-3"><a href="metrics.html#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="metrics.html#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#MafiaNodes and MafiaEdges are built-in datasets in SSNtools package</span></span>
+<span id="cb19-5"><a href="metrics.html#cb19-5" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(MafiaEdges, <span class="at">directed =</span> <span class="cn">FALSE</span>, <span class="at">vertices=</span>MafiaNodes)</span>
+<span id="cb19-6"><a href="metrics.html#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="metrics.html#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#set the node size to base on clustering coefficients </span></span>
+<span id="cb19-8"><a href="metrics.html#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">transitivity</span>(g, <span class="at">type=</span><span class="st">&#39;local&#39;</span>) </span>
+<span id="cb19-9"><a href="metrics.html#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="metrics.html#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#delete vertices that do not have clustering coefficients</span></span>
+<span id="cb19-11"><a href="metrics.html#cb19-11" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">delete_vertices</span>(g, <span class="fu">is.na</span>(<span class="fu">V</span>(g)<span class="sc">$</span>size))</span>
+<span id="cb19-12"><a href="metrics.html#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="metrics.html#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Set the node color to vary by mafia family group.  </span></span>
+<span id="cb19-14"><a href="metrics.html#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- get all color from a color device </span></span>
+<span id="cb19-15"><a href="metrics.html#cb19-15" aria-hidden="true" tabindex="-1"></a>color <span class="ot">=</span> grDevices<span class="sc">::</span><span class="fu">colors</span>()[<span class="fu">grep</span>(<span class="st">&#39;gr(a|e)y&#39;</span>, grDevices<span class="sc">::</span><span class="fu">colors</span>(), <span class="at">invert =</span> T)] </span>
+<span id="cb19-16"><a href="metrics.html#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- sample n color, in which n = family groups</span></span>
+<span id="cb19-17"><a href="metrics.html#cb19-17" aria-hidden="true" tabindex="-1"></a>colrs <span class="ot">&lt;-</span> <span class="fu">sample</span>(color, <span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family))) </span>
+<span id="cb19-18"><a href="metrics.html#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- #assign color to correpsonding mafia family member</span></span>
+<span id="cb19-19"><a href="metrics.html#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>color <span class="ot">&lt;-</span> colrs[<span class="fu">as.numeric</span>(<span class="fu">factor</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family))] </span>
+<span id="cb19-20"><a href="metrics.html#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-21"><a href="metrics.html#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot igraph network </span></span>
+<span id="cb19-22"><a href="metrics.html#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(g,</span>
+<span id="cb19-23"><a href="metrics.html#cb19-23" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb19-24"><a href="metrics.html#cb19-24" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.color =</span> <span class="fu">V</span>(g)<span class="sc">$</span>color,</span>
+<span id="cb19-25"><a href="metrics.html#cb19-25" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.size =</span> <span class="dv">50</span><span class="sc">*</span><span class="fu">V</span>(g)<span class="sc">$</span>size, <span class="co">#Scaled node size</span></span>
+<span id="cb19-26"><a href="metrics.html#cb19-26" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.width=</span><span class="fl">0.5</span>,</span>
+<span id="cb19-27"><a href="metrics.html#cb19-27" aria-hidden="true" tabindex="-1"></a>     <span class="at">layout=</span><span class="fu">layout_with_fr</span>(g)</span>
+<span id="cb19-28"><a href="metrics.html#cb19-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-29"><a href="metrics.html#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="metrics.html#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="co">#Add node color legend</span></span>
+<span id="cb19-31"><a href="metrics.html#cb19-31" aria-hidden="true" tabindex="-1"></a>fname <span class="ot">=</span> <span class="fu">sort</span>(<span class="fu">unique</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family)) <span class="co">#sort the legend labels </span></span>
+<span id="cb19-32"><a href="metrics.html#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x=</span><span class="sc">-</span><span class="fl">2.2</span>, <span class="at">y=</span><span class="fl">1.5</span>, <span class="co">#legend position </span></span>
+<span id="cb19-33"><a href="metrics.html#cb19-33" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span>fname,</span>
+<span id="cb19-34"><a href="metrics.html#cb19-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="dv">21</span>, <span class="co">#solid circle with one color </span></span>
+<span id="cb19-35"><a href="metrics.html#cb19-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span>colrs[<span class="fu">as.numeric</span>(<span class="fu">factor</span>(fname))],</span>
+<span id="cb19-36"><a href="metrics.html#cb19-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.cex=</span><span class="dv">1</span>, <span class="at">cex=</span>.<span class="dv">7</span>, <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="at">ncol=</span><span class="dv">1</span>,</span>
+<span id="cb19-37"><a href="metrics.html#cb19-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&#39;Node Color: Family Group&#39;</span></span>
+<span id="cb19-38"><a href="metrics.html#cb19-38" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-39"><a href="metrics.html#cb19-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-40"><a href="metrics.html#cb19-40" aria-hidden="true" tabindex="-1"></a><span class="co">#Add node size legend</span></span>
+<span id="cb19-41"><a href="metrics.html#cb19-41" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- quantile breaks to show node size</span></span>
+<span id="cb19-42"><a href="metrics.html#cb19-42" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">quantile</span>(<span class="fu">V</span>(g)<span class="sc">$</span>size, <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)),<span class="dv">2</span>) </span>
+<span id="cb19-43"><a href="metrics.html#cb19-43" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">2.2</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">1.2</span>, <span class="co">#legend position </span></span>
+<span id="cb19-44"><a href="metrics.html#cb19-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span>breaks, <span class="at">pch=</span><span class="dv">21</span>, </span>
+<span id="cb19-45"><a href="metrics.html#cb19-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span><span class="cn">NA</span>, <span class="co">#no color background</span></span>
+<span id="cb19-46"><a href="metrics.html#cb19-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex=</span><span class="fl">0.7</span>, <span class="co">#size of legend</span></span>
+<span id="cb19-47"><a href="metrics.html#cb19-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.cex=</span>breaks <span class="sc">*</span> <span class="dv">10</span>, <span class="co">#Scaled node size </span></span>
+<span id="cb19-48"><a href="metrics.html#cb19-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="co">#node shape</span></span>
+<span id="cb19-49"><a href="metrics.html#cb19-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">5</span>, <span class="co">#number of column for legend</span></span>
+<span id="cb19-50"><a href="metrics.html#cb19-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.width =</span> <span class="fl">0.27</span>, <span class="co">#adjust width of each column</span></span>
+<span id="cb19-51"><a href="metrics.html#cb19-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&#39;Node Size: Local Clustering Coefficient&#39;</span>)</span></code></pre></div>
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <!-- You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods). -->
 <!-- Figures and tables with captions will be placed in `figure` and `table` environments, respectively. -->
@@ -479,7 +503,6 @@ Reference a figure by its code chunk label with the `fig:` prefix, e.g., see Fig
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -498,6 +521,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -518,6 +542,10 @@ gitbook.start({
 "text": null
 },
 "download": ["SSN_tutorial.pdf", "SSN_tutorial.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
