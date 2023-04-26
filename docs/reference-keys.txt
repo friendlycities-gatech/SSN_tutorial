@@ -1,6 +1,7 @@
 tab:matrix
 tab:nodetable
 tab:edgetable
+fig:unnamed-chunk-72
 introduction
 metrics
 network-data-formats
@@ -37,5 +38,9 @@ how-to-visualize-ssn-hotspots
 how-to-find-optimal-window-sizes-for-ssn-hotspots
 calculate-ssn-hotspots-using-a-user-defined-walking-distance-matrix-extracted-from-osm
 application-to-a-weighted-and-bipartite-network
+k-fullfillment
+calculate-k-fullfillment-values
+visualize-k-fullfillment
+application-to-a-bipartite-network
 reference
 edges
