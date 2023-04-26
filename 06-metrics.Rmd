@@ -713,7 +713,7 @@ g =
 g
 ```
 
-### Application to a Bipartite Network
+### Application to a bipartite network
 
 To calculate **K-fullfillment** values on the node level for a bipartite network, you can use the following codes as a reference. Note that only nodes whose `Bipartite` column is equal to 1 (in this case, POI) will have K-fullfillment values. 
 

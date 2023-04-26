@@ -202,7 +202,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li><a href="advanced-ssn-metrics.html#calculate-k-fullfillment-values" id="toc-calculate-k-fullfillment-values"><span class="toc-section-number">6.2.1</span> Calculate K-fullfillment values</a></li>
 <li><a href="advanced-ssn-metrics.html#visualize-k-fullfillment" id="toc-visualize-k-fullfillment"><span class="toc-section-number">6.2.2</span> Visualize K-fullfillment</a></li>
-<li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network" id="toc-application-to-a-bipartite-network"><span class="toc-section-number">6.2.3</span> Application to a Bipartite Network</a></li>
+<li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network" id="toc-application-to-a-bipartite-network"><span class="toc-section-number">6.2.3</span> Application to a bipartite network</a></li>
 </ul></li>
 </ul></li>
 <li><a href="edges.html#edges" id="toc-edges"><span class="toc-section-number">7</span> Future Development</a></li>
@@ -649,7 +649,7 @@ Figure 6.1: Figure: Schematic Diagram of EdgeScan and NDScan Values Calculation
 <span id="cb89-30"><a href="advanced-ssn-metrics.html#cb89-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb89-31"><a href="advanced-ssn-metrics.html#cb89-31" aria-hidden="true" tabindex="-1"></a>heat[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>
 <pre><code>##               label heat
-## 1 AMAROSA-ALEXANDER    1
+## 1 AMAROSA-ALEXANDER   NA
 ## 2   VINTALORO-JAMES   NA
 ## 3   TANTILLO-ENRICO   NA</code></pre>
 <div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="advanced-ssn-metrics.html#cb91-1" aria-hidden="true" tabindex="-1"></a>edgeWithin[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>
@@ -767,7 +767,7 @@ Figure 6.1: Figure: Schematic Diagram of EdgeScan and NDScan Values Calculation
 </div>
 <div id="k-fullfillment" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> K-fullfillment</h2>
-<p><strong>K-fullfillment</strong> is a node-level metric to describe local (dis)connection. It is defined as the percentage of a node’s K-nearest neighbors that it is connected to over a node’s total number of K-nearest neighbors. Here, <code>K</code> is equal to the node’s degree. Nodes that are exclusively connected to their nearest neighbors will have a K-fulfillment value of 1. K-fullfillment assumes that the target SSN is an undirected network.</p>
+<p><strong>K-fullfillment</strong> is a node-level metric to describe local (dis)connection. It is defined as the percentage of a node’s K-nearest neighbors that it is connected (i.e., connected K-nearest neighbors divided by total K-nearest neighbors). Here, <code>K</code> is equal to the node’s degree. Nodes that are exclusively connected to their nearest neighbors will have a K-fulfillment value of 1. K-fullfillment assumes that the target SSN is an undirected network.</p>
 <p>Here are some example research questions that can be answered by the <strong>K-fullfillment</strong> metric:</p>
 <ul>
 <li>(Mafia members SSN) Which mafia members have strong local connections (i.e., higher percentage of K-nearest neighbors connected)?</li>
@@ -782,7 +782,8 @@ Figure 6.1: Figure: Schematic Diagram of EdgeScan and NDScan Values Calculation
 <p>We will continue to use sample dataset <strong>NYCMafiaNodes</strong> and <strong>NYCMafiaEdges</strong> in <code>SSNtools</code> to illustrate examples. To load the sample dataset and the functions, go to GitHub <a href="https://github.com/friendlycities-gatech/SSNtools">SSNtool</a> to download the development R package, or type the following lines in your R console. Click the GitHub page for more detailed description of all the functions available in the package and the input formats for each function.</p>
 <div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="advanced-ssn-metrics.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
 <span id="cb97-2"><a href="advanced-ssn-metrics.html#cb97-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>)</span></code></pre></div>
-<p><strong>NYCMafiaNodes</strong> is a node table with label and spatial coordinates for each node (a mafia member). <strong>NYCMafiaeEdges</strong> contains pairs of node labels (corresponding to node table label), representing mafia criminal associations. This is a unweighted and undirected network. The coordinate system crs is 32118, in the unit of meters. Data in <strong>POINodes</strong> and <strong>POIEdges</strong> are processed from SafeGraph with extra filters and coding to hide sensitive information. The dataset is meant to be educational and thus can be inaccurate for real implications. The nodes in the dataset are restaurants in Atlanta (set 0) and centroids of census block group (set 1). The edges in the dataset are visits from the census block group to restaurants. The weight of the edges represent the percentage of total visits coming from a particular census block group. You can call <strong>POINodes</strong> (n=1356) and <strong>POIEdges</strong> (n=7926) to directly access the sample dataset. The coordinates system is transformed with crs=26967 (unit meter).</p>
+<p><strong>NYCMafiaNodes</strong> is a node table with label and spatial coordinates for each node (a mafia member). <strong>NYCMafiaeEdges</strong> contains pairs of node labels (corresponding to node table label), representing mafia criminal associations. This is a unweighted and undirected network. The coordinate system crs is 32118, in the unit of meters.</p>
+<p>Data in <strong>POINodes</strong> and <strong>POIEdges</strong> are processed from SafeGraph with extra filters and coding to hide sensitive information. The dataset is meant to be educational and thus can be inaccurate for real implications. The nodes in the dataset are restaurants in Atlanta (set 0) and centroids of census block group (set 1). The edges in the dataset are visits from the census block group to restaurants. The weight of the edges represent the percentage of total visits coming from a particular census block group. You can call <strong>POINodes</strong> (n=1356) and <strong>POIEdges</strong> (n=7926) to directly access the sample dataset. The coordinates system is transformed with crs=26967 (unit meter).</p>
 <div id="calculate-k-fullfillment-values" class="section level3" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Calculate K-fullfillment values</h3>
 <p>To get K-fullfillment value for each node, you just need to run your node and edge dataframe through the following codes:</p>
@@ -832,7 +833,7 @@ Figure 6.1: Figure: Schematic Diagram of EdgeScan and NDScan Values Calculation
 <li><code>label</code>: the node label</li>
 <li><code>K</code>: the node’s degree K, which is the same K for the node’s K-nearest neighbors.<br />
 </li>
-<li><code>K-fullfillment</code>: the percentage of a node’s K-nearest neighbors that it is connected to over a node’s total number of K-nearest neighbors. Nodes that are exclusively connected to their nearest neighbors will have a k-fulfillment value of 1.</li>
+<li><code>K-fullfillment</code>: the percentage of a node’s K-nearest neighbors that it is connected. Nodes that are exclusively connected to their nearest neighbors will have a k-fulfillment value of 1.</li>
 </ul>
 <p>The second dataframe is an edge dataframe that has three columns:</p>
 <ul>
@@ -880,11 +881,11 @@ Figure 6.1: Figure: Schematic Diagram of EdgeScan and NDScan Values Calculation
 <span id="cb104-14"><a href="advanced-ssn-metrics.html#cb104-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&#39;0&#39;</span>, <span class="st">&#39;(0, 0.10]&#39;</span>, <span class="st">&#39;(0.10, 0.25]&#39;</span>, <span class="st">&#39;(0.25, 1]&#39;</span>, <span class="st">&#39;NA (Less than minK)&#39;</span>), </span>
 <span id="cb104-15"><a href="advanced-ssn-metrics.html#cb104-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;#FBD977&#39;</span>, <span class="st">&#39;#F78D3D&#39;</span>, <span class="st">&#39;#E3211B&#39;</span>, <span class="st">&#39;#800F26&#39;</span>, <span class="st">&#39;white&#39;</span>), </span>
 <span id="cb104-16"><a href="advanced-ssn-metrics.html#cb104-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">is.portrait =</span> T, <span class="at">title=</span><span class="fu">c</span>(<span class="st">&#39;K-fullfillment&#39;</span>), <span class="at">size=</span><span class="fl">0.5</span>) <span class="sc">+</span> </span>
-<span id="cb104-17"><a href="advanced-ssn-metrics.html#cb104-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(<span class="at">type=</span><span class="st">&#39;line&#39;</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&#39;Connections to K-nearest Neigbhors&#39;</span>)), </span>
+<span id="cb104-17"><a href="advanced-ssn-metrics.html#cb104-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(<span class="at">type=</span><span class="st">&#39;line&#39;</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&#39;Edges to K-nearest Neigbhors&#39;</span>)), </span>
 <span id="cb104-18"><a href="advanced-ssn-metrics.html#cb104-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">col=</span><span class="st">&#39;black&#39;</span>, <span class="at">lwd=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
 <span id="cb104-19"><a href="advanced-ssn-metrics.html#cb104-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>), <span class="at">text.size =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  </span>
 <span id="cb104-20"><a href="advanced-ssn-metrics.html#cb104-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.title.size =</span> <span class="fl">0.9</span>, <span class="at">legend.text.size =</span> <span class="fl">0.7</span>, <span class="at">legend.width =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb104-21"><a href="advanced-ssn-metrics.html#cb104-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">&#39;NYC 1960s Mafia SSN K-fullfillment&#39;</span>,</span>
+<span id="cb104-21"><a href="advanced-ssn-metrics.html#cb104-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">&#39;NYC Mafia SSN K-fullfillment&#39;</span>,</span>
 <span id="cb104-22"><a href="advanced-ssn-metrics.html#cb104-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.position =</span> <span class="fu">c</span>(<span class="st">&#39;center&#39;</span>),</span>
 <span id="cb104-23"><a href="advanced-ssn-metrics.html#cb104-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.5</span>)</span>
 <span id="cb104-24"><a href="advanced-ssn-metrics.html#cb104-24" aria-hidden="true" tabindex="-1"></a></span>
@@ -892,7 +893,7 @@ Figure 6.1: Figure: Schematic Diagram of EdgeScan and NDScan Values Calculation
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-94-1.png" width="672" /></p>
 </div>
 <div id="application-to-a-bipartite-network" class="section level3" number="6.2.3">
-<h3><span class="header-section-number">6.2.3</span> Application to a Bipartite Network</h3>
+<h3><span class="header-section-number">6.2.3</span> Application to a bipartite network</h3>
 <p>To calculate <strong>K-fullfillment</strong> values on the node level for a bipartite network, you can use the following codes as a reference. Note that only nodes whose <code>Bipartite</code> column is equal to 1 (in this case, POI) will have K-fullfillment values.</p>
 <div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="advanced-ssn-metrics.html#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SSNtools)</span>
 <span id="cb105-2"><a href="advanced-ssn-metrics.html#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(POINodes)</span>
