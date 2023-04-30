@@ -143,7 +143,7 @@ heat = edgeScanKNearest(nodes, edges, 10)[[1]]
 heat = edgeScanManhattan(nodes, edges, 500)[[1]]
 ```
 
-### How to visualize SSN hotspots
+### Visualize SSN hotspots
 
 To visualize SSN hotspots, we need to attach spatial information to nodes in the **heat** dataframe and visualize nodes based on the hotspot values (i.e., column heat). If the codes below are foreign to you, review [Chapter 5: Advanced Aesthetics](https://friendlycities-gatech.github.io/SSN_tutorial/advanced-aesthetics.html) for more details. 
 
@@ -215,13 +215,13 @@ Inset = st_bbox(data.frame(lon=c(-74.00434, -73.98125), lat=c(40.73080, 40.71109
 Inset_bg = basemap_stars(Inset)
 
 # create the inset map
-InsetMap = tm_shape(inset_bg) + 
+InsetMap = tm_shape(Inset_bg) + 
     tm_rgb() + 
     tm_shape(NYCMafiaEdges_shp ) + 
     tm_lines(col='black', lwd=1) + 
-    tm_shape(MafiaSpatial) + 
-    tm_symbols(col='white', size=0.05) + 
-    tm_shape(MafiaSpatial %>% arrange(heat)) + 
+    tm_shape(MafiaSpatial %>% filter(is.na(heat))) + 
+    tm_symbols(col='white', size=0.05) +
+    tm_shape(MafiaSpatial %>% drop_na(heat) %>% arrange(heat)) + 
     tm_symbols(col='heat', size=0.2, style='fixed', 
                breaks=c(0, 0.00001, 0.10, 0.25, 0.667), legend.col.show = FALSE, 
                palette = c('#FBD977', '#F78D3D', '#E3211B', '#800F26')) + 
@@ -246,7 +246,7 @@ tmap_save(g + box, insets_tm=InsetMap,
 knitr::include_graphics("Figs/06-metrics-hotspot-inset.png")
 ```
 
-### How to find optimal window sizes for SSN hotspots
+### Find optimal window sizes for SSN hotspots
 
 SSN hotspots are sensitive to **neighborhood definition** and **window sizes**. Neighborhood definition should match theoretical questions, such as: Is distance between nodes meaningful; is travel time a factor in the study; or do events form natural clusters of varying radii? As such, there may not be an optimal window size, but visualizing outputs can help with decisions. 
 
@@ -584,12 +584,12 @@ knitr::include_graphics("Figs/06-metrics-POIvisits.png")
 
 ## K-fullfillment
 
-**K-fullfillment** is a node-level metric to describe local (dis)connection. It is defined as the percentage of a node’s K-nearest neighbors that it is connected (i.e., connected K-nearest neighbors divided by total K-nearest neighbors). Here, `K` is equal to the node’s degree. Nodes that are exclusively connected to their nearest neighbors will have a K-fulfillment value of 1. K-fullfillment assumes that the target SSN is an undirected network. 
+**K-fullfillment** is a node-level metric to describe local (dis)connection. It is defined as the percentage of a node’s K-nearest neighbors (in Euclidean space) that it is connected (i.e., connected K-nearest neighbors divided by total K-nearest neighbors). Here, `K` is equal to the node’s degree. Nodes that are exclusively connected to their nearest neighbors will have a K-fulfillment value of 1. K-fullfillment assumes that the target SSN is an unweighted, undirected network. 
 
 Here are some example research questions that can be answered by the **K-fullfillment** metric: 
 
 * (Mafia members SSN) Which mafia members have strong local connections (i.e., higher percentage of K-nearest neighbors connected)? 
-* (Restaurant POI visits SSN) Which restaurant tends to serve local residents? 
+* (Restaurant POI visits SSN) Which restaurant tends to serve residents from nearby census block groups? 
 * (Food sharing SSN) Which organization is highly connected to other local organizations? 
 
 Our tutorial will cover the following topics:
@@ -597,7 +597,7 @@ Our tutorial will cover the following topics:
 * How to calculate K-fullfillment values on the node level using `Kfullfillment()` in `SSNtools`.
 * How to visualize K-fullfillment values on the node level and connections to the nearest neighbors. 
 
-We will continue to use sample dataset **NYCMafiaNodes** and **NYCMafiaEdges** in `SSNtools` to illustrate examples. To load the sample dataset and the functions, go to GitHub [SSNtool](https://github.com/friendlycities-gatech/SSNtools) to download the development R package, or type the following lines in your R console. Click the GitHub page for more detailed description of all the functions available in the package and the input formats for each function.
+We will continue to use sample dataset **NYCMafiaNodes**, **NYCMafiaEdges**, **POINodes**, and **POIEdges** in `SSNtools` to illustrate examples. To load the sample dataset and the functions, go to GitHub [SSNtool](https://github.com/friendlycities-gatech/SSNtools) to download the development R package, or type the following lines in your R console. Click the GitHub page for more detailed description of all the functions available in the package and the input formats for each function.
 
 ```{r warning=FALSE, message=FALSE, eval=FALSE}
 # install.packages("devtools")
@@ -639,7 +639,7 @@ edges = processEdge(NYCMafiaEdges, 'Source', 'Target')
 #     bipartite - (optional) whether the K-fullfillment will only be reported for nodes whose bipartite column is coded as 1. Default to FALSE.
 # return:
 #     list(nodelist, edgelist) - a list of two dataframe for node and edge table. 
-results = Kfullfillment(nodes, edges, minK=1, bipartite=FALSE)
+results = Kfullfillment(nodes, edges)
 nodelist = results[[1]]
 edgelist = results[[2]]
 
@@ -690,21 +690,23 @@ tmap_mode('plot')
 g = 
   tm_shape(bg) +
   tm_rgb(alpha=0.8) +
+  tm_shape(NYCMafiaEdges_shp) + 
+  tm_lines(alpha=0.5, col='grey') + 
+  tm_shape(NYCMafiaEdges_shp %>% filter(is_K_nearest_neighbor == 1)) + 
+  tm_lines(alpha=0.5, col='black') + 
   tm_shape(MafiaSpatial %>% arrange(K_fullfillment)) + 
   tm_symbols(col='K_fullfillment', size=0.1, style='fixed', 
              breaks=c(0, 0.00001, 0.10, 0.25, 1),
              palette = c('#FBD977', '#F78D3D', '#E3211B', '#800F26'),
              legend.col.show = FALSE) + 
-  tm_shape(NYCMafiaEdges_shp) + 
-  tm_lines(alpha=0.5) + 
   #customize legend and layout
   tm_add_legend(type='symbol', 
                 labels=c('0', '(0, 0.10]', '(0.10, 0.25]', '(0.25, 1]', 'NA (Less than minK)'), 
-                col=c('#FBD977', '#F78D3D', '#E3211B', '#800F26', 'white'), 
+                col=c('#FBD977', '#F78D3D', '#E3211B', '#800F26', 'grey'), 
                 is.portrait = T, title=c('K-fullfillment'), size=0.5) + 
-  tm_add_legend(type='line', labels=c(paste0('Edges to K-nearest Neigbhors')), 
-                col='black', lwd=1) + 
-  tm_scale_bar(breaks=c(0, 5, 10), text.size = 0.7) +  
+  tm_add_legend(type='line', labels=c('Edges also Connect to KNN', 'All Edges'), 
+                col=c('black', 'grey'), lwd=1) + 
+  tm_scale_bar(breaks=c(0, 5, 10), text.size = 0.7, position=c(0.78,0.9)) +  
   tm_layout(legend.title.size = 0.9, legend.text.size = 0.7, legend.width = 1) + 
   tm_layout(main.title = 'NYC Mafia SSN K-fullfillment',
             main.title.position = c('center'),
@@ -715,7 +717,7 @@ g
 
 ### Application to a bipartite network
 
-To calculate **K-fullfillment** values on the node level for a bipartite network, you can use the following codes as a reference. Note that only nodes whose `Bipartite` column is equal to 1 (in this case, POI) will have K-fullfillment values. 
+To calculate **K-fullfillment** values on the node level for a bipartite network, you can use the following codes as a reference. Note that only nodes whose `Bipartite` column is equal to 1 (in this case, POIs) will have K-fullfillment values. 
 
 ```{r, message=FALSE, warning=FALSE, eval=FALSE}
 library(SSNtools)
@@ -757,6 +759,184 @@ edgelist[c(1:3),]
 # 2   poi1 130890205002                     0
 # 3   poi1 131210001002                     0
 ```
+
+## Flattening Ratio
+**Global Flattening Ratio** is a network-level metric to measure the spatial tightness of a network. We reference the following definition in the paper [Metrics for characterizing network structure and node importance in Spatial Social Network (Sarkar et al., 2019)](https://www.tandfonline.com/doi/full/10.1080/13658816.2019.1567736). To define the flattening ratio, first create a degree-constrained nearest neighbour network \bar{G} from the given social network G by reconfiguration, such that each node *i* in \bar{G} with degree *K* connects to its nearest *K* neighbors in Euclidean space. As such, the (global) flattening ratio is the ratio of the sum of the Euclidean distance of edges in \bar{G} where all nodes are connected to their K-nearest neighbors and the sum of the Euclidean distance of actual edges in G. 
+
+**Local Flattening Ratio** is a node-level metric, adapted from the **Global Flattening Ratio** definition. It is defined as the ratio of a node’s minimized distance (*d_opt*) needed to connect to any k nearest neighbors to the total actual distance (*d_act*) of its connections. Nodes with low values prioritize distant connections. This metric is similar to **K-fullfillment**, as both describe local (dis)connection. 
+
+Our implementation of the Global and Local Flattening Ratio in `SSNtools` assume that the network is undirected and unweighted. These two concepts can also be applied to **bipartite networks**. In bipartite networks, a node (in set 1)'s K nearest neighbors can only be nodes in set 0.
+
+Here are some example research questions that can be answered by the **Local Flattening Ratio** metric: 
+
+* (Mafia members SSN) Which mafia members have strong local social connections (or the most spatially tight social connections)? 
+* (Restaurant POI visits SSN) Which restaurant tends to serve residents from nearby census block groups? 
+* (Food sharing SSN) Which organization is highly connected to other local organizations? 
+
+Our tutorial will cover the following topics:
+
+* How to calculate Local Flattening Ratio values on the node level using `LocalFlatteningRatio()` in `SSNtools`.
+* How to visualize Local Flattening Ratio values on the node level and connections to the nearest neighbors. 
+
+We will continue to use sample dataset **NYCMafiaNodes**, **NYCMafiaEdges**, **POINodes**, and **POIEdges** in `SSNtools` to illustrate examples. To load the sample dataset and the functions, go to GitHub [SSNtool](https://github.com/friendlycities-gatech/SSNtools) to download the development R package, or type the following lines in your R console. Click the GitHub page for more detailed description of all the functions available in the package and the input formats for each function.
+
+**NYCMafiaNodes** is a node table with label and spatial coordinates for each node (a mafia member). **NYCMafiaeEdges** contains pairs of node labels (corresponding to node table label), representing mafia criminal associations. This is a unweighted and undirected network. The coordinate system crs is 32118, in the unit of meters. 
+
+Data in **POINodes** and **POIEdges** are processed from SafeGraph with extra filters and coding to hide sensitive information. The dataset is meant to be educational and thus can be inaccurate for real implications. The nodes in the dataset are restaurants in Atlanta (set 0) and centroids of census block group (set 1). The edges in the dataset are visits from the census block group to restaurants. The weight of the edges represent the percentage of total visits coming from a particular census block group. You can call **POINodes** (n=1356) and **POIEdges** (n=7926) to directly access the sample dataset. The coordinates system is transformed with crs=26967 (unit meter). 
+
+### Calculate Local Flattening Ratio
+
+To get Local Flattening Ratio value for each node, you just need to run your node and edge dataframe through the following codes: 
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+library(SSNtools)
+
+data(NYCMafiaNodes)
+data(NYCMafiaEdges)
+
+# ----process dataframe into a list of lists 
+# params:
+#     data - a R dataframe containing node label, longitude, and latitude
+#     label_name - the name of the column for node label
+#     lon_name - the name of the column for node longitude 
+#     lat_name - the name of the column for node latitude
+#     bipartite_name - (optional) the name of the column that indicates the bipartite set of the nodes. The set of nodes that EdgeScan or NDScan should report on should be coded as 1 in the biparite column, and 0 otherwise.  
+nodes = processNode(NYCMafiaNodes, 'label', 'LonX', 'LatY')
+# params:
+#     data - a R dataframe containing source node label and target node label
+#     source_name - the name of the column for source node label
+#     target_name - the name of the column for target node label
+#     weight_name - (optional) the name of the column for edge weight 
+edges = processEdge(NYCMafiaEdges, 'Source', 'Target')
+# params:
+#     nodes - a list of named lists. Each sublist contains a node.
+#     edges - a list of list. Each sublist contains an edge.
+#     minK - (optional) minimum K (degree) for a node to have Local_flattening_ratio value. Default to minK = 1.
+#     bipartite - (optional) whether the Local_flattening_ratio will only be reported for nodes whose bipartite column is coded as 1. Default to FALSE.
+# return:
+#     list(nodelist, edgelist) - a list of two dataframe for node and edge table. 
+results = LocalFlatteningRatio(nodes, edges) 
+nodelist = results[[1]]
+edgelist = results[[2]]
+
+nodelist[c(1:3), ]
+edgelist[c(1:3), ]
+```
+
+**Interpret Outputs**
+
+`LocalFlatteningRatio()` will return a list of two dataframes. The first dataframe is a node dataframe wtih three columns: 
+
+* `label`: the node label
+* `K`: the node's degree K, which is the same K for the node's K-nearest neighbors.  
+* `Local_flattening_ratio`: the ratio of the sum of Euclidean distance between a node and its K-nearest neighbors (K is the node's degree) and the sum of Euclidean distance between a node and all other nodes it connects to. The value is ranged between 0 and 1. 
+
+The second dataframe is an edge dataframe that has three columns: 
+
+* `Source`: source node label 
+* `Target`: target node label 
+* `is_K_nearest_neighbor`: binary value (1 or 0) indicating whether the edge represented a connection that is also within the source or target node's K-nearest neighbors. 
+
+### Visualize Local Flattening Ratio
+
+To visualize **Local Flattening Ratio** values on the node level, you can use the following codes as a reference.
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+#packages for wranggling data and map visualization
+library(tmap)
+library(tidyverse)
+library(sf)
+library(stplanr)
+library(basemaps)
+
+# convert heat dataframe to a spatial sf object
+MafiaSpatial = nodelist %>% 
+  left_join(NYCMafiaNodes, by=c('label'), copy=FALSE) %>% st_as_sf(coords=c('LonX', 'LatY'), crs=32118)
+
+# convert edgelist dataframe to line geometry and filter those that are also the K-nearest neighbors.
+NYCMafiaEdges_shp = od2line(edgelist, MafiaSpatial) %>% 
+  filter(is_K_nearest_neighbor == 1)
+
+# create basemap with functions from basemaps library
+set_defaults(map_service = "carto", map_type = "light")
+bgbox = st_bbox(MafiaSpatial) %>% st_as_sfc()
+bg = basemap_stars(bgbox)
+  
+tmap_mode('plot')
+g = 
+  tm_shape(bg) +
+  tm_rgb(alpha=0.8) +
+  tm_shape(NYCMafiaEdges_shp) + 
+  tm_lines(alpha=0.5, col='grey') + 
+  tm_shape(NYCMafiaEdges_shp %>% filter(is_K_nearest_neighbor == 1)) + 
+  tm_lines(alpha=0.5, col='black') + 
+  tm_shape(MafiaSpatial %>% arrange(Local_flattening_ratio)) + 
+  tm_symbols(col='Local_flattening_ratio', size=0.1, style='fixed', 
+             breaks=c(0, 0.05, 0.1, 0.15, 1),
+             palette = c('#FBD977', '#F78D3D', '#E3211B', '#800F26'),
+             legend.col.show = FALSE) + 
+  #customize legend and layout
+  tm_add_legend(type='symbol', 
+                labels=c('(0, 0.05]', '(0.05, 0.10]', '(0.10, 0.15]', '(0.15, 1]', 'NA (Less than minK)'), 
+                col=c('#FBD977', '#F78D3D', '#E3211B', '#800F26', 'grey'), 
+                is.portrait = T, title=c('Local Flattening Ratio'), size=0.5) + 
+  tm_add_legend(type='line', labels=c('Edges also Connect to KNN', 'All Edges'), 
+                col=c('black', 'grey'), lwd=1) + 
+  tm_scale_bar(breaks=c(0, 5, 10), text.size = 0.7, position=c(0.78,0.9)) +  
+  tm_layout(legend.title.size = 0.9, legend.text.size = 0.7, legend.width = 1,
+            main.title = 'NYC Mafia SSN Local Flattening Ratio',
+            main.title.position = c('center'),
+            main.title.size = 1.5)
+
+g
+```
+
+### Application to a bipartite network
+
+To calculate **Local Flattening Ratio** values on the node level for a bipartite network, you can use the following codes as a reference. Note that only nodes whose `Bipartite` column is equal to 1 (in this case, POIs) will have Local Flattening Ratio values. 
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+library(SSNtools)
+data(POINodes)
+data(POIEdges)
+
+# show example outputs in the sample data
+POINodes[c(1,2,1046),]
+
+#             label Bipartite     LonX     LatY
+# 1            poi1         1 682812.1 418009.0
+# 2            poi2         1 681756.2 417956.0
+# 1046 131210016001         0 682506.8 417742.6
+
+POIEdges[c(1:3),]
+# 
+#   Source       Target    Weight
+# 1   poi1 130890204001 14.545455
+# 2   poi1 130890205002  7.272727
+# 3   poi1 131210001002  7.272727
+
+nodes = processNode(POINodes, 'label', 'LonX', 'LatY', 'Bipartite')
+edges = processEdge(POIEdges, 'Source', 'Target', 'Weight')
+
+results = LocalFlatteningRatio(nodes, edges, minK=1, bipartite=TRUE)
+nodelist = results[[1]]
+edgelist = results[[2]]
+
+nodelist[c(1:3),]
+
+#   label  K Local_flattening_ratio
+# 1  poi1 11              0.2400992
+# 2  poi2 15              0.3255136
+# 3  poi3  7              0.3924708
+
+edgelist[c(1:3),]
+
+#   Source       Target is_K_nearest_neighbor
+# 1   poi1 130890204001                     1
+# 2   poi1 130890205002                     0
+# 3   poi1 131210001002                     0
+```
+
 
 #### Reference 
 Liang, X., Baker, J., DellaPosta, D., & Andris, C. (2023). Is your neighbor your friend? Scan methods for spatial social network hotspot detection. *Transactions in GIS*. https://doi.org/10.1111/tgis.13050
