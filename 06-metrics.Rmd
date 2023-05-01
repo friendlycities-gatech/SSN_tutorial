@@ -37,7 +37,7 @@ The users can input the following **window size**
 
 The graphic below shows a schematic diagram of how the EdgeScan and NDScan value for a focal node is calculated. The window in the first circle simultaneously represents a potential window size of Euclidean distance of 400m, Manhattan distance of 500m, and 7-nearest neighbors. 
 
-```{r echo=FALSE, fig.cap="Figure: Schematic Diagram of EdgeScan and NDScan Values Calculation", out.width = '100%', fig.show = "hold"}
+```{r echo=FALSE, fig.cap="Schematic Diagram of EdgeScan and NDScan Values Calculation", out.width = '100%', fig.show = "hold"}
 knitr::include_graphics("Figs/06-metrics-hotspot-schema.png")
 ```
 
@@ -666,7 +666,7 @@ The second dataframe is an edge dataframe that has three columns:
 To visualize **Kfullfillment** values on the node level, you can use the following codes as a reference.
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
-#packages for wranggling data and map visualization
+# packages for wranggling data and map visualization
 library(tmap)
 library(tidyverse)
 library(sf)
@@ -677,9 +677,8 @@ library(basemaps)
 MafiaSpatial = nodelist %>% 
   left_join(NYCMafiaNodes, by=c('label'), copy=FALSE) %>% st_as_sf(coords=c('LonX', 'LatY'), crs=32118)
 
-# convert edgelist dataframe to line geometry and filter those that are also the K-nearest neighbors.
-NYCMafiaEdges_shp = od2line(edgelist, MafiaSpatial) %>% 
-  filter(is_K_nearest_neighbor == 1)
+# convert edgelist dataframe to line geometry
+NYCMafiaEdges_shp = od2line(edgelist, MafiaSpatial) 
 
 # create basemap with functions from basemaps library
 set_defaults(map_service = "carto", map_type = "light")
@@ -688,18 +687,22 @@ bg = basemap_stars(bgbox)
   
 tmap_mode('plot')
 g = 
+  # map base map
   tm_shape(bg) +
   tm_rgb(alpha=0.8) +
+  # map all edges in grey
   tm_shape(NYCMafiaEdges_shp) + 
   tm_lines(alpha=0.5, col='grey') + 
+  # map edges that also connect to K-nearest neighbors in black 
   tm_shape(NYCMafiaEdges_shp %>% filter(is_K_nearest_neighbor == 1)) + 
   tm_lines(alpha=0.5, col='black') + 
+  # map nodes colored by K_fullfillment. Nodes with higher K_fullfillment values mapped last. 
   tm_shape(MafiaSpatial %>% arrange(K_fullfillment)) + 
   tm_symbols(col='K_fullfillment', size=0.1, style='fixed', 
              breaks=c(0, 0.00001, 0.10, 0.25, 1),
              palette = c('#FBD977', '#F78D3D', '#E3211B', '#800F26'),
              legend.col.show = FALSE) + 
-  #customize legend and layout
+  # customize legend and layout
   tm_add_legend(type='symbol', 
                 labels=c('0', '(0, 0.10]', '(0.10, 0.25]', '(0.25, 1]', 'NA (Less than minK)'), 
                 col=c('#FBD977', '#F78D3D', '#E3211B', '#800F26', 'grey'), 
@@ -761,7 +764,7 @@ edgelist[c(1:3),]
 ```
 
 ## Flattening Ratio
-**Global Flattening Ratio** is a network-level metric to measure the spatial tightness of a network. We reference the following definition in the paper [Metrics for characterizing network structure and node importance in Spatial Social Network (Sarkar et al., 2019)](https://www.tandfonline.com/doi/full/10.1080/13658816.2019.1567736). To define the flattening ratio, first create a degree-constrained nearest neighbour network \bar{G} from the given social network G by reconfiguration, such that each node *i* in \bar{G} with degree *K* connects to its nearest *K* neighbors in Euclidean space. As such, the (global) flattening ratio is the ratio of the sum of the Euclidean distance of edges in \bar{G} where all nodes are connected to their K-nearest neighbors and the sum of the Euclidean distance of actual edges in G. 
+**Global Flattening Ratio** is a network-level metric to measure the spatial tightness of a network. We reference the following definition in the paper [Metrics for characterizing network structure and node importance in Spatial Social Network (Sarkar et al., 2019)](https://www.tandfonline.com/doi/full/10.1080/13658816.2019.1567736). To define the flattening ratio, we first create a degree-constrained nearest neighbour network \bar{G} from the given social network G by reconfiguration, such that each node *i* in \bar{G} with degree *K* connects to its nearest *K* neighbors in Euclidean space. As such, the (global) flattening ratio is the ratio of the sum of the Euclidean distance of edges in \bar{G} where all nodes are connected to their K-nearest neighbors and the sum of the Euclidean distance of actual edges in G. 
 
 **Local Flattening Ratio** is a node-level metric, adapted from the **Global Flattening Ratio** definition. It is defined as the ratio of a node’s minimized distance (*d_opt*) needed to connect to any k nearest neighbors to the total actual distance (*d_act*) of its connections. Nodes with low values prioritize distant connections. This metric is similar to **K-fullfillment**, as both describe local (dis)connection. 
 
@@ -779,6 +782,11 @@ Our tutorial will cover the following topics:
 * How to visualize Local Flattening Ratio values on the node level and connections to the nearest neighbors. 
 
 We will continue to use sample dataset **NYCMafiaNodes**, **NYCMafiaEdges**, **POINodes**, and **POIEdges** in `SSNtools` to illustrate examples. To load the sample dataset and the functions, go to GitHub [SSNtool](https://github.com/friendlycities-gatech/SSNtools) to download the development R package, or type the following lines in your R console. Click the GitHub page for more detailed description of all the functions available in the package and the input formats for each function.
+
+```{r warning=FALSE, message=FALSE, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("friendlycities-gatech/SSNtools")
+```
 
 **NYCMafiaNodes** is a node table with label and spatial coordinates for each node (a mafia member). **NYCMafiaeEdges** contains pairs of node labels (corresponding to node table label), representing mafia criminal associations. This is a unweighted and undirected network. The coordinate system crs is 32118, in the unit of meters. 
 
@@ -842,7 +850,7 @@ The second dataframe is an edge dataframe that has three columns:
 To visualize **Local Flattening Ratio** values on the node level, you can use the following codes as a reference.
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
-#packages for wranggling data and map visualization
+# packages for wranggling data and map visualization
 library(tmap)
 library(tidyverse)
 library(sf)
@@ -853,23 +861,26 @@ library(basemaps)
 MafiaSpatial = nodelist %>% 
   left_join(NYCMafiaNodes, by=c('label'), copy=FALSE) %>% st_as_sf(coords=c('LonX', 'LatY'), crs=32118)
 
-# convert edgelist dataframe to line geometry and filter those that are also the K-nearest neighbors.
-NYCMafiaEdges_shp = od2line(edgelist, MafiaSpatial) %>% 
-  filter(is_K_nearest_neighbor == 1)
+# convert edgelist dataframe to line geometry
+NYCMafiaEdges_shp = od2line(edgelist, MafiaSpatial) 
 
 # create basemap with functions from basemaps library
 set_defaults(map_service = "carto", map_type = "light")
 bgbox = st_bbox(MafiaSpatial) %>% st_as_sfc()
 bg = basemap_stars(bgbox)
-  
+
 tmap_mode('plot')
 g = 
+  # map base map
   tm_shape(bg) +
   tm_rgb(alpha=0.8) +
+  # map all edges in grey
   tm_shape(NYCMafiaEdges_shp) + 
   tm_lines(alpha=0.5, col='grey') + 
+  # map edges that also connect to K-nearest neighbors in black 
   tm_shape(NYCMafiaEdges_shp %>% filter(is_K_nearest_neighbor == 1)) + 
   tm_lines(alpha=0.5, col='black') + 
+  # map nodes colored by Local_flattening_ratio. Nodes with higher Local_flattening_ratio values mapped last. 
   tm_shape(MafiaSpatial %>% arrange(Local_flattening_ratio)) + 
   tm_symbols(col='Local_flattening_ratio', size=0.1, style='fixed', 
              breaks=c(0, 0.05, 0.1, 0.15, 1),
@@ -886,7 +897,7 @@ g =
   tm_layout(legend.title.size = 0.9, legend.text.size = 0.7, legend.width = 1,
             main.title = 'NYC Mafia SSN Local Flattening Ratio',
             main.title.position = c('center'),
-            main.title.size = 1.5)
+            main.title.size = 1.2)
 
 g
 ```
@@ -937,10 +948,225 @@ edgelist[c(1:3),]
 # 3   poi1 131210001002                     0
 ```
 
+## Linked Activity Space
+
+**Linked Activity Space** is a concept introduced in paper [Linked Activity Spaces: Embedding Social Networks in Urban Space (Wang et al., 2015)](https://pennstate.pure.elsevier.com/en/publications/linked-activity-spaces-embedding-social-networks-in-urban-space) to measure to what extent nodes connected also overlap in their associated locations. This concept applies to networks where the nodes represent **egos** (e.g., individuals; also called **primary nodes**) and the locations associated with egos (e.g., places the individuals have visited), while the edges represent connections between egos and their **alters** (e.g., friends; also called **linked nodes**). In [Wang et al., 2015](https://pennstate.pure.elsevier.com/en/publications/linked-activity-spaces-embedding-social-networks-in-urban-space), an ego is a cell phone user, alters are users who have phone calls with this user, and the locations associated with the users are POIs that the users have visited. 
+
+An **Activity Space** refers to the areas captured by the standard deviation ellipse given an ego's associated locations. Thus, **Linked Activity Space** refers to a pair of activity spaces of an ego and its alters. We quantify the overlaps between linked activity spaces using the number of locations (e.g., POIs) found in the intersections of activity spaces, as defined in [Wang et al., 2015](https://pennstate.pure.elsevier.com/en/publications/linked-activity-spaces-embedding-social-networks-in-urban-space).  
+
+Here are some example research questions that can be answered by the **Linked Activity Space** visualization and metric: 
+
+* Do egos visit the same set of places as its alters? 
+* Which alter (given an ego) has activity space overlapping the most with the ego? 
+
+Our tutorial will cover the following topics:
+
+* How to visualize a selected ego's and its alters' activity spaces (i.e., two ellipses), using `ggplot2`
+* How to visualize a selected ego's activity space and each of its alters' activity spaces (i.e., linked activity spaces), using `ggplot2`
+* How to quantify the overlap between a ego and its alters' activity spaces (i.e., number of nodes in both ellipses)
+* How to quantify the overlap between a ego and each of its alters' activity spaces (i.e., number of nodes in each pair of ellipses)
+
+We will use a new sample dataset **EmergencyNodes** and **EmergencyEdges** in `SSNtools` to illustrate examples. To load the sample dataset and the functions, go to GitHub [SSNtool](https://github.com/friendlycities-gatech/SSNtools) to download the development R package, or type the following lines in your R console. Click the GitHub page for more detailed description of all the functions available in the package and the input formats for each function.
+
+```{r warning=FALSE, message=FALSE, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("friendlycities-gatech/SSNtools")
+```
+
+A row in **EmergencyNodes** (n=1582) represent a New York City emergency responder (label) and locations where the responder have been dispatched (LonX, LatY). The coordinate system is in crs = 4326. A row in **EmergencyEdges** (n=47) represent that the two responders (Source, Target) had been paired in a dispatch. Note that one responder can be dispatched multiple times and thus be associated with multiple locations in **EmergencyNodes**, while **EmergencyEdges** only documents the pairing once as long as the two repsonders have been paired up before. The network is unweighted and undirected. As such, linked activity space method can help examine the efficiency of emergency management, such as whether respondents who are often paired together also tend to go to the same emergency locations. 
+
+### Visualize Linked Activity Spaces
+
+The sample dataset contains data for two egos (primary nodes; labeled as **P1** and **P2**) and their associated alters (linked nodes). We would like to focus on one primary node, **P1**, to demonstrate the method. The additional primary node (P2) is included in the sample dataset as an extra example for exploration. We would like to thank Sambhavi Joshi for contributing to the codes below. 
+
+We first filter **EmergencyNodes** and **EmergencyEdges** to data that are relevant to **P1** and take a look at the data. Then we use `ggplot2()` to visualize locations associated with **P1**, the primary node, and its linked nodes. Note that `basemap_gglayer()` defaults the input data has crs 3857, so we have to convert our data from crs 4326 to 3857.  
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+library(SSNtools)
+library(ggplot2)
+library(basemaps)
+library(tidyverse)
+library(sf)
+
+data(EmergencyNodes)
+data(EmergencyEdges)
+
+# filter edges that contain the ego
+ego_label = 'P1'
+ego_alters_pairs = EmergencyEdges %>% filter(Source == ego_label | Target == ego_label)
+ego_alters_pairs[c(1:3),]
+
+# filter emergency locations associated with ego and its alters in node list  
+ego_alters_locations = EmergencyNodes %>% filter(label %in% ego_alters_pairs$Source | label %in% ego_alters_pairs$Target) %>% 
+  mutate(role = ifelse(label == ego_label, 'Primary Node', 'Linked Node'))
+
+ego_alters_locations[c(1,2,46),]
+
+# visualize locations visited by the primary nodes and linked nodes; 
+# basemap_gglayer assumes data comes in with crs=3857, so transform the coordinates from crs 4326 to 3857
+ego_alters_locations = ego_alters_locations %>% 
+  st_as_sf(coords=c('LonX', 'LatY'), crs=4326) %>% 
+  st_transform(crs=3857) %>% 
+  mutate(LonX = sf::st_coordinates(.)[,1],
+         LatY = sf::st_coordinates(.)[,2]) %>% 
+  mutate(role = factor(role, levels=c('Primary Node', 'Linked Node')))
+
+# create basemap 
+set_defaults(map_service = "carto", map_type = "light")
+bgbox = st_bbox(ego_alters_locations %>% st_as_sf(coords=c('LonX', 'LatY'), crs=3857)) %>% st_as_sfc()
+
+g1 = 
+  # map basemap 
+  ggplot() + 
+  basemap_gglayer(bgbox) + 
+  scale_fill_identity() +
+  # map locations associated with both the primary node and linked nodes. 
+  geom_point(data = ego_alters_locations, 
+             aes(x =LonX, y=LatY, color=role, size=role)) +
+  # customize aesthetics and the layout
+  scale_size_manual(values = c(`Primary Node` = 5, `Linked Node` = 2), name='Emergency Locations Visited by') +
+  scale_color_manual(values = c(`Primary Node` = 'darkred', `Linked Node` = 'orange'), name='Emergency Locations Visited by') +
+  coord_sf() + 
+  theme_void() + 
+  theme(legend.position = "bottom",
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank()) 
+
+g1
+```
+
+Not surprisingly, we can see that emergency locations visited by the linked nodes are more widespread than those visited by the primary node, with most overlaps in the northeast section of the map. Next, we would like to visualize the activity spaces as ellipses. 
+
+To add eclipses to the map above, we just need to add a layer in `ggplot` using `stat_ellipse()`. You can control the size (or coverage) of ellipses by adjusting the `level` argument. Here, `level = 0.8` means the ellipse covers about 80% of the data points. 
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+# visualize standard deviation ellipses for locations visited by the primary node and linked nodes.
+g2 = 
+  # map basemap 
+  ggplot() + 
+  basemap_gglayer(bgbox) + 
+  scale_fill_identity() +
+  # map locations associated with both the primary node and linked nodes. 
+  geom_point(data = ego_alters_locations, 
+             aes(x =LonX, y=LatY, color=role, size=role)) +
+  scale_size_manual(values = c(`Primary Node` = 5, `Linked Node` = 2), name='Activity Space by') +
+  scale_color_manual(values = c(`Primary Node` = 'darkred', `Linked Node` = 'orange'), name='Activity Space by') +
+  # map activity space in the form of ellipses 
+  stat_ellipse(data = ego_alters_locations, 
+               geom = "polygon", aes(x=LonX, y=LatY, group=role, color=role),
+               type = "norm", alpha=0, linetype='dashed', level = 0.8) + 
+  coord_sf() + 
+  theme_void() + 
+  ggtitle('A Pair of Activity Spaces') + 
+  theme(legend.position = "bottom",
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        plot.title = element_text(hjust = 0.5)) 
+
+g2 
+```
+
+The map confirms that the primary node has a smaller activity space than the linked nodes. The two activity spaces overlap quite a bit as expected, because the primary node visits the emergency locations with at least one other linked node. 
+
+We are interested to explore further how the primary node's activity space overlaps with **each** linked node (i.e., **Linked Activity Spaces**). We only need to modify the codes above slightly, by adding `group = label` in the `stat_ellipse()` function. Now the codes will draw a ellipse for each responders' dispatched locations. 
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+# visualize standard deviation ellipses of locations visited by each unique responders 
+g3 = 
+  # map basemap 
+  ggplot() + 
+  basemap_gglayer(bgbox) + 
+  scale_fill_identity() +
+  # map locations associated with both the primary node and linked nodes. 
+  geom_point(data = ego_alters_locations, 
+             aes(x =LonX, y=LatY, color=role, size=role)) +
+  scale_size_manual(values = c(`Primary Node` = 5, `Linked Node` = 2), name='Activity Space by') +
+  scale_color_manual(values = c(`Primary Node` = 'darkred', `Linked Node` = 'orange'), name='Activity Space by') +
+  # map activity space in the form of ellipses 
+  stat_ellipse(data = ego_alters_locations, 
+               geom = "polygon", aes(x=LonX, y=LatY, group=label, color=role),
+               type = "norm", alpha=0, linetype='dashed', level = 0.8) + 
+  coord_sf() + 
+  theme_void() + 
+  ggtitle('Linked Activity Spaces') + 
+  theme(legend.position = "bottom",
+        axis.title.x=element_blank(),
+        plot.title = element_text(hjust = 0.5)) 
+g3
+```
+
+We can roughly see three clusters of linked nodes' activity spaces. One cluster of ellipses overlap closely with the primary node's ellipse. The other cluster of ellipses overlap partially with the primary node's ellipse while also going to locations toward the south (east of the river). However, there are about three elipses on the west bank of the river that have little overlaps with the primary node's ellipse. It indicates that these three linked nodes (emergency responders) tend to have very different dispatch locations than the primary node. Next, we would like to further quantify the intersection between the activity spaces. 
+
+### Quantify Linked Activity Spaces 
+
+We quantify the intersection between activity spaces as the number of nodes (in this case, emergency locations) in between the ellipses. We reference this [Stack Overflow post](https://stackoverflow.com/questions/34650441/how-to-get-the-points-inside-of-the-ellipse-in-ggplot2) to generate the codes below. 
+
+Let's first quantify the intersection for `g2` (see the map for `g2` above). `ggplot_build()` returns a list containing several data frames, one for each layer in the plot. In my case, there are three layers: `basemap_gglayer`, `geom_point`, and `stat_ellipse`. Thus, `points` and `ellipse` data correspond to the second and third data frames. `ellipse_sf` is an sf object with two geometries (because we drew two ellipses). Thus, `points_in_ellipses` will return a list of integer vectors, in which an empty vector means the point is not inside either ellipses; one element (1 or 2) means the point is inside ellipse 1 or 2 (the number refers to the group associated with the ellipses); two elements (1 and 2) means that the point is inside both ellipses. 
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+
+# retrieve points and ellipse data. 
+build <- ggplot_build(g2)$data
+points <- build[[2]]
+ellipse <- build[[3]]
+
+# Convert ellipse data to sf polygons; ellipse_sf is an sf object with two geometries 
+ellipse_sf <- ellipse %>%
+  st_as_sf(coords = c("x", "y"), crs = 3857) %>%
+  group_by(group) %>%
+  summarise(geometry = st_combine(geometry)) %>%
+  st_cast("POLYGON")
+
+ellipse_sf
+
+# Check if each point in the ego_alters_locations dataset is within the respective ellipses
+points_in_ellipses <- st_within(ego_alters_locations, ellipse_sf)
+
+# example outputs in points_in_ellipses
+points_in_ellipses[c(1,3,12)]
+
+# calculate the number of points that are in both ellipses
+sum(lengths(points_in_ellipses) > 1)
+```
+
+Great! We have quantified intersection between one pair of activity spaces. For **Linked Activity Space**, we would like to know this value for each linked node so that we can see which responders' activity space overlap the most with the primary node. We just need to modify the codes above slightly and use outputs from `g3`. Note that this time `ellipse_sf` will have 22 geometries (22 ellipses for 22 linked nodes). Since in `stat_ellipse()`, ellipses are drawn by group based on the order of labels. Thus, primary node's ellipse is assigned to group 1 (i.e., 1). We create a loop to loop through each linked node's ellipse (starting from group 2) and count the number of locations in the intersection of the primary node's ellipse and the linked node's ellipse. 
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+# retrieve points and ellipse data. 
+build <- ggplot_build(g3)$data
+points <- build[[2]]
+ellipse <- build[[3]]
+
+# convert ellipse data to sf polygons; ellipse_sf is an sf object with twenty-two geometries 
+ellipse_sf <- ellipse %>%
+  st_as_sf(coords = c("x", "y"), crs = 3857) %>%
+  group_by(group) %>%
+  summarise(geometry = st_combine(geometry)) %>%
+  st_cast("POLYGON")
+
+nrow(ellipse_sf)
+
+# loop through each linked node's ellipse (starting from group 2) and count the number of locations in the intersection. 
+cnt = c()
+for (grp in c(2:nrow(ellipse_sf))) {
+  points_in_ellipses <- st_within(ego_alters_locations, ellipse_sf %>% filter(group %in% c(1, grp)))
+  n_nodes_in_both_ellipses <- sum(lengths(points_in_ellipses) > 1)
+  cnt = c(cnt, n_nodes_in_both_ellipses)
+}
+
+#pair up nodes and the number of nodes in P1's ellipse and this linked node's ellipse. 
+data.frame(label = unique(ego_alters_locations$label), n_nodes_in_both_ellipses = c(NA, cnt))
+```
+
+The result confirms our observations above: there are three linked nodes (P31, P32, P38) that have zero location overlaps with the primary node. While these responders may be paired with the primary node (P1) for few tasks, it is worth looking into why they are paired to improve the emergency management. In contrast, P3 and P8's activity spaces overlap with the primary node (P1) the most.
 
 #### Reference 
 Liang, X., Baker, J., DellaPosta, D., & Andris, C. (2023). Is your neighbor your friend? Scan methods for spatial social network hotspot detection. *Transactions in GIS*. https://doi.org/10.1111/tgis.13050
 
 Andris, C., DellaPosta, D., Freelin, B. N., Zhu, X., Hinger, B., & Chen, H. (2021). To racketeer among neighbors: spatial features of criminal collaboration in the American Mafia. *International Journal of Geographical Information Science*, 35(12), 2463-2488.
+
+Sarkar, D., Andris, C., Chapman, C. A., & Sengupta, R. (2019). Metrics for characterizing network structure and node importance in Spatial Social Networks. *International Journal of Geographical Information Science*, 33(5), 1017-1039.
+
+Wang, Y., Kang, C., Bettencourt, L. M., Liu, Y., & Andris, C. (2015). Linked activity spaces: Embedding social networks in urban space. *Computational approaches for urban environments*, 313-336.
 
 

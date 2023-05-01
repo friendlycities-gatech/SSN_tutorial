@@ -46,5 +46,8 @@ flattening-ratio
 calculate-local-flattening-ratio
 visualize-local-flattening-ratio
 application-to-a-bipartite-network-1
+linked-activity-space
+visualize-linked-activity-spaces
+quantify-linked-activity-spaces
 reference
 edges
