@@ -217,26 +217,30 @@ htmltools::tags$iframe(src = "Interactive/Leaflet.html", width='100%', height='4
 
 ## Base Map 
 
-While interactive map comes with base maps, you can manually add base map into static maps in `tmap`. This section shows you how to add **Mapbox base map** to `tmap` map in the plot mode. To use Mapbox base map, you need to create a token on Mapbox. Follow the instructions on [Mapbox Docs](https://docs.mapbox.com/help/getting-started/access-tokens/) to create your access token. You should keep this token private. 
+While interactive map comes with base maps, you can manually add base map into static maps in `tmap`. This section shows you how to use `basemaps` R package to add an **Carto base map** to `tmap` map in the plot mode. 
 
 We use `st_bbox` to find the bounding box of U.S. states and use `st_as_sfc()` to transform it into a sfc object for retrieving stars object. Then we use the `basemap_stars` function in `basemaps` package to retrieve Mapbox base map based on the input bounding box information. `basemaps` support basemaps from OpenStreetMaps, Mapbox, Carto, and ESRI. Please refer to [basemaps document](https://cran.r-project.org/web/packages/basemaps/basemaps.pdf) for more examples on using other basemaps. The base map raster can be visualized by `tmap` through `tm_rgb()`. 
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE, class.source="Code"}
+```{r, warning=FALSE, message=FALSE, eval=TRUE, class.source="Code"}
 library(tigris)
 library(sf)
 library(tidyverse)
 library(basemaps)
+library(tmap)
 
 #states is a function in tigris to download U.S. state boundary shapefile
 us_states = states(cb=TRUE, progress_bar = FALSE) %>%
   filter(!STUSPS %in% c('PR','AS', 'AK', 'GU','MP','VI', 'HI')) 
 
-token = 'YOUR MAPBOX TOKEN' #see how to apply for token in Mapbox Docs.
+MafiaSpatial = MafiaNodes %>% 
+  st_as_sf(coords=c("LonX", "LatY"), crs = 4326) 
+g = graph_from_data_frame(MafiaEdges, directed = FALSE, vertices=MafiaSpatial)
+MafiaSpatial$degree = degree(g)
 
 #Decide which basemap service to use and what map styles. 
-set_defaults(map_service = "mapbox", map_type = "light", map_token = token)
+set_defaults(map_service = "carto", map_type = "light")
 bgbox = st_bbox(us_states, crs=4326) %>% st_as_sfc()
-bg = basemap_stars(bgbox)
+bg = basemap_stars(bgbox) #process basemap into a raster
 
 tmap_mode('plot')
 map = tm_shape(bg) + #add base map
@@ -252,16 +256,10 @@ map = tm_shape(bg) + #add base map
 map
 ```
 
-```{r echo=FALSE, fig.cap="", out.width = '100%', fig.show = "hold", class.source="Code"}
-knitr::include_graphics("Figs/05-aesthetics-1.png")
-```
-You can find all the available Mapbox style [here](https://docs.mapbox.com/api/maps/styles/). You can also customize your Mapbox basemap in [Mapbox Studio](https://studio.mapbox.com/). To use the customized base map, replace the `map_type` in the `set_defaults` function with your customized style URL ID (can be found after the path https://api.mapbox.com/styles/), which you can find if you click "share" button for your customized style. The following figures shows the effects of `map` object under `map_type = 'light'` (top left), `map_type = 'dark'` (top right), `map_type = 'outdoors'` (bottom left), `map_type = 'satellite'` (bottom right).   
+Here are all the available `map_service` and `map_type`:
 
-```{r echo=FALSE, fig.cap="", out.width = '50%', fig.show = "hold", class.source="Code"}
-knitr::include_graphics("Figs/05-aesthetics-1.png")
-knitr::include_graphics("Figs/05-aesthetics-2.png")
-knitr::include_graphics("Figs/05-aesthetics-3.png")
-knitr::include_graphics("Figs/05-aesthetics-4.png")
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+get_maptypes()
 ```
 
 Sometimes you may want a customized bounding box that is not based on data layer. A helpful tool to find the coordinates around your data is to visualize your data in the interactive mode with `tm_mouse_coordinates()` (see example above). You can also specify the bounding box of your base map using the following code: 
@@ -280,9 +278,8 @@ To decide on the Inset Map bounding box, you can either use the measurement from
 First, we need to create the inset map. We pick a bounding box around the central New York City including where the most connected mafia member (in degree of connections) locates. We also calculate *aspect_ratio* for the inset map so that when plugged into the background map, we can preserve the inset map's natural ratio of height and width.  
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE, class.source="Code"}
-token = 'YOUR MAPBOX TOKEN' #see how to apply for token in Mapbox Docs.
-set_defaults(map_service = "mapbox", map_type = "light", map_token = token)
 
+set_defaults(map_service = "carto", map_type = "light")
 #Create the bounding box for the inset map and retrieve corresponding base map 
 bgbox = st_bbox(c(xmin=-74.065141, xmax=-73.537727, ymin=40.558198, ymax=40.882353), crs=4326) 
 inset_bg = basemap_stars(bgbox)

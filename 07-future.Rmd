@@ -1,15 +1,18 @@
-# Future Development {#edges}
+# Future Development {#development}
 
-The development of this tutorial is funded under NSF Career Grant: A Research and Educational Framework for Incorporating Spatial Heterogeneity into Social Network Analysis. 
+The development of this tutorial is funded under NSF Career Grant: A Research and Educational Framework for Incorporating Spatial Heterogeneity into Social Network Analysis. Please visit our website [SNoMan (The Social Network Mapping Nexus)](https://sites.gatech.edu/snoman/) to see our SSN paper collection and interactive software. 
 
 The future development of the tutorial includes: 
 
 * Advanced Metrics 
   + Regional Modularity
-  + Linked Activity Spaces
-  + Global Flatterning Ratio
   + Missed Opportunities
   + Cluster/Cluster Plots
   + Route Factor Diagrams
   
-We are also considering more examples of topic applications using the same visualization codes and metrics. 
+* Application Examples
+  + Commutes
+  
+We are also considering more examples of topic applications using visualization and metrics. If you would like to contribute writing a chapter, sharing a sample dataset, or developing a metric in the `SSNtools` R package, please contact Xiaofan Liang at xiaofan.l@gatech.edu. 
+
+If you run into an issue with the `SSNtools` R package or this tutorial, please open an [issue](https://github.com/friendlycities-gatech/SSNtools/issues) at the GitHub with an replicable example. 

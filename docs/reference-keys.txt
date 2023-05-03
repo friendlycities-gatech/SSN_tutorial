@@ -1,7 +1,7 @@
 tab:matrix
 tab:nodetable
 tab:edgetable
-fig:unnamed-chunk-72
+fig:unnamed-chunk-71
 introduction
 metrics
 network-data-formats
@@ -46,8 +46,8 @@ flattening-ratio
 calculate-local-flattening-ratio
 visualize-local-flattening-ratio
 application-to-a-bipartite-network-1
-linked-activity-space
+linked-activity-spaces
 visualize-linked-activity-spaces
 quantify-linked-activity-spaces
 reference
-edges
+development

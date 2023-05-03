@@ -24,7 +24,7 @@
 <meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
 
 
-<meta name="date" content="2022-11-30" />
+<meta name="date" content="2023-05-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -210,13 +210,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Visualize Local Flattening Ratio</a></li>
 <li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.3</span> Application to a bipartite network</a></li>
 </ul></li>
-<li><a href="advanced-ssn-metrics.html#linked-activity-space" id="toc-linked-activity-space"><span class="toc-section-number">6.4</span> Linked Activity Space</a>
+<li><a href="advanced-ssn-metrics.html#linked-activity-spaces" id="toc-linked-activity-spaces"><span class="toc-section-number">6.4</span> Linked Activity Spaces</a>
 <ul>
 <li><a href="advanced-ssn-metrics.html#visualize-linked-activity-spaces" id="toc-visualize-linked-activity-spaces"><span class="toc-section-number">6.4.1</span> Visualize Linked Activity Spaces</a></li>
 <li><a href="advanced-ssn-metrics.html#quantify-linked-activity-spaces" id="toc-quantify-linked-activity-spaces"><span class="toc-section-number">6.4.2</span> Quantify Linked Activity Spaces</a></li>
 </ul></li>
 </ul></li>
-<li><a href="edges.html#edges" id="toc-edges"><span class="toc-section-number">7</span> Future Development</a></li>
+<li><a href="development.html#development" id="toc-development"><span class="toc-section-number">7</span> Future Development</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -239,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="vizedges" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Visualizing Edges</h1>
-<p>In this chapter, we will use commute data from U.S. Census LEHD (Longitudinal Employer-Household Dynamics) Origin-Destination Employment Statistics (<a href="https://lehd.ces.census.gov/data/">LODES</a>). We will use <code>lehdr</code> package to download LODES commute data between counties in Georgia and use <code>tigris</code> to download county shapefiles and convert to centroids as points in the spatial networks.</p>
+<p>In this chapter, we continue to use the American Mafia data introduced in Chapter 2.</p>
 <p>This chapter covers the following topics:</p>
 <ul>
 <li>How to convert point data into line geometry</li>
@@ -249,347 +249,380 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>How to visualize edges with varying edge size and edge color with a combined legend</li>
 </ul>
 <p>You will be able to find a copy of all the codes at the bottom of the page.</p>
-<p><img src="Figs/04-edges-1.png" width="50%" /><img src="Figs/04-edges-3.png" width="50%" /><img src="Figs/04-edges-4.png" width="50%" /><img src="Figs/04-edges-6.png" width="50%" /></p>
+<p><img src="Figs/04-edges-basic.png" width="50%" /><img src="Figs/04-edges-line-width.png" width="50%" /><img src="Figs/04-edges-color.png" width="50%" /><img src="Figs/04-edges-line-color-node.png" width="50%" /></p>
 <p>Before proceeding to the codes, please load the following packages:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="vizedges.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf) <span class="co">#for using spatial objects </span></span>
 <span id="cb33-2"><a href="vizedges.html#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co">#for using tidy syntax </span></span>
 <span id="cb33-3"><a href="vizedges.html#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap) <span class="co">#for visualizing maps </span></span>
 <span id="cb33-4"><a href="vizedges.html#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris) <span class="co">#for downloading TIGER boundary shapefiles </span></span>
-<span id="cb33-5"><a href="vizedges.html#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lehdr) <span class="co">#for downloading LODES commute data</span></span>
-<span id="cb33-6"><a href="vizedges.html#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stplanr) <span class="co">#for using od2line function to convert points to lines</span></span></code></pre></div>
+<span id="cb33-5"><a href="vizedges.html#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stplanr) <span class="co">#for using od2line function to convert points to lines</span></span>
+<span id="cb33-6"><a href="vizedges.html#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph) <span class="co">#for calculating node degree</span></span>
+<span id="cb33-7"><a href="vizedges.html#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SSNtools) <span class="co">#load sample datasets MafiaNodes and MafiaEdges</span></span></code></pre></div>
 <div id="convert-points-into-lines" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Convert Points into Lines</h2>
-<p>To start, we use <code>lehdr</code> <a href="https://github.com/jamgreen/lehdr">package</a> to download LODES commute data between counties in Georgia and use <code>tigris</code> <a href="https://github.com/walkerke/tigris">package</a> to download county shapefiles and convert to centroids as points in the spatial networks.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="vizedges.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#counties is a function in tigris package</span></span>
-<span id="cb34-2"><a href="vizedges.html#cb34-2" aria-hidden="true" tabindex="-1"></a>GA_county <span class="ot">=</span> <span class="fu">counties</span>(<span class="at">state =</span> <span class="st">&#39;GA&#39;</span>, <span class="at">cb=</span><span class="cn">TRUE</span>, <span class="at">year=</span><span class="dv">2018</span>, <span class="at">progress_bar=</span><span class="cn">FALSE</span>) </span>
-<span id="cb34-3"><a href="vizedges.html#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="vizedges.html#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">#grab_lodes is a function in lehdr package</span></span>
-<span id="cb34-5"><a href="vizedges.html#cb34-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">grab_lodes</span>(<span class="at">state=</span><span class="st">&#39;ga&#39;</span>, <span class="at">year=</span><span class="dv">2018</span>, <span class="at">lodes_type =</span> <span class="st">&#39;od&#39;</span>, <span class="at">state_part =</span> <span class="st">&#39;main&#39;</span>, <span class="at">agg_geo =</span> <span class="st">&#39;county&#39;</span>)</span>
-<span id="cb34-6"><a href="vizedges.html#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="vizedges.html#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co">#filter top 1000 county-to-county flows </span></span>
-<span id="cb34-8"><a href="vizedges.html#cb34-8" aria-hidden="true" tabindex="-1"></a>ctc_commutes <span class="ot">=</span> data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(w_county, h_county, S000)) <span class="sc">%&gt;%</span> </span>
-<span id="cb34-9"><a href="vizedges.html#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">flow =</span> S000) <span class="sc">%&gt;%</span> </span>
-<span id="cb34-10"><a href="vizedges.html#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(h_county <span class="sc">!=</span> w_county) <span class="sc">%&gt;%</span> </span>
-<span id="cb34-11"><a href="vizedges.html#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(flow)) <span class="sc">%&gt;%</span> </span>
-<span id="cb34-12"><a href="vizedges.html#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) </span>
-<span id="cb34-13"><a href="vizedges.html#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-14"><a href="vizedges.html#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ctc_commutes, <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## # A tibble: 3 × 3
-##   w_county h_county   flow
-##   &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;
-## 1 13121    13089    128889
-## 2 13121    13067    109627
-## 3 13121    13135     87646</code></pre>
-<p>Columns <code>h_county</code> and <code>w_county</code> contain the county FIPS (or GEOID) codes. <code>S000</code> contains the total number of job flows between the home county and the work county. We also only want to create lines between counties, so we will filter out flows that have the same <code>h_county</code> and <code>w_county</code>.</p>
-<p>There are THREE ways to convert points into a line geometry.</p>
 <div id="method-1-use-od2line-function-in-stplanr-package." class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Method 1: Use <code>od2line</code> function in <code>stplanr</code> package.</h3>
-<p><code>od2line</code> takes in an OD dataframe that assumes the first two column contains the origin and destination variables that can be matched to the shapefile. In our case, those are the county GEOID. <strong>This method is particularly useful if you stores your OD dataframe and your shapefiles separately</strong>. This is the easiest way for our dataset to convert into lines. The only downside is you have one more package dependency. We encourage readers to explore other useful OD-related functions in the <code>stplanr</code> package, such as <code>dist_google()</code>, <code>od_coords2line()</code>, <code>od_to_odmatrix()</code> and so on.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="vizedges.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stplanr)</span>
-<span id="cb36-2"><a href="vizedges.html#cb36-2" aria-hidden="true" tabindex="-1"></a>cnty_centroid <span class="ot">=</span> GA_county <span class="sc">%&gt;%</span> <span class="fu">st_centroid</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(GEOID, geometry))</span>
-<span id="cb36-3"><a href="vizedges.html#cb36-3" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> <span class="fu">od2line</span>(ctc_commutes, cnty_centroid)</span>
-<span id="cb36-4"><a href="vizedges.html#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(edges, <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## Simple feature collection with 3 features and 3 fields
+<p><code>od2line</code> takes in two arguments: 1) an OD dataframe that assumes the first two column contains the origin and destination variables, and 2) a shapefile that can be matched to the origin and destinations. In our case, the first dataframe is <strong>MafiaEdges</strong>, and the second is <strong>MafiaNodes</strong> converted into an sf geometry object. <strong>This method is particularly useful if you stores your OD dataframe and your shapefile separately</strong>. This is also the easiest way for our dataset to convert into lines. The only downside is that you have one more package dependency. We encourage readers to explore other useful OD-related functions in the <code>stplanr</code> package, such as <code>dist_google()</code>, <code>od_coords2line()</code>, <code>od_to_odmatrix()</code> and so on.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="vizedges.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(SSNtools)</span></span>
+<span id="cb34-2"><a href="vizedges.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tidyverse)</span></span>
+<span id="cb34-3"><a href="vizedges.html#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">#library(stplanr)</span></span>
+<span id="cb34-4"><a href="vizedges.html#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="vizedges.html#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaNodes)</span>
+<span id="cb34-6"><a href="vizedges.html#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaEdges)</span>
+<span id="cb34-7"><a href="vizedges.html#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="vizedges.html#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># convert MafiaNodes to an sf geometry object (shapefile)</span></span>
+<span id="cb34-9"><a href="vizedges.html#cb34-9" aria-hidden="true" tabindex="-1"></a>MafiaSpatial <span class="ot">=</span> MafiaNodes <span class="sc">%&gt;%</span> </span>
+<span id="cb34-10"><a href="vizedges.html#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>) </span>
+<span id="cb34-11"><a href="vizedges.html#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="vizedges.html#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="co"># create line geometry </span></span>
+<span id="cb34-13"><a href="vizedges.html#cb34-13" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> <span class="fu">od2line</span>(MafiaEdges, MafiaSpatial)</span>
+<span id="cb34-14"><a href="vizedges.html#cb34-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-15"><a href="vizedges.html#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="co"># print first three rows </span></span>
+<span id="cb34-16"><a href="vizedges.html#cb34-16" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>
+<pre><code>## Simple feature collection with 3 features and 2 fields
 ## Geometry type: LINESTRING
 ## Dimension:     XY
-## Bounding box:  xmin: -84.5767 ymin: 33.77149 xmax: -84.02363 ymax: 33.96167
-## Geodetic CRS:  NAD83
-##   w_county h_county   flow                       geometry
-## 1    13121    13089 128889 LINESTRING (-84.4676 33.789...
-## 2    13121    13067 109627 LINESTRING (-84.4676 33.789...
-## 3    13121    13135  87646 LINESTRING (-84.4676 33.789...</code></pre>
+## Bounding box:  xmin: -80.1252 ymin: 25.9783 xmax: -73.9652 ymax: 40.7449
+## Geodetic CRS:  WGS 84
+##         Source           Target                       geometry
+## 1 CARUSO-FRANK     LISI-GAETANO LINESTRING (-74.0049 40.613...
+## 2 LANSKY-MEYER    GAMBINO-CARLO LINESTRING (-80.1252 25.978...
+## 3 CARUSO-FRANK DIMAGGIO-ROSARIO LINESTRING (-74.0049 40.613...</code></pre>
 </div>
 <div id="method-2-group-by-lineid-and-summarize-points-into-line" class="section level3" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Method 2: Group by lineID and Summarize Points into Line</h3>
-<p>The second one is to group the points coordinates by line ID, summarize the flow values, and then use <code>st_cast</code> in the <code>sf</code> package to turn the grouped point coordinates into a line geometry. <strong>This method is particularly useful if your points are organized by line ID and if you do not want to use extra packages</strong>. It is also convenient GPS trajectory data because each row is a point data associated with a line ID and you want to connect all the points that represent one trajectory.</p>
-<p>For our data, we do not have line ID for points, but we can create such ID with <code>row_number()</code>. To leverage method 1, we have to split one OD pair into two rows so that the first row contains the point geometry of the origin and the second row contains the point geometry of the destination. To do that, we perform a little trick: we swap the position of the <code>h_county</code> and <code>w_county</code> of <code>ctc_commutes</code> and bind it to the existing <code>ctc_commutes</code> dataframe. Then when we join county shapefiles by <code>h_county</code>, we actually join the shapefiles for both the origin county and the destination county. Then we can use the group_by and summarise method to create lines. Noted that column <code>ID</code> needs to be created before and during binding the <code>ctc_commutes</code>, so that group_by knows which OD is one the same line. You also need to ensure the dataframe is an <code>sf</code> object after doing <code>left_join</code> through <code>st_as_sf()</code>.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="vizedges.html#cb38-1" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> ctc_commutes <span class="sc">%&gt;%</span> </span>
-<span id="cb38-2"><a href="vizedges.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb38-3"><a href="vizedges.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(ctc_commutes <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">w_county =</span> h_county, <span class="at">h_county =</span> w_county) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">row_number</span>())) <span class="sc">%&gt;%</span> </span>
-<span id="cb38-4"><a href="vizedges.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(GA_county <span class="sc">%&gt;%</span> <span class="fu">st_centroid</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(GEOID, geometry)), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;h_county&#39;</span> <span class="ot">=</span> <span class="st">&#39;GEOID&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb38-5"><a href="vizedges.html#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb38-6"><a href="vizedges.html#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID) <span class="sc">%&gt;%</span> </span>
-<span id="cb38-7"><a href="vizedges.html#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">w_county=</span><span class="fu">first</span>(w_county), <span class="at">h_county =</span> <span class="fu">first</span>(h_county), <span class="at">flow=</span><span class="fu">mean</span>(flow)) <span class="sc">%&gt;%</span></span>
-<span id="cb38-8"><a href="vizedges.html#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_cast</span>(<span class="st">&quot;LINESTRING&quot;</span>) </span>
-<span id="cb38-9"><a href="vizedges.html#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-10"><a href="vizedges.html#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(edges, <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## Simple feature collection with 3 features and 4 fields
+<p>The second one is to group the points coordinates by line ID, summarize the geometry (you can also flow values in the same statement if available), and then use <code>st_cast</code> in the <code>sf</code> package to turn the grouped point coordinates into a line geometry. <strong>This method is particularly useful if your points are organized by line ID and if you do not want to use extra packages</strong>. It is also convenient for visualizing GPS trajectory data because each row tends to be a point data associated with a line ID and you want to connect all the points that represent one trajectory.</p>
+<p>For our data, we do not have line ID for points, but for demonstration purpose, we can create such ID with <code>row_number()</code>. Then we use <code>pivot_longer()</code> in <code>tidyr</code> package (loaded with <code>tidyverse</code>) to transform one row of edge to two rows of edge points and show what the data look like. Noted that multiple mafia members in <strong>MafiaNodes</strong> have the same locations and are connected. They cannot form lines. Thus we remove them in the codes.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="vizedges.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(SSNtools)</span></span>
+<span id="cb36-2"><a href="vizedges.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tidyverse)</span></span>
+<span id="cb36-3"><a href="vizedges.html#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">#library(sf)</span></span>
+<span id="cb36-4"><a href="vizedges.html#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="vizedges.html#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaNodes)</span>
+<span id="cb36-6"><a href="vizedges.html#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaEdges)</span>
+<span id="cb36-7"><a href="vizedges.html#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="vizedges.html#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># convert MafiaNodes to an sf geometry object (shapefile)</span></span>
+<span id="cb36-9"><a href="vizedges.html#cb36-9" aria-hidden="true" tabindex="-1"></a>MafiaSpatial <span class="ot">=</span> MafiaNodes <span class="sc">%&gt;%</span> </span>
+<span id="cb36-10"><a href="vizedges.html#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>) </span>
+<span id="cb36-11"><a href="vizedges.html#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-12"><a href="vizedges.html#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="co"># transform MafiaEdges to a format where each node in the edge is coded with an edge ID</span></span>
+<span id="cb36-13"><a href="vizedges.html#cb36-13" aria-hidden="true" tabindex="-1"></a>MafiaEdges2 <span class="ot">=</span> MafiaEdges <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">ID =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-14"><a href="vizedges.html#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;Source&quot;</span>, <span class="st">&quot;Target&quot;</span>), <span class="at">names_to =</span> <span class="st">&quot;type&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;NODE&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-15"><a href="vizedges.html#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(MafiaSpatial, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;NODE&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) </span>
+<span id="cb36-16"><a href="vizedges.html#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="vizedges.html#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co"># print first three rows of the data</span></span>
+<span id="cb36-18"><a href="vizedges.html#cb36-18" aria-hidden="true" tabindex="-1"></a>MafiaEdges2[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 7
+##      ID type   NODE         Family      NY NiceLabel              geometry
+##   &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;        &lt;chr&gt;    &lt;int&gt; &lt;chr&gt;               &lt;POINT [°]&gt;
+## 1     1 Source CARUSO-FRANK Genovese     2 Frank Caruso (-74.0049 40.6133)
+## 2     1 Target LISI-GAETANO Lucchese     2 Gaetano Lisi (-73.9908 40.7142)
+## 3     2 Source LANSKY-MEYER Genovese     1 Meyer Lansky (-80.1252 25.9783)</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="vizedges.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert points to lines</span></span>
+<span id="cb38-2"><a href="vizedges.html#cb38-2" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> MafiaEdges2 <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="vizedges.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-4"><a href="vizedges.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this is an optional step to remove points that are at the same location; </span></span>
+<span id="cb38-5"><a href="vizedges.html#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n_distinct</span>(geometry) <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-6"><a href="vizedges.html#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb38-7"><a href="vizedges.html#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID) <span class="sc">%&gt;%</span></span>
+<span id="cb38-8"><a href="vizedges.html#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb38-9"><a href="vizedges.html#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_cast</span>(<span class="st">&quot;LINESTRING&quot;</span>)</span>
+<span id="cb38-10"><a href="vizedges.html#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="vizedges.html#cb38-11" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>
+<pre><code>## Simple feature collection with 3 features and 1 field
 ## Geometry type: LINESTRING
 ## Dimension:     XY
-## Bounding box:  xmin: -84.5767 ymin: 33.77149 xmax: -84.02363 ymax: 33.96167
-## Geodetic CRS:  NAD83
-## # A tibble: 3 × 5
-##      ID w_county h_county   flow                                geometry
-##   &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;                        &lt;LINESTRING [°]&gt;
-## 1     1 13121    13089    128889 (-84.4676 33.78992, -84.22637 33.77149)
-## 2     2 13121    13067    109627  (-84.5767 33.94143, -84.4676 33.78992)
-## 3     3 13121    13135     87646 (-84.4676 33.78992, -84.02363 33.96167)</code></pre>
+## Bounding box:  xmin: -80.1252 ymin: 25.9783 xmax: -73.9652 ymax: 40.7449
+## Geodetic CRS:  WGS 84
+## # A tibble: 3 × 2
+##      ID                             geometry
+##   &lt;int&gt;                     &lt;LINESTRING [°]&gt;
+## 1     1 (-74.0049 40.6133, -73.9908 40.7142)
+## 2     2  (-80.1252 25.9783, -73.9652 40.595)
+## 3     3  (-74.0049 40.6133, -73.985 40.7449)</code></pre>
 </div>
 <div id="method-3-join-two-point-geometry-into-one-row-and-unite-into-line" class="section level3" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Method 3: Join Two Point Geometry into One Row and Unite into Line</h3>
-<p>The third way to convert points into lines is to join two point geometry in one row and cast them into a line. <strong>This method is particularly useful if you have coordinates of both origin and destination points in one dataframe</strong>. In our case, we do not have coordinates, so we have to join <code>GA_county</code> to get the geometries to use this method.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="vizedges.html#cb40-1" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> ctc_commutes <span class="sc">%&gt;%</span> </span>
-<span id="cb40-2"><a href="vizedges.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(GA_county <span class="sc">%&gt;%</span> <span class="fu">st_centroid</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(GEOID, geometry)), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;h_county&#39;</span> <span class="ot">=</span> <span class="st">&#39;GEOID&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-3"><a href="vizedges.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(GA_county <span class="sc">%&gt;%</span> <span class="fu">st_centroid</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(GEOID, geometry)), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;w_county&#39;</span> <span class="ot">=</span> <span class="st">&#39;GEOID&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-4"><a href="vizedges.html#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geometry =</span> <span class="fu">st_cast</span>(<span class="fu">st_union</span>(geometry.x, geometry.y), <span class="st">&quot;LINESTRING&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-5"><a href="vizedges.html#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(geometry.x, geometry.y)) <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>()</span>
-<span id="cb40-6"><a href="vizedges.html#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="vizedges.html#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(edges, <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## Simple feature collection with 3 features and 3 fields
+<p>The third way to convert points into lines is to join two point geometry in one row and cast them into a line. <strong>This method is particularly useful if you have coordinates of both origin and destination points in one dataframe</strong>. In our case, we do not have coordinates, so we have to join <code>MafiaNodes</code> to get the geometries to use this method.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="vizedges.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(SSNtools)</span></span>
+<span id="cb40-2"><a href="vizedges.html#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tidyverse)</span></span>
+<span id="cb40-3"><a href="vizedges.html#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co">#library(sf)</span></span>
+<span id="cb40-4"><a href="vizedges.html#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="vizedges.html#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaNodes)</span>
+<span id="cb40-6"><a href="vizedges.html#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaEdges)</span>
+<span id="cb40-7"><a href="vizedges.html#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="vizedges.html#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="co"># attach point geometry to MafiaEdges for both Source and Target nodes </span></span>
+<span id="cb40-9"><a href="vizedges.html#cb40-9" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> MafiaEdges <span class="sc">%&gt;%</span> </span>
+<span id="cb40-10"><a href="vizedges.html#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(MafiaNodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Source&#39;</span> <span class="ot">=</span> <span class="st">&#39;NODE&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-11"><a href="vizedges.html#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(MafiaNodes, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Target&#39;</span> <span class="ot">=</span> <span class="st">&#39;NODE&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-12"><a href="vizedges.html#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#LonX.x and LatY.x are coordinates for Source; </span></span>
+<span id="cb40-13"><a href="vizedges.html#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">#LonX.y and LatY.y are coordinates for Target </span></span>
+<span id="cb40-14"><a href="vizedges.html#cb40-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(Source, Target, LonX.x, LatY.x, LonX.y, LatY.y)) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-15"><a href="vizedges.html#cb40-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this is an optional step to remove points that are at the same location</span></span>
+<span id="cb40-16"><a href="vizedges.html#cb40-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(LonX.x <span class="sc">!=</span> LonX.y <span class="sc">&amp;</span> LatY.x <span class="sc">!=</span> LatY.y) </span>
+<span id="cb40-17"><a href="vizedges.html#cb40-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-18"><a href="vizedges.html#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="co"># this helper function converts a row with four coordinates into a </span></span>
+<span id="cb40-19"><a href="vizedges.html#cb40-19" aria-hidden="true" tabindex="-1"></a><span class="co"># two by two matrix and cast it into a linestring.</span></span>
+<span id="cb40-20"><a href="vizedges.html#cb40-20" aria-hidden="true" tabindex="-1"></a>st_segment <span class="ot">=</span> <span class="cf">function</span>(r){<span class="fu">st_linestring</span>(<span class="fu">t</span>(<span class="fu">matrix</span>(<span class="fu">unlist</span>(r), <span class="dv">2</span>, <span class="dv">2</span>)))}</span>
+<span id="cb40-21"><a href="vizedges.html#cb40-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-22"><a href="vizedges.html#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="co"># loop through each row and cast it into a linestring</span></span>
+<span id="cb40-23"><a href="vizedges.html#cb40-23" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine<span class="sc">$</span>geometry <span class="ot">=</span> <span class="fu">st_sfc</span>(</span>
+<span id="cb40-24"><a href="vizedges.html#cb40-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(MafiaEdges_toLine), </span>
+<span id="cb40-25"><a href="vizedges.html#cb40-25" aria-hidden="true" tabindex="-1"></a>         <span class="cf">function</span>(i){</span>
+<span id="cb40-26"><a href="vizedges.html#cb40-26" aria-hidden="true" tabindex="-1"></a>           <span class="fu">st_segment</span>(MafiaEdges_toLine[i,][<span class="fu">c</span>(<span class="st">&#39;LonX.x&#39;</span>, <span class="st">&#39;LatY.x&#39;</span>, <span class="st">&#39;LonX.y&#39;</span>, <span class="st">&#39;LatY.y&#39;</span>)])},</span>
+<span id="cb40-27"><a href="vizedges.html#cb40-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">simplify=</span><span class="cn">FALSE</span>))</span>
+<span id="cb40-28"><a href="vizedges.html#cb40-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-29"><a href="vizedges.html#cb40-29" aria-hidden="true" tabindex="-1"></a><span class="co"># ensure the output is an sf object and set the crs </span></span>
+<span id="cb40-30"><a href="vizedges.html#cb40-30" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> MafiaEdges_toLine <span class="sc">%&gt;%</span> <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> <span class="fu">st_set_crs</span>(<span class="dv">4326</span>)</span>
+<span id="cb40-31"><a href="vizedges.html#cb40-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-32"><a href="vizedges.html#cb40-32" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>
+<pre><code>## Simple feature collection with 3 features and 6 fields
 ## Geometry type: LINESTRING
 ## Dimension:     XY
-## Bounding box:  xmin: -84.5767 ymin: 33.77149 xmax: -84.02363 ymax: 33.96167
-## Geodetic CRS:  NAD83
-## # A tibble: 3 × 4
-##   w_county h_county   flow                                geometry
-##   &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;                        &lt;LINESTRING [°]&gt;
-## 1 13121    13089    128889 (-84.4676 33.78992, -84.22637 33.77149)
-## 2 13121    13067    109627  (-84.5767 33.94143, -84.4676 33.78992)
-## 3 13121    13135     87646 (-84.4676 33.78992, -84.02363 33.96167)</code></pre>
+## Bounding box:  xmin: -80.1252 ymin: 25.9783 xmax: -73.9652 ymax: 40.7449
+## Geodetic CRS:  WGS 84
+##         Source           Target   LonX.x  LatY.x   LonX.y  LatY.y
+## 1 CARUSO-FRANK     LISI-GAETANO -74.0049 40.6133 -73.9908 40.7142
+## 2 LANSKY-MEYER    GAMBINO-CARLO -80.1252 25.9783 -73.9652 40.5950
+## 3 CARUSO-FRANK DIMAGGIO-ROSARIO -74.0049 40.6133 -73.9850 40.7449
+##                         geometry
+## 1 LINESTRING (-74.0049 40.613...
+## 2 LINESTRING (-80.1252 25.978...
+## 3 LINESTRING (-74.0049 40.613...</code></pre>
 </div>
 </div>
 <div id="visualizing-edges" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Visualizing Edges</h2>
 <p>The simplest edge visualization code snippet using <code>tmap</code> is the following:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="vizedges.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
-<span id="cb42-2"><a href="vizedges.html#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Visualize edges </span></span>
-<span id="cb42-3"><a href="vizedges.html#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(GA_county) <span class="sc">+</span> </span>
-<span id="cb42-4"><a href="vizedges.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
-<span id="cb42-5"><a href="vizedges.html#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(edges) <span class="sc">+</span></span>
-<span id="cb42-6"><a href="vizedges.html#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>()</span></code></pre></div>
-<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="vizedges.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(SSNtools)</span></span>
+<span id="cb42-2"><a href="vizedges.html#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tidyverse)</span></span>
+<span id="cb42-3"><a href="vizedges.html#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co">#library(sf)</span></span>
+<span id="cb42-4"><a href="vizedges.html#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tmap)</span></span>
+<span id="cb42-5"><a href="vizedges.html#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tigris)</span></span>
+<span id="cb42-6"><a href="vizedges.html#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="vizedges.html#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare data </span></span>
+<span id="cb42-8"><a href="vizedges.html#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaNodes)</span>
+<span id="cb42-9"><a href="vizedges.html#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaEdges)</span>
+<span id="cb42-10"><a href="vizedges.html#cb42-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="vizedges.html#cb42-11" aria-hidden="true" tabindex="-1"></a><span class="co"># convert coordinates to sf point geometries </span></span>
+<span id="cb42-12"><a href="vizedges.html#cb42-12" aria-hidden="true" tabindex="-1"></a>MafiaSpatial <span class="ot">=</span> MafiaNodes <span class="sc">%&gt;%</span> </span>
+<span id="cb42-13"><a href="vizedges.html#cb42-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>) </span>
+<span id="cb42-14"><a href="vizedges.html#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-15"><a href="vizedges.html#cb42-15" aria-hidden="true" tabindex="-1"></a><span class="co"># convert point geometries to lines </span></span>
+<span id="cb42-16"><a href="vizedges.html#cb42-16" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> <span class="fu">od2line</span>(MafiaEdges, MafiaSpatial)</span>
+<span id="cb42-17"><a href="vizedges.html#cb42-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-18"><a href="vizedges.html#cb42-18" aria-hidden="true" tabindex="-1"></a><span class="co"># states is a function in tigris to download U.S. state boundary shapefile</span></span>
+<span id="cb42-19"><a href="vizedges.html#cb42-19" aria-hidden="true" tabindex="-1"></a>us_states <span class="ot">=</span> <span class="fu">states</span>(<span class="at">cb=</span><span class="cn">TRUE</span>, <span class="at">progress_bar =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb42-20"><a href="vizedges.html#cb42-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>STUSPS <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;PR&#39;</span>,<span class="st">&#39;AS&#39;</span>, <span class="st">&#39;AK&#39;</span>, <span class="st">&#39;GU&#39;</span>,<span class="st">&#39;MP&#39;</span>,<span class="st">&#39;VI&#39;</span>, <span class="st">&#39;HI&#39;</span>)) </span>
+<span id="cb42-21"><a href="vizedges.html#cb42-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-22"><a href="vizedges.html#cb42-22" aria-hidden="true" tabindex="-1"></a><span class="co"># tmap functions to visualize maps</span></span>
+<span id="cb42-23"><a href="vizedges.html#cb42-23" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb42-24"><a href="vizedges.html#cb42-24" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(us_states) <span class="sc">+</span> </span>
+<span id="cb42-25"><a href="vizedges.html#cb42-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>() <span class="sc">+</span> </span>
+<span id="cb42-26"><a href="vizedges.html#cb42-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(MafiaEdges_toLine) <span class="sc">+</span> </span>
+<span id="cb42-27"><a href="vizedges.html#cb42-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>()</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
 </div>
 <div id="visualizing-edges-by-line-width" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> Visualizing Edges by Line Width</h2>
-<p>To visualize edges by line width, we added a column variable <code>flow</code> for line width in <code>tm_lines()</code>.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="vizedges.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
-<span id="cb43-2"><a href="vizedges.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(GA_county) <span class="sc">+</span> </span>
-<span id="cb43-3"><a href="vizedges.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#change polygon background to be transparent</span></span>
-<span id="cb43-4"><a href="vizedges.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="sc">+</span></span>
-<span id="cb43-5"><a href="vizedges.html#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(edges) <span class="sc">+</span></span>
-<span id="cb43-6"><a href="vizedges.html#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#define line width and properties associated with lines </span></span>
-<span id="cb43-7"><a href="vizedges.html#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">lwd=</span><span class="st">&#39;flow&#39;</span>, <span class="at">scale=</span><span class="dv">10</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">legend.lwd.is.portrait =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb43-8"><a href="vizedges.html#cb43-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.lwd =</span> <span class="fu">c</span>(<span class="st">&#39;Commutes Across Counties&#39;</span>)) <span class="sc">+</span> </span>
-<span id="cb43-9"><a href="vizedges.html#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
-<span id="cb43-10"><a href="vizedges.html#cb43-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.07</span>))</span></code></pre></div>
-<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
-<p>The default line width setting is proportional to the column variable (in this case, flow values). As you can see, this default is not a good visualization for the map because edges with small amount of flows are too thin to be seen. In reality, the degree weight distribution of non-planar networks is often skewed, with a few edges have very high flow values and most of the rest have low values. Therefore, we need to adjust the breaks to better visualize the spatial network.</p>
-<p><strong>To adjust the line width breaks</strong>, we need to create a column to store relative edge width, which is similar to the node size visualization in chapter 2. We chose a skewed quantile breaks for line width.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="vizedges.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We design the breaks for edge width through a skewed quantile distribution</span></span>
-<span id="cb44-2"><a href="vizedges.html#cb44-2" aria-hidden="true" tabindex="-1"></a>brks <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">quantile</span>(edges<span class="sc">$</span>flow, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>)</span>
+<p>To visualize edges by line width, we added a column variable <code>weight</code> for line width in <code>tm_lines()</code>.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="vizedges.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a line weight column based on edge distance</span></span>
+<span id="cb43-2"><a href="vizedges.html#cb43-2" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> MafiaEdges_toLine <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">weight =</span> <span class="fu">as.numeric</span>(<span class="fu">st_length</span>(geometry)))</span>
+<span id="cb43-3"><a href="vizedges.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-4"><a href="vizedges.html#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co">#library(tmap)</span></span>
+<span id="cb43-5"><a href="vizedges.html#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb43-6"><a href="vizedges.html#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(us_states) <span class="sc">+</span> </span>
+<span id="cb43-7"><a href="vizedges.html#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;grey&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb43-8"><a href="vizedges.html#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(MafiaEdges_toLine) <span class="sc">+</span> </span>
+<span id="cb43-9"><a href="vizedges.html#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#define line width with column `weight` and properties associated with lines </span></span>
+<span id="cb43-10"><a href="vizedges.html#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">lwd=</span><span class="st">&#39;weight&#39;</span>, <span class="at">scale=</span><span class="dv">2</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, <span class="at">legend.lwd.is.portrait =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb43-11"><a href="vizedges.html#cb43-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.lwd =</span> <span class="fu">c</span>(<span class="st">&#39;Distance (m)&#39;</span>)) <span class="sc">+</span> </span>
+<span id="cb43-12"><a href="vizedges.html#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;bottom&#39;</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>The default line width setting is proportional to the column variable (in this case, weight values). In reality, the degree weight distribution of non-planar networks is often skewed, with a few edges have very high weights or flow values and most of the rest have low values. Therefore, we need to adjust the breaks to better visualize the SSN network.</p>
+<p><strong>To adjust the line width breaks</strong>, we need to create a column to store relative edge width, which is similar to the node size visualization in chapter 2. We chose a skewed quantile breaks for line width. This step is quite manual for line width aesthetics, and better supported for color aesthetics. The upcoming <a href="https://mtennekes.github.io/tmap4/">tmap v4</a> will have significant improvements on the ease of use.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="vizedges.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We create a column called flow_breaks that stores relative line width </span></span>
+<span id="cb44-2"><a href="vizedges.html#cb44-2" aria-hidden="true" tabindex="-1"></a>brks <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">quantile</span>(MafiaEdges_toLine<span class="sc">$</span>weight, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>)</span>
 <span id="cb44-3"><a href="vizedges.html#cb44-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-4"><a href="vizedges.html#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We create a column called flow_breaks that stores relative line width </span></span>
-<span id="cb44-5"><a href="vizedges.html#cb44-5" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> edges <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
-<span id="cb44-6"><a href="vizedges.html#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">flow_width =</span> <span class="fu">case_when</span>(</span>
-<span id="cb44-7"><a href="vizedges.html#cb44-7" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;=</span> brks[<span class="dv">1</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">2</span>] <span class="sc">~</span> <span class="fl">0.1</span>,</span>
-<span id="cb44-8"><a href="vizedges.html#cb44-8" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">2</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">3</span>] <span class="sc">~</span> <span class="fl">0.3</span>,</span>
-<span id="cb44-9"><a href="vizedges.html#cb44-9" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">3</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">4</span>] <span class="sc">~</span> <span class="fl">0.5</span>,</span>
-<span id="cb44-10"><a href="vizedges.html#cb44-10" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">4</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">5</span>] <span class="sc">~</span> <span class="dv">1</span></span>
-<span id="cb44-11"><a href="vizedges.html#cb44-11" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb44-12"><a href="vizedges.html#cb44-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb44-13"><a href="vizedges.html#cb44-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-14"><a href="vizedges.html#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
-<span id="cb44-15"><a href="vizedges.html#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(GA_county) <span class="sc">+</span> </span>
-<span id="cb44-16"><a href="vizedges.html#cb44-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="sc">+</span> </span>
-<span id="cb44-17"><a href="vizedges.html#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># commute edges are arranged by flow values from high to low so that </span></span>
-<span id="cb44-18"><a href="vizedges.html#cb44-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># high volumn flows will be plotted on the top of the low value ones.  </span></span>
-<span id="cb44-19"><a href="vizedges.html#cb44-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(edges, flow)) <span class="sc">+</span> </span>
-<span id="cb44-20"><a href="vizedges.html#cb44-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">lwd=</span><span class="st">&quot;flow_width&quot;</span>, <span class="at">scale=</span><span class="dv">2</span>, <span class="at">alpha=</span><span class="fl">0.5</span>,</span>
-<span id="cb44-21"><a href="vizedges.html#cb44-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.legend =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="sc">*</span><span class="dv">2</span>, </span>
-<span id="cb44-22"><a href="vizedges.html#cb44-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">legend.lwd.is.portrait =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb44-23"><a href="vizedges.html#cb44-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.legend.labels=</span><span class="fu">c</span>(<span class="st">&#39;300-600&#39;</span>,<span class="st">&#39;601-3400&#39;</span>,</span>
-<span id="cb44-24"><a href="vizedges.html#cb44-24" aria-hidden="true" tabindex="-1"></a>                               <span class="st">&#39;3401-30,000&#39;</span>,<span class="st">&#39;30,001-130,000&#39;</span>),</span>
-<span id="cb44-25"><a href="vizedges.html#cb44-25" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.lwd =</span> <span class="fu">c</span>(<span class="st">&#39;Commutes Across Counties&#39;</span>)) <span class="sc">+</span> </span>
-<span id="cb44-26"><a href="vizedges.html#cb44-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
-<span id="cb44-27"><a href="vizedges.html#cb44-27" aria-hidden="true" tabindex="-1"></a>            <span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.05</span>))</span></code></pre></div>
-<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<span id="cb44-4"><a href="vizedges.html#cb44-4" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> MafiaEdges_toLine <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
+<span id="cb44-5"><a href="vizedges.html#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">line_width =</span> <span class="fu">case_when</span>(</span>
+<span id="cb44-6"><a href="vizedges.html#cb44-6" aria-hidden="true" tabindex="-1"></a>    weight <span class="sc">&gt;=</span> brks[<span class="dv">1</span>] <span class="sc">&amp;</span> weight <span class="sc">&lt;=</span> brks[<span class="dv">2</span>] <span class="sc">~</span> <span class="fl">0.1</span>,</span>
+<span id="cb44-7"><a href="vizedges.html#cb44-7" aria-hidden="true" tabindex="-1"></a>    weight <span class="sc">&gt;</span> brks[<span class="dv">2</span>] <span class="sc">&amp;</span> weight <span class="sc">&lt;=</span> brks[<span class="dv">3</span>] <span class="sc">~</span> <span class="fl">0.3</span>,</span>
+<span id="cb44-8"><a href="vizedges.html#cb44-8" aria-hidden="true" tabindex="-1"></a>    weight <span class="sc">&gt;</span> brks[<span class="dv">3</span>] <span class="sc">&amp;</span> weight <span class="sc">&lt;=</span> brks[<span class="dv">4</span>] <span class="sc">~</span> <span class="fl">0.5</span>,</span>
+<span id="cb44-9"><a href="vizedges.html#cb44-9" aria-hidden="true" tabindex="-1"></a>    weight <span class="sc">&gt;</span> brks[<span class="dv">4</span>] <span class="sc">&amp;</span> weight <span class="sc">&lt;=</span> brks[<span class="dv">5</span>] <span class="sc">~</span> <span class="dv">1</span></span>
+<span id="cb44-10"><a href="vizedges.html#cb44-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb44-11"><a href="vizedges.html#cb44-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb44-12"><a href="vizedges.html#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="vizedges.html#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb44-14"><a href="vizedges.html#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(us_states) <span class="sc">+</span> </span>
+<span id="cb44-15"><a href="vizedges.html#cb44-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;grey&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb44-16"><a href="vizedges.html#cb44-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(MafiaEdges_toLine) <span class="sc">+</span> </span>
+<span id="cb44-17"><a href="vizedges.html#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#define line width with column `weight` and properties associated with lines </span></span>
+<span id="cb44-18"><a href="vizedges.html#cb44-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">lwd=</span><span class="st">&#39;line_width&#39;</span>, <span class="at">scale=</span><span class="dv">2</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, </span>
+<span id="cb44-19"><a href="vizedges.html#cb44-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">legend.lwd.is.portrait =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb44-20"><a href="vizedges.html#cb44-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.legend =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="sc">*</span><span class="dv">2</span>, </span>
+<span id="cb44-21"><a href="vizedges.html#cb44-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">lwd.legend.labels=</span><span class="fu">c</span>(<span class="st">&#39;0-14&#39;</span>,<span class="st">&#39;14-1630&#39;</span>,<span class="st">&#39;1630-4000&#39;</span>,<span class="st">&#39;4000-4150&#39;</span>),</span>
+<span id="cb44-22"><a href="vizedges.html#cb44-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.lwd =</span> <span class="fu">c</span>(<span class="st">&#39;Distance (km)&#39;</span>)) <span class="sc">+</span> </span>
+<span id="cb44-23"><a href="vizedges.html#cb44-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;bottom&#39;</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 </div>
 <div id="visualizing-edges-by-color" class="section level2" number="4.4">
 <h2><span class="header-section-number">4.4</span> Visualizing Edges by Color</h2>
-<p>To visualize edges by color, we assign a variable column <code>flow</code> to argument <code>col</code> in <code>tm_lines</code>. Since we already established that the edges are better viewed through a skewed flow breaks, we manually assign break values for color. To do that, we give argument <code>breaks</code> a vector of fixed numbers, and set argument <code>style</code> to <code>fixed</code>. The following map has constant line width across different colors.</p>
+<p>To visualize edges by color, we assign the variable column <code>weight</code> to argument <code>col</code> in <code>tm_lines</code>. Since we already established that the edges are better viewed through a skewed flow breaks, we manually assign break values for color. To do that, we give argument <code>breaks</code> a vector of fixed numbers, and set argument <code>style</code> to <code>fixed</code>. The following map has constant line width across different colors.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="vizedges.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
-<span id="cb45-2"><a href="vizedges.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(GA_county) <span class="sc">+</span> </span>
-<span id="cb45-3"><a href="vizedges.html#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="sc">+</span> </span>
-<span id="cb45-4"><a href="vizedges.html#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(edges, flow)) <span class="sc">+</span> </span>
-<span id="cb45-5"><a href="vizedges.html#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># all the parameters for adjusting colors</span></span>
-<span id="cb45-6"><a href="vizedges.html#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&quot;flow&quot;</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">scale =</span> <span class="dv">1</span>,</span>
-<span id="cb45-7"><a href="vizedges.html#cb45-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">breaks =</span> <span class="fu">round</span>(<span class="fu">quantile</span>(edges<span class="sc">$</span>flow, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
-<span id="cb45-8"><a href="vizedges.html#cb45-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="at">n =</span> <span class="dv">4</span>, </span>
-<span id="cb45-9"><a href="vizedges.html#cb45-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.col =</span> <span class="fu">c</span>(<span class="st">&#39;Commutes Across Counties&#39;</span>),</span>
-<span id="cb45-10"><a href="vizedges.html#cb45-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&#39;300-600&#39;</span>,<span class="st">&#39;601-3400&#39;</span>,<span class="st">&#39;3401-30,000&#39;</span>,<span class="st">&#39;30,001-130,000&#39;</span>),</span>
-<span id="cb45-11"><a href="vizedges.html#cb45-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>)) <span class="sc">+</span> </span>
-<span id="cb45-12"><a href="vizedges.html#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
-<span id="cb45-13"><a href="vizedges.html#cb45-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.05</span>))</span></code></pre></div>
+<span id="cb45-2"><a href="vizedges.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(us_states) <span class="sc">+</span> </span>
+<span id="cb45-3"><a href="vizedges.html#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;grey&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb45-4"><a href="vizedges.html#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#reorder edges so that long distance edges are drawn first and short-ranged edges drawn last</span></span>
+<span id="cb45-5"><a href="vizedges.html#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(MafiaEdges_toLine, <span class="fu">desc</span>(weight))) <span class="sc">+</span> </span>
+<span id="cb45-6"><a href="vizedges.html#cb45-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#define line color with column `weight` and properties associated with lines </span></span>
+<span id="cb45-7"><a href="vizedges.html#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&#39;weight&#39;</span>, <span class="at">scale=</span><span class="dv">2</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, </span>
+<span id="cb45-8"><a href="vizedges.html#cb45-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">breaks =</span> <span class="fu">round</span>(<span class="fu">quantile</span>(MafiaEdges_toLine<span class="sc">$</span>weight, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
+<span id="cb45-9"><a href="vizedges.html#cb45-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="at">n =</span> <span class="dv">4</span>, </span>
+<span id="cb45-10"><a href="vizedges.html#cb45-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&#39;0-14&#39;</span>,<span class="st">&#39;14-1630&#39;</span>,<span class="st">&#39;1630-4000&#39;</span>,<span class="st">&#39;4000-4150&#39;</span>),</span>
+<span id="cb45-11"><a href="vizedges.html#cb45-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&#39;#CCEBC5&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#094081&#39;</span>), </span>
+<span id="cb45-12"><a href="vizedges.html#cb45-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.col =</span> <span class="fu">c</span>(<span class="st">&#39;Distance (km)&#39;</span>)) <span class="sc">+</span> </span>
+<span id="cb45-13"><a href="vizedges.html#cb45-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;bottom&#39;</span>))</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<p>We can also <strong>visualize lines by color based on a categorical variable</strong>, such as mafia families. To create assign a categorical value to each edge, we identified the top 5 mafia families with the most number of members. They are ‘Genovese’, ‘Lucchese’, ‘Gambino’, ‘Detroit’, and ‘Chicago’. If an edge is affiliated with one of the top 5 mafia families, it will be joined with the respective mafia family name. Otherwise, it will has the value <code>Others</code>. <strong>The biggest difference with the codes above is to change <code>style = 'fixed'</code> to <code>style = 'cat'</code> in <code>tm_lines()</code></strong> and change the color palette to represent categorical colors.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="vizedges.html#cb46-1" aria-hidden="true" tabindex="-1"></a>top_5 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&#39;Genovese&#39;</span>, <span class="st">&#39;Lucchese&#39;</span>, <span class="st">&#39;Gambino&#39;</span>, <span class="st">&#39;Detroit&#39;</span>, <span class="st">&#39;Chicago&#39;</span>)</span>
+<span id="cb46-2"><a href="vizedges.html#cb46-2" aria-hidden="true" tabindex="-1"></a>MafiaNodes <span class="ot">=</span> MafiaNodes <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Family =</span> <span class="fu">ifelse</span>(Family <span class="sc">%in%</span> top_5, Family, <span class="st">&#39;Others&#39;</span>))</span>
+<span id="cb46-3"><a href="vizedges.html#cb46-3" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> MafiaEdges_toLine <span class="sc">%&gt;%</span> </span>
+<span id="cb46-4"><a href="vizedges.html#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(MafiaNodes <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(NODE, Family)), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Source&#39;</span> <span class="ot">=</span> <span class="st">&#39;NODE&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-5"><a href="vizedges.html#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(MafiaNodes <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(NODE, Family)), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;Target&#39;</span> <span class="ot">=</span> <span class="st">&#39;NODE&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-6"><a href="vizedges.html#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#the two left join above will automatically create Family.x and Family.y to differentiate having `Family` twice. </span></span>
+<span id="cb46-7"><a href="vizedges.html#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">edge_family =</span> <span class="fu">ifelse</span>(Family.x <span class="sc">%in%</span> top_5, Family.x, <span class="st">&#39;Others&#39;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-8"><a href="vizedges.html#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">edge_family =</span> <span class="fu">ifelse</span>(Family.y <span class="sc">%in%</span> top_5, Family.y, edge_family))</span>
+<span id="cb46-9"><a href="vizedges.html#cb46-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-10"><a href="vizedges.html#cb46-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb46-11"><a href="vizedges.html#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(us_states) <span class="sc">+</span> </span>
+<span id="cb46-12"><a href="vizedges.html#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;grey&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb46-13"><a href="vizedges.html#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(MafiaEdges_toLine, <span class="fu">desc</span>(edge_family))) <span class="sc">+</span> </span>
+<span id="cb46-14"><a href="vizedges.html#cb46-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&#39;edge_family&#39;</span>, <span class="at">style=</span><span class="st">&#39;cat&#39;</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">lwd=</span><span class="dv">1</span>,</span>
+<span id="cb46-15"><a href="vizedges.html#cb46-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&#39;#57B897&#39;</span>, <span class="st">&#39;#F7774F&#39;</span>, <span class="st">&#39;#7A8CC1&#39;</span>, <span class="st">&#39;#E072B5&#39;</span>, <span class="st">&#39;#FAD324&#39;</span>, <span class="st">&#39;lightgrey&#39;</span>),</span>
+<span id="cb46-16"><a href="vizedges.html#cb46-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.col =</span> <span class="fu">c</span>(<span class="st">&#39;Edges by Families&#39;</span>),</span>
+<span id="cb46-17"><a href="vizedges.html#cb46-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;bottom&#39;</span>))</span></code></pre></div>
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
 </div>
 <div id="visualizing-edges-by-width-and-color" class="section level2" number="4.5">
 <h2><span class="header-section-number">4.5</span> Visualizing Edges by Width and Color</h2>
 <p>Similar to node visualization, to visualize edges with both line width and color, we need to add arguments for both and create a combined legend through <code>tm_add_legend</code>. Unfortunately, the package does not have an automatic way to combine color and line width legend together, so we have to define the values manually.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="vizedges.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
-<span id="cb46-2"><a href="vizedges.html#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="vizedges.html#cb46-3" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> <span class="fu">tm_shape</span>(GA_county) <span class="sc">+</span> </span>
-<span id="cb46-4"><a href="vizedges.html#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="sc">+</span> </span>
-<span id="cb46-5"><a href="vizedges.html#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(edges, flow)) <span class="sc">+</span> </span>
-<span id="cb46-6"><a href="vizedges.html#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(</span>
-<span id="cb46-7"><a href="vizedges.html#cb46-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">#arguments that define the styles for color </span></span>
-<span id="cb46-8"><a href="vizedges.html#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="st">&quot;flow&quot;</span>, <span class="at">alpha=</span><span class="fl">0.8</span>, </span>
-<span id="cb46-9"><a href="vizedges.html#cb46-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">round</span>(<span class="fu">quantile</span>(edges<span class="sc">$</span>flow, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
-<span id="cb46-10"><a href="vizedges.html#cb46-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="at">n =</span> <span class="dv">4</span>, </span>
-<span id="cb46-11"><a href="vizedges.html#cb46-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>),</span>
-<span id="cb46-12"><a href="vizedges.html#cb46-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.col.show =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb46-13"><a href="vizedges.html#cb46-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#arguments that define the styles for line width </span></span>
-<span id="cb46-14"><a href="vizedges.html#cb46-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="st">&quot;flow_width&quot;</span>, <span class="at">scale=</span><span class="dv">2</span>,</span>
-<span id="cb46-15"><a href="vizedges.html#cb46-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.lwd.show =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> </span>
-<span id="cb46-16"><a href="vizedges.html#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add manual legends to combine color and line width schema</span></span>
-<span id="cb46-17"><a href="vizedges.html#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(</span>
-<span id="cb46-18"><a href="vizedges.html#cb46-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">type=</span><span class="fu">c</span>(<span class="st">&#39;line&#39;</span>), </span>
-<span id="cb46-19"><a href="vizedges.html#cb46-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>), </span>
-<span id="cb46-20"><a href="vizedges.html#cb46-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>), </span>
-<span id="cb46-21"><a href="vizedges.html#cb46-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&#39;300-600&#39;</span>,<span class="st">&#39;601-3400&#39;</span>,<span class="st">&#39;3401-30,000&#39;</span>,<span class="st">&#39;30,001-130,000&#39;</span>),</span>
-<span id="cb46-22"><a href="vizedges.html#cb46-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span><span class="st">&#39;Commutes Across Counties&#39;</span>) <span class="sc">+</span> </span>
-<span id="cb46-23"><a href="vizedges.html#cb46-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
-<span id="cb46-24"><a href="vizedges.html#cb46-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.05</span>))</span>
-<span id="cb46-25"><a href="vizedges.html#cb46-25" aria-hidden="true" tabindex="-1"></a>map</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="vizedges.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb47-2"><a href="vizedges.html#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="vizedges.html#cb47-3" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> <span class="fu">tm_shape</span>(us_states) <span class="sc">+</span> </span>
+<span id="cb47-4"><a href="vizedges.html#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;grey&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb47-5"><a href="vizedges.html#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#reorder edges so that long distance edges are drawn first and short-ranged edges drawn last</span></span>
+<span id="cb47-6"><a href="vizedges.html#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(MafiaEdges_toLine, <span class="fu">desc</span>(weight))) <span class="sc">+</span> </span>
+<span id="cb47-7"><a href="vizedges.html#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(</span>
+<span id="cb47-8"><a href="vizedges.html#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">#arguments that define the styles for color </span></span>
+<span id="cb47-9"><a href="vizedges.html#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="st">&quot;weight&quot;</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, </span>
+<span id="cb47-10"><a href="vizedges.html#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">round</span>(<span class="fu">quantile</span>(MafiaEdges_toLine<span class="sc">$</span>weight, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
+<span id="cb47-11"><a href="vizedges.html#cb47-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="at">n =</span> <span class="dv">4</span>, </span>
+<span id="cb47-12"><a href="vizedges.html#cb47-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&#39;#CCEBC5&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#094081&#39;</span>),</span>
+<span id="cb47-13"><a href="vizedges.html#cb47-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.col.show =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb47-14"><a href="vizedges.html#cb47-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">#arguments that define the styles for line width </span></span>
+<span id="cb47-15"><a href="vizedges.html#cb47-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="st">&#39;line_width&#39;</span>, <span class="at">scale=</span><span class="dv">2</span>,</span>
+<span id="cb47-16"><a href="vizedges.html#cb47-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.lwd.show =</span> <span class="cn">FALSE</span></span>
+<span id="cb47-17"><a href="vizedges.html#cb47-17" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
+<span id="cb47-18"><a href="vizedges.html#cb47-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add manual legends to combine color and line width schema</span></span>
+<span id="cb47-19"><a href="vizedges.html#cb47-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(</span>
+<span id="cb47-20"><a href="vizedges.html#cb47-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">type=</span><span class="fu">c</span>(<span class="st">&#39;line&#39;</span>), </span>
+<span id="cb47-21"><a href="vizedges.html#cb47-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;#CCEBC5&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#094081&#39;</span>), </span>
+<span id="cb47-22"><a href="vizedges.html#cb47-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="sc">*</span><span class="dv">2</span>, </span>
+<span id="cb47-23"><a href="vizedges.html#cb47-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&#39;0-14&#39;</span>,<span class="st">&#39;14-1630&#39;</span>,<span class="st">&#39;1630-4000&#39;</span>,<span class="st">&#39;4000-4150&#39;</span>),</span>
+<span id="cb47-24"><a href="vizedges.html#cb47-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span><span class="st">&#39;Distance (km)&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb47-25"><a href="vizedges.html#cb47-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;bottom&#39;</span>))</span>
+<span id="cb47-26"><a href="vizedges.html#cb47-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-27"><a href="vizedges.html#cb47-27" aria-hidden="true" tabindex="-1"></a>map</span></code></pre></div>
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
-<p>Perfect! Now we can see clearly that commutes across counties are most intensive around the Atlanta metropolitan area and less so in the south of the state. We can further perfect the map by <strong>adding information about within county flows and visualize the numbers as node sizes</strong>. Here we show a new technique, which is to save the map we already plotted as a variable, and add new components to it. In this way, we do not have to regenerate the portion of the map that we already produced and speed up the mapping and testing time dramatically!</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="vizedges.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># creating nodes as point geometry that represent within county flows </span></span>
-<span id="cb47-2"><a href="vizedges.html#cb47-2" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">=</span> data <span class="sc">%&gt;%</span> </span>
-<span id="cb47-3"><a href="vizedges.html#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(w_county, h_county, S000)) <span class="sc">%&gt;%</span> </span>
-<span id="cb47-4"><a href="vizedges.html#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">flow =</span> S000) <span class="sc">%&gt;%</span> </span>
-<span id="cb47-5"><a href="vizedges.html#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(h_county <span class="sc">==</span> w_county) <span class="sc">%&gt;%</span></span>
-<span id="cb47-6"><a href="vizedges.html#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(GA_county <span class="sc">%&gt;%</span> <span class="fu">st_centroid</span>(), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;h_county&#39;</span> <span class="ot">=</span> <span class="st">&#39;GEOID&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb47-7"><a href="vizedges.html#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>()</span>
-<span id="cb47-8"><a href="vizedges.html#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-9"><a href="vizedges.html#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="co"># here we use quantile breaks for node size </span></span>
-<span id="cb47-10"><a href="vizedges.html#cb47-10" aria-hidden="true" tabindex="-1"></a>brks <span class="ot">=</span> <span class="fu">quantile</span>(nodes<span class="sc">$</span>flow, <span class="at">probs=</span><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.25</span>))</span>
-<span id="cb47-11"><a href="vizedges.html#cb47-11" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">=</span> nodes <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
-<span id="cb47-12"><a href="vizedges.html#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">size =</span> <span class="fu">case_when</span>(</span>
-<span id="cb47-13"><a href="vizedges.html#cb47-13" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;=</span> brks[<span class="dv">1</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">2</span>] <span class="sc">~</span> <span class="fl">0.1</span>,</span>
-<span id="cb47-14"><a href="vizedges.html#cb47-14" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">2</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">3</span>] <span class="sc">~</span> <span class="fl">0.3</span>,</span>
-<span id="cb47-15"><a href="vizedges.html#cb47-15" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">3</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">4</span>] <span class="sc">~</span> <span class="fl">0.5</span>,</span>
-<span id="cb47-16"><a href="vizedges.html#cb47-16" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">4</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">5</span>] <span class="sc">~</span> <span class="dv">1</span></span>
-<span id="cb47-17"><a href="vizedges.html#cb47-17" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb47-18"><a href="vizedges.html#cb47-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb47-19"><a href="vizedges.html#cb47-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-20"><a href="vizedges.html#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="co">#visualize nodes on top of the map from last section</span></span>
-<span id="cb47-21"><a href="vizedges.html#cb47-21" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> map <span class="sc">+</span> </span>
-<span id="cb47-22"><a href="vizedges.html#cb47-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(nodes) <span class="sc">+</span></span>
-<span id="cb47-23"><a href="vizedges.html#cb47-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(</span>
-<span id="cb47-24"><a href="vizedges.html#cb47-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="st">&quot;size&quot;</span>, <span class="at">scale=</span><span class="fl">0.8</span>, </span>
-<span id="cb47-25"><a href="vizedges.html#cb47-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="at">border.alpha=</span><span class="fl">0.5</span>, </span>
-<span id="cb47-26"><a href="vizedges.html#cb47-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># values in sizes.legend = relative size defined in &#39;size&#39; column * scale </span></span>
-<span id="cb47-27"><a href="vizedges.html#cb47-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">sizes.legend =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="sc">*</span><span class="fl">0.8</span>,</span>
-<span id="cb47-28"><a href="vizedges.html#cb47-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># labels have rounded the break values</span></span>
-<span id="cb47-29"><a href="vizedges.html#cb47-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">sizes.legend.labels=</span><span class="fu">c</span>(<span class="st">&#39;70-1000&#39;</span>,<span class="st">&#39;1001-2500&#39;</span>,<span class="st">&#39;2501-7000&#39;</span>,<span class="st">&#39;7001-250,000&#39;</span>),</span>
-<span id="cb47-30"><a href="vizedges.html#cb47-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">title.size=</span><span class="fu">c</span>(<span class="st">&#39;Commutes Within Counties&#39;</span>),</span>
-<span id="cb47-31"><a href="vizedges.html#cb47-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.size.is.portrait =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb47-32"><a href="vizedges.html#cb47-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
-<span id="cb47-33"><a href="vizedges.html#cb47-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.25</span>)) <span class="co">#added margins to accomodate legends</span></span>
-<span id="cb47-34"><a href="vizedges.html#cb47-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-35"><a href="vizedges.html#cb47-35" aria-hidden="true" tabindex="-1"></a>map</span></code></pre></div>
+<p>Perfect! Now we can would like to add nodes with size scaled by their degree. Here we show a new technique, which is to save the map we already plotted as a variable <code>map</code> above, and add new components to it. In this way, we do not have to regenerate the portion of the map that we already produced and speed up the mapping and testing time dramatically!</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="vizedges.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(igraph)</span></span>
+<span id="cb48-2"><a href="vizedges.html#cb48-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">graph_from_data_frame</span>(MafiaEdges, <span class="at">directed =</span> <span class="cn">FALSE</span>, <span class="at">vertices=</span>MafiaSpatial)</span>
+<span id="cb48-3"><a href="vizedges.html#cb48-3" aria-hidden="true" tabindex="-1"></a>MafiaSpatial<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g)</span>
+<span id="cb48-4"><a href="vizedges.html#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="vizedges.html#cb48-5" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> map <span class="sc">+</span> </span>
+<span id="cb48-6"><a href="vizedges.html#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(MafiaSpatial) <span class="sc">+</span></span>
+<span id="cb48-7"><a href="vizedges.html#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">size=</span><span class="st">&quot;degree&quot;</span>, <span class="at">scale=</span><span class="dv">2</span>, <span class="co">#scale up the node size </span></span>
+<span id="cb48-8"><a href="vizedges.html#cb48-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">col=</span><span class="st">&#39;orange&#39;</span>, <span class="at">border.col=</span><span class="st">&#39;darkorange&#39;</span>,</span>
+<span id="cb48-9"><a href="vizedges.html#cb48-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha=</span><span class="fl">0.2</span>, <span class="at">border.alpha =</span> <span class="fl">0.2</span>,</span>
+<span id="cb48-10"><a href="vizedges.html#cb48-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">title.size=</span><span class="fu">c</span>(<span class="st">&#39;Degree&#39;</span>))</span>
+<span id="cb48-11"><a href="vizedges.html#cb48-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-12"><a href="vizedges.html#cb48-12" aria-hidden="true" tabindex="-1"></a>map</span></code></pre></div>
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
 <p>To export the tmap object into a local folder, you can add:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="vizedges.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="at">filename=</span><span class="st">&#39;YOUR_LOCAL_FOLDER_PATH/map.png&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="vizedges.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="at">filename=</span><span class="st">&#39;YOUR_LOCAL_FOLDER_PATH/map.png&#39;</span>)</span></code></pre></div>
 <p>Here is the full code to replicate the map above</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="vizedges.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb49-2"><a href="vizedges.html#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb49-3"><a href="vizedges.html#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
-<span id="cb49-4"><a href="vizedges.html#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris)</span>
-<span id="cb49-5"><a href="vizedges.html#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lehdr)</span>
-<span id="cb49-6"><a href="vizedges.html#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stplanr)</span>
-<span id="cb49-7"><a href="vizedges.html#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-8"><a href="vizedges.html#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="co">#counties is a function in tigris package</span></span>
-<span id="cb49-9"><a href="vizedges.html#cb49-9" aria-hidden="true" tabindex="-1"></a>GA_county <span class="ot">=</span> <span class="fu">counties</span>(<span class="at">state =</span> <span class="st">&#39;GA&#39;</span>, <span class="at">cb=</span><span class="cn">TRUE</span>, <span class="at">year=</span><span class="dv">2018</span>, <span class="at">progress_bar=</span><span class="cn">FALSE</span>) </span>
-<span id="cb49-10"><a href="vizedges.html#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-11"><a href="vizedges.html#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="co">#grab_lodes is a function in lehdr package</span></span>
-<span id="cb49-12"><a href="vizedges.html#cb49-12" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">grab_lodes</span>(<span class="at">state=</span><span class="st">&#39;ga&#39;</span>, <span class="at">year=</span><span class="dv">2018</span>, <span class="at">lodes_type =</span> <span class="st">&#39;od&#39;</span>, <span class="at">state_part =</span> <span class="st">&#39;main&#39;</span>, <span class="at">agg_geo =</span> <span class="st">&#39;county&#39;</span>)</span>
-<span id="cb49-13"><a href="vizedges.html#cb49-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-14"><a href="vizedges.html#cb49-14" aria-hidden="true" tabindex="-1"></a><span class="co">#filter top 1000 county-to-county flows </span></span>
-<span id="cb49-15"><a href="vizedges.html#cb49-15" aria-hidden="true" tabindex="-1"></a>ctc_commutes <span class="ot">=</span> data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(w_county, h_county, S000)) <span class="sc">%&gt;%</span> </span>
-<span id="cb49-16"><a href="vizedges.html#cb49-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">flow =</span> S000) <span class="sc">%&gt;%</span> </span>
-<span id="cb49-17"><a href="vizedges.html#cb49-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(h_county <span class="sc">!=</span> w_county) <span class="sc">%&gt;%</span> </span>
-<span id="cb49-18"><a href="vizedges.html#cb49-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(flow)) <span class="sc">%&gt;%</span> </span>
-<span id="cb49-19"><a href="vizedges.html#cb49-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>) </span>
-<span id="cb49-20"><a href="vizedges.html#cb49-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-21"><a href="vizedges.html#cb49-21" aria-hidden="true" tabindex="-1"></a><span class="co">#--- Create lines from OD dataframe ---# </span></span>
-<span id="cb49-22"><a href="vizedges.html#cb49-22" aria-hidden="true" tabindex="-1"></a>cnty_centroid <span class="ot">=</span> GA_county <span class="sc">%&gt;%</span> <span class="fu">st_centroid</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">c</span>(GEOID, geometry))</span>
-<span id="cb49-23"><a href="vizedges.html#cb49-23" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> <span class="fu">od2line</span>(ctc_commutes, cnty_centroid)</span>
-<span id="cb49-24"><a href="vizedges.html#cb49-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-25"><a href="vizedges.html#cb49-25" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Convert flows within county into point geometry --- #</span></span>
-<span id="cb49-26"><a href="vizedges.html#cb49-26" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">=</span> data <span class="sc">%&gt;%</span> </span>
-<span id="cb49-27"><a href="vizedges.html#cb49-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(w_county, h_county, S000)) <span class="sc">%&gt;%</span> </span>
-<span id="cb49-28"><a href="vizedges.html#cb49-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">flow =</span> S000) <span class="sc">%&gt;%</span> </span>
-<span id="cb49-29"><a href="vizedges.html#cb49-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(h_county <span class="sc">==</span> w_county) <span class="sc">%&gt;%</span></span>
-<span id="cb49-30"><a href="vizedges.html#cb49-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(GA_county <span class="sc">%&gt;%</span> <span class="fu">st_centroid</span>(), <span class="at">by=</span><span class="fu">c</span>(<span class="st">&#39;h_county&#39;</span> <span class="ot">=</span> <span class="st">&#39;GEOID&#39;</span>), <span class="at">copy=</span><span class="cn">FALSE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb49-31"><a href="vizedges.html#cb49-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>()</span>
-<span id="cb49-32"><a href="vizedges.html#cb49-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-33"><a href="vizedges.html#cb49-33" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Create Breaks for edge width --- # </span></span>
-<span id="cb49-34"><a href="vizedges.html#cb49-34" aria-hidden="true" tabindex="-1"></a>brks <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">quantile</span>(edges<span class="sc">$</span>flow, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>)</span>
-<span id="cb49-35"><a href="vizedges.html#cb49-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-36"><a href="vizedges.html#cb49-36" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">=</span> edges <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
-<span id="cb49-37"><a href="vizedges.html#cb49-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">flow_width =</span> <span class="fu">case_when</span>(</span>
-<span id="cb49-38"><a href="vizedges.html#cb49-38" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;=</span> brks[<span class="dv">1</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">2</span>] <span class="sc">~</span> <span class="fl">0.1</span>,</span>
-<span id="cb49-39"><a href="vizedges.html#cb49-39" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">2</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">3</span>] <span class="sc">~</span> <span class="fl">0.3</span>,</span>
-<span id="cb49-40"><a href="vizedges.html#cb49-40" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">3</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">4</span>] <span class="sc">~</span> <span class="fl">0.5</span>,</span>
-<span id="cb49-41"><a href="vizedges.html#cb49-41" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks[<span class="dv">4</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks[<span class="dv">5</span>] <span class="sc">~</span> <span class="dv">1</span></span>
-<span id="cb49-42"><a href="vizedges.html#cb49-42" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb49-43"><a href="vizedges.html#cb49-43" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb49-44"><a href="vizedges.html#cb49-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-45"><a href="vizedges.html#cb49-45" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Create Breaks for node size --- # </span></span>
-<span id="cb49-46"><a href="vizedges.html#cb49-46" aria-hidden="true" tabindex="-1"></a>brks2 <span class="ot">=</span> <span class="fu">quantile</span>(nodes<span class="sc">$</span>flow, <span class="at">probs=</span><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.25</span>))</span>
-<span id="cb49-47"><a href="vizedges.html#cb49-47" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">=</span> nodes <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
-<span id="cb49-48"><a href="vizedges.html#cb49-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">size =</span> <span class="fu">case_when</span>(</span>
-<span id="cb49-49"><a href="vizedges.html#cb49-49" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;=</span> brks2[<span class="dv">1</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks2[<span class="dv">2</span>] <span class="sc">~</span> <span class="fl">0.1</span>,</span>
-<span id="cb49-50"><a href="vizedges.html#cb49-50" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks2[<span class="dv">2</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks2[<span class="dv">3</span>] <span class="sc">~</span> <span class="fl">0.3</span>,</span>
-<span id="cb49-51"><a href="vizedges.html#cb49-51" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks2[<span class="dv">3</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks2[<span class="dv">4</span>] <span class="sc">~</span> <span class="fl">0.5</span>,</span>
-<span id="cb49-52"><a href="vizedges.html#cb49-52" aria-hidden="true" tabindex="-1"></a>    flow <span class="sc">&gt;</span> brks2[<span class="dv">4</span>] <span class="sc">&amp;</span> flow <span class="sc">&lt;=</span> brks2[<span class="dv">5</span>] <span class="sc">~</span> <span class="dv">1</span></span>
-<span id="cb49-53"><a href="vizedges.html#cb49-53" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb49-54"><a href="vizedges.html#cb49-54" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb49-55"><a href="vizedges.html#cb49-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-56"><a href="vizedges.html#cb49-56" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Visualize the map ---- # </span></span>
-<span id="cb49-57"><a href="vizedges.html#cb49-57" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
-<span id="cb49-58"><a href="vizedges.html#cb49-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-59"><a href="vizedges.html#cb49-59" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> <span class="fu">tm_shape</span>(GA_county) <span class="sc">+</span> </span>
-<span id="cb49-60"><a href="vizedges.html#cb49-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;black&#39;</span>) <span class="sc">+</span> </span>
-<span id="cb49-61"><a href="vizedges.html#cb49-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(edges, flow)) <span class="sc">+</span> </span>
-<span id="cb49-62"><a href="vizedges.html#cb49-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(</span>
-<span id="cb49-63"><a href="vizedges.html#cb49-63" aria-hidden="true" tabindex="-1"></a>    <span class="co">#arguments that define the styles for color </span></span>
-<span id="cb49-64"><a href="vizedges.html#cb49-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="st">&quot;flow&quot;</span>, <span class="at">alpha=</span><span class="fl">0.8</span>, </span>
-<span id="cb49-65"><a href="vizedges.html#cb49-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">round</span>(<span class="fu">quantile</span>(edges<span class="sc">$</span>flow, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
-<span id="cb49-66"><a href="vizedges.html#cb49-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="at">n =</span> <span class="dv">4</span>, </span>
-<span id="cb49-67"><a href="vizedges.html#cb49-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>),</span>
-<span id="cb49-68"><a href="vizedges.html#cb49-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.col.show =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb49-69"><a href="vizedges.html#cb49-69" aria-hidden="true" tabindex="-1"></a>    <span class="co">#arguments that define the styles for line width </span></span>
-<span id="cb49-70"><a href="vizedges.html#cb49-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="st">&quot;flow_width&quot;</span>, <span class="at">scale=</span><span class="dv">2</span>,</span>
-<span id="cb49-71"><a href="vizedges.html#cb49-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.lwd.show =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> </span>
-<span id="cb49-72"><a href="vizedges.html#cb49-72" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add manual legends to combine color and line width schema </span></span>
-<span id="cb49-73"><a href="vizedges.html#cb49-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(</span>
-<span id="cb49-74"><a href="vizedges.html#cb49-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">type=</span><span class="fu">c</span>(<span class="st">&#39;line&#39;</span>), </span>
-<span id="cb49-75"><a href="vizedges.html#cb49-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;#094081&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#CCEBC5&#39;</span>), </span>
-<span id="cb49-76"><a href="vizedges.html#cb49-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>), </span>
-<span id="cb49-77"><a href="vizedges.html#cb49-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&#39;300-600&#39;</span>,<span class="st">&#39;601-3400&#39;</span>,<span class="st">&#39;3401-30,000&#39;</span>,<span class="st">&#39;30,001-130,000&#39;</span>),</span>
-<span id="cb49-78"><a href="vizedges.html#cb49-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span><span class="st">&#39;Commutes Across Counties&#39;</span>) <span class="sc">+</span> </span>
-<span id="cb49-79"><a href="vizedges.html#cb49-79" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add inner margin to accomodate legend size </span></span>
-<span id="cb49-80"><a href="vizedges.html#cb49-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
-<span id="cb49-81"><a href="vizedges.html#cb49-81" aria-hidden="true" tabindex="-1"></a>            <span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
-<span id="cb49-82"><a href="vizedges.html#cb49-82" aria-hidden="true" tabindex="-1"></a>  <span class="co"># visualize nodes </span></span>
-<span id="cb49-83"><a href="vizedges.html#cb49-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(nodes) <span class="sc">+</span></span>
-<span id="cb49-84"><a href="vizedges.html#cb49-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(</span>
-<span id="cb49-85"><a href="vizedges.html#cb49-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">size=</span><span class="st">&quot;size&quot;</span>, <span class="at">scale=</span><span class="fl">0.8</span>, </span>
-<span id="cb49-86"><a href="vizedges.html#cb49-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="at">border.alpha=</span><span class="fl">0.5</span>, </span>
-<span id="cb49-87"><a href="vizedges.html#cb49-87" aria-hidden="true" tabindex="-1"></a>    <span class="co"># values in sizes.legend = relative size defined in &#39;size&#39; column * scale </span></span>
-<span id="cb49-88"><a href="vizedges.html#cb49-88" aria-hidden="true" tabindex="-1"></a>    <span class="at">sizes.legend =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="sc">*</span><span class="fl">0.8</span>,</span>
-<span id="cb49-89"><a href="vizedges.html#cb49-89" aria-hidden="true" tabindex="-1"></a>    <span class="co"># labels have rounded the break values</span></span>
-<span id="cb49-90"><a href="vizedges.html#cb49-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">sizes.legend.labels=</span><span class="fu">c</span>(<span class="st">&#39;70-1000&#39;</span>,<span class="st">&#39;1001-2500&#39;</span>,<span class="st">&#39;2501-7000&#39;</span>,<span class="st">&#39;7001-250,000&#39;</span>),</span>
-<span id="cb49-91"><a href="vizedges.html#cb49-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">title.size=</span><span class="fu">c</span>(<span class="st">&#39;Commutes Within Counties&#39;</span>),</span>
-<span id="cb49-92"><a href="vizedges.html#cb49-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.size.is.portrait =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb49-93"><a href="vizedges.html#cb49-93" aria-hidden="true" tabindex="-1"></a>  <span class="co"># since the default layout is too small to accomodate both legends</span></span>
-<span id="cb49-94"><a href="vizedges.html#cb49-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;top&#39;</span>),</span>
-<span id="cb49-95"><a href="vizedges.html#cb49-95" aria-hidden="true" tabindex="-1"></a>            <span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.02</span>, <span class="fl">0.25</span>))</span>
-<span id="cb49-96"><a href="vizedges.html#cb49-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-97"><a href="vizedges.html#cb49-97" aria-hidden="true" tabindex="-1"></a>map</span>
-<span id="cb49-98"><a href="vizedges.html#cb49-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-99"><a href="vizedges.html#cb49-99" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="at">filename=</span><span class="st">&#39;YOUR_LOCAL_FOLDER_PATH/map.png&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="vizedges.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb50-2"><a href="vizedges.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb50-3"><a href="vizedges.html#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb50-4"><a href="vizedges.html#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris)</span>
+<span id="cb50-5"><a href="vizedges.html#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stplanr)</span>
+<span id="cb50-6"><a href="vizedges.html#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb50-7"><a href="vizedges.html#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="vizedges.html#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaNodes)</span>
+<span id="cb50-9"><a href="vizedges.html#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaEdges)</span>
+<span id="cb50-10"><a href="vizedges.html#cb50-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-11"><a href="vizedges.html#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="co"># convert MafiaNodes to an sf geometry object (shapefile)</span></span>
+<span id="cb50-12"><a href="vizedges.html#cb50-12" aria-hidden="true" tabindex="-1"></a>MafiaSpatial <span class="ot">=</span> MafiaNodes <span class="sc">%&gt;%</span> </span>
+<span id="cb50-13"><a href="vizedges.html#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>) </span>
+<span id="cb50-14"><a href="vizedges.html#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-15"><a href="vizedges.html#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="co"># create line geometry </span></span>
+<span id="cb50-16"><a href="vizedges.html#cb50-16" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> <span class="fu">od2line</span>(MafiaEdges, MafiaSpatial)</span>
+<span id="cb50-17"><a href="vizedges.html#cb50-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-18"><a href="vizedges.html#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="co"># states is a function in tigris to download U.S. state boundary shapefile</span></span>
+<span id="cb50-19"><a href="vizedges.html#cb50-19" aria-hidden="true" tabindex="-1"></a>us_states <span class="ot">=</span> <span class="fu">states</span>(<span class="at">cb=</span><span class="cn">TRUE</span>, <span class="at">progress_bar =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb50-20"><a href="vizedges.html#cb50-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>STUSPS <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;PR&#39;</span>,<span class="st">&#39;AS&#39;</span>, <span class="st">&#39;AK&#39;</span>, <span class="st">&#39;GU&#39;</span>,<span class="st">&#39;MP&#39;</span>,<span class="st">&#39;VI&#39;</span>, <span class="st">&#39;HI&#39;</span>)) </span>
+<span id="cb50-21"><a href="vizedges.html#cb50-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-22"><a href="vizedges.html#cb50-22" aria-hidden="true" tabindex="-1"></a><span class="co"># create weight column for each edge </span></span>
+<span id="cb50-23"><a href="vizedges.html#cb50-23" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> MafiaEdges_toLine <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">weight =</span> <span class="fu">as.numeric</span>(<span class="fu">st_length</span>(geometry)))</span>
+<span id="cb50-24"><a href="vizedges.html#cb50-24" aria-hidden="true" tabindex="-1"></a>brks <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">quantile</span>(MafiaEdges_toLine<span class="sc">$</span>weight, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>)</span>
+<span id="cb50-25"><a href="vizedges.html#cb50-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-26"><a href="vizedges.html#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="co"># create line_width column for each edge</span></span>
+<span id="cb50-27"><a href="vizedges.html#cb50-27" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine <span class="ot">=</span> MafiaEdges_toLine <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
+<span id="cb50-28"><a href="vizedges.html#cb50-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">line_width =</span> <span class="fu">case_when</span>(</span>
+<span id="cb50-29"><a href="vizedges.html#cb50-29" aria-hidden="true" tabindex="-1"></a>    weight <span class="sc">&gt;=</span> brks[<span class="dv">1</span>] <span class="sc">&amp;</span> weight <span class="sc">&lt;=</span> brks[<span class="dv">2</span>] <span class="sc">~</span> <span class="fl">0.1</span>,</span>
+<span id="cb50-30"><a href="vizedges.html#cb50-30" aria-hidden="true" tabindex="-1"></a>    weight <span class="sc">&gt;</span> brks[<span class="dv">2</span>] <span class="sc">&amp;</span> weight <span class="sc">&lt;=</span> brks[<span class="dv">3</span>] <span class="sc">~</span> <span class="fl">0.3</span>,</span>
+<span id="cb50-31"><a href="vizedges.html#cb50-31" aria-hidden="true" tabindex="-1"></a>    weight <span class="sc">&gt;</span> brks[<span class="dv">3</span>] <span class="sc">&amp;</span> weight <span class="sc">&lt;=</span> brks[<span class="dv">4</span>] <span class="sc">~</span> <span class="fl">0.5</span>,</span>
+<span id="cb50-32"><a href="vizedges.html#cb50-32" aria-hidden="true" tabindex="-1"></a>    weight <span class="sc">&gt;</span> brks[<span class="dv">4</span>] <span class="sc">&amp;</span> weight <span class="sc">&lt;=</span> brks[<span class="dv">5</span>] <span class="sc">~</span> <span class="dv">1</span></span>
+<span id="cb50-33"><a href="vizedges.html#cb50-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb50-34"><a href="vizedges.html#cb50-34" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb50-35"><a href="vizedges.html#cb50-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-36"><a href="vizedges.html#cb50-36" aria-hidden="true" tabindex="-1"></a><span class="co"># create degree column for each node</span></span>
+<span id="cb50-37"><a href="vizedges.html#cb50-37" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">graph_from_data_frame</span>(MafiaEdges, <span class="at">directed =</span> <span class="cn">FALSE</span>, <span class="at">vertices=</span>MafiaSpatial)</span>
+<span id="cb50-38"><a href="vizedges.html#cb50-38" aria-hidden="true" tabindex="-1"></a>MafiaSpatial<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">degree</span>(g)</span>
+<span id="cb50-39"><a href="vizedges.html#cb50-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-40"><a href="vizedges.html#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_mode</span>(<span class="st">&#39;plot&#39;</span>)</span>
+<span id="cb50-41"><a href="vizedges.html#cb50-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-42"><a href="vizedges.html#cb50-42" aria-hidden="true" tabindex="-1"></a>map <span class="ot">=</span> <span class="fu">tm_shape</span>(us_states) <span class="sc">+</span> </span>
+<span id="cb50-43"><a href="vizedges.html#cb50-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">alpha=</span><span class="dv">0</span>, <span class="at">border.col =</span> <span class="st">&#39;grey&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb50-44"><a href="vizedges.html#cb50-44" aria-hidden="true" tabindex="-1"></a>  <span class="co">#reorder edges so that long distance edges are drawn first and short-ranged edges drawn last</span></span>
+<span id="cb50-45"><a href="vizedges.html#cb50-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(MafiaEdges_toLine, <span class="fu">desc</span>(weight))) <span class="sc">+</span> </span>
+<span id="cb50-46"><a href="vizedges.html#cb50-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(</span>
+<span id="cb50-47"><a href="vizedges.html#cb50-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">#arguments that define the styles for color </span></span>
+<span id="cb50-48"><a href="vizedges.html#cb50-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="st">&quot;weight&quot;</span>, <span class="at">alpha=</span><span class="fl">0.2</span>, </span>
+<span id="cb50-49"><a href="vizedges.html#cb50-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">round</span>(<span class="fu">quantile</span>(MafiaEdges_toLine<span class="sc">$</span>weight, <span class="at">probs=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.99</span>, <span class="dv">1</span>)), <span class="dv">0</span>),</span>
+<span id="cb50-50"><a href="vizedges.html#cb50-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">style=</span><span class="st">&quot;fixed&quot;</span>, <span class="at">n =</span> <span class="dv">4</span>, </span>
+<span id="cb50-51"><a href="vizedges.html#cb50-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&#39;#CCEBC5&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#094081&#39;</span>),</span>
+<span id="cb50-52"><a href="vizedges.html#cb50-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.col.show =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb50-53"><a href="vizedges.html#cb50-53" aria-hidden="true" tabindex="-1"></a>    <span class="co">#arguments that define the styles for line width </span></span>
+<span id="cb50-54"><a href="vizedges.html#cb50-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="st">&#39;line_width&#39;</span>, <span class="at">scale=</span><span class="dv">2</span>,</span>
+<span id="cb50-55"><a href="vizedges.html#cb50-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.lwd.show =</span> <span class="cn">FALSE</span></span>
+<span id="cb50-56"><a href="vizedges.html#cb50-56" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb50-57"><a href="vizedges.html#cb50-57" aria-hidden="true" tabindex="-1"></a>  <span class="co">#add manual legends to combine color and line width schema</span></span>
+<span id="cb50-58"><a href="vizedges.html#cb50-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(</span>
+<span id="cb50-59"><a href="vizedges.html#cb50-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">type=</span><span class="fu">c</span>(<span class="st">&#39;line&#39;</span>), </span>
+<span id="cb50-60"><a href="vizedges.html#cb50-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">col=</span><span class="fu">c</span>(<span class="st">&#39;#CCEBC5&#39;</span>, <span class="st">&#39;#7BCCC4&#39;</span>, <span class="st">&#39;#2B8CBE&#39;</span>, <span class="st">&#39;#094081&#39;</span>), </span>
+<span id="cb50-61"><a href="vizedges.html#cb50-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">lwd=</span><span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="dv">1</span>)<span class="sc">*</span><span class="dv">2</span>, </span>
+<span id="cb50-62"><a href="vizedges.html#cb50-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&#39;0-14&#39;</span>,<span class="st">&#39;14-1630&#39;</span>,<span class="st">&#39;1630-4000&#39;</span>,<span class="st">&#39;4000-4150&#39;</span>),</span>
+<span id="cb50-63"><a href="vizedges.html#cb50-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span><span class="st">&#39;Distance (km)&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb50-64"><a href="vizedges.html#cb50-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(MafiaSpatial) <span class="sc">+</span></span>
+<span id="cb50-65"><a href="vizedges.html#cb50-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_symbols</span>(<span class="at">size=</span><span class="st">&quot;degree&quot;</span>, <span class="at">scale=</span><span class="dv">2</span>, <span class="co">#scale up the node size </span></span>
+<span id="cb50-66"><a href="vizedges.html#cb50-66" aria-hidden="true" tabindex="-1"></a>             <span class="at">col=</span><span class="st">&#39;orange&#39;</span>, <span class="at">border.col=</span><span class="st">&#39;darkorange&#39;</span>,</span>
+<span id="cb50-67"><a href="vizedges.html#cb50-67" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha=</span><span class="fl">0.2</span>, <span class="at">border.alpha =</span> <span class="fl">0.2</span>,</span>
+<span id="cb50-68"><a href="vizedges.html#cb50-68" aria-hidden="true" tabindex="-1"></a>             <span class="at">title.size=</span><span class="fu">c</span>(<span class="st">&#39;Degree&#39;</span>)) <span class="sc">+</span> </span>
+<span id="cb50-69"><a href="vizedges.html#cb50-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;bottom&#39;</span>)) </span>
+<span id="cb50-70"><a href="vizedges.html#cb50-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-71"><a href="vizedges.html#cb50-71" aria-hidden="true" tabindex="-1"></a><span class="co">#tmap_save(map, filename=&#39;YOUR_LOCAL_FOLDER_PATH/map.png&#39;)</span></span>
+<span id="cb50-72"><a href="vizedges.html#cb50-72" aria-hidden="true" tabindex="-1"></a>map</span></code></pre></div>
+<p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
 
 </div>
 </div>

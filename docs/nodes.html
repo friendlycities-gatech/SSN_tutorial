@@ -24,7 +24,7 @@
 <meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
 
 
-<meta name="date" content="2022-11-30" />
+<meta name="date" content="2023-05-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -210,13 +210,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Visualize Local Flattening Ratio</a></li>
 <li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.3</span> Application to a bipartite network</a></li>
 </ul></li>
-<li><a href="advanced-ssn-metrics.html#linked-activity-space" id="toc-linked-activity-space"><span class="toc-section-number">6.4</span> Linked Activity Space</a>
+<li><a href="advanced-ssn-metrics.html#linked-activity-spaces" id="toc-linked-activity-spaces"><span class="toc-section-number">6.4</span> Linked Activity Spaces</a>
 <ul>
 <li><a href="advanced-ssn-metrics.html#visualize-linked-activity-spaces" id="toc-visualize-linked-activity-spaces"><span class="toc-section-number">6.4.1</span> Visualize Linked Activity Spaces</a></li>
 <li><a href="advanced-ssn-metrics.html#quantify-linked-activity-spaces" id="toc-quantify-linked-activity-spaces"><span class="toc-section-number">6.4.2</span> Quantify Linked Activity Spaces</a></li>
 </ul></li>
 </ul></li>
-<li><a href="edges.html#edges" id="toc-edges"><span class="toc-section-number">7</span> Future Development</a></li>
+<li><a href="development.html#development" id="toc-development"><span class="toc-section-number">7</span> Future Development</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -239,7 +239,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="nodes" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Visualizing Nodes</h1>
-<p>In this chapter, we continue to use the American Mafia data introduced in Chapter 2. This chapter covers the following topics:</p>
+<p>In this chapter, we continue to use the American Mafia data introduced in Chapter 2. They can be loaded from the <code>SSNtools</code> package directly.</p>
+<p>The node table <strong>MafiaNodes</strong> contains:</p>
+<ul>
+<li><code>NODE</code>: Name of the Mafia member (capitalized)</li>
+<li><code>Family</code>: Mafia family the member belongs to</li>
+<li><code>NY</code>: Whether the member is in New York City</li>
+<li><code>LonX</code>: Longitude of the location of the member</li>
+<li><code>LatY</code>: Latitude of the location of the member</li>
+<li><code>NiceLabel</code>: Name of the Mafia member (lower case)</li>
+</ul>
+<p>The edge list <strong>MafiaEdges</strong> contains pairs of undirected connections:</p>
+<ul>
+<li><code>Source</code>: the name of a member</li>
+<li><code>Target</code>: the name of a different member</li>
+</ul>
+<p>This chapter covers the following topics:</p>
 <ul>
 <li>How to convert node coordinates into point geometry</li>
 <li>How to visualize nodes with constant color and size</li>
@@ -378,9 +393,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb30-12"><a href="nodes.html#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">border.col=</span><span class="st">&#39;black&#39;</span>, <span class="at">border.alpha =</span> <span class="fl">0.5</span>,</span>
 <span id="cb30-13"><a href="nodes.html#cb30-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.col.show =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb30-14"><a href="nodes.html#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_add_legend</span>(<span class="at">type=</span><span class="fu">c</span>(<span class="st">&quot;symbol&quot;</span>),</span>
-<span id="cb30-15"><a href="nodes.html#cb30-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">col =</span> <span class="fu">brewer.pal</span>(<span class="dv">4</span>, <span class="st">&quot;YlGnBu&quot;</span>), <span class="co">#copy the color from R palette</span></span>
+<span id="cb30-15"><a href="nodes.html#cb30-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;#FFFFCC&quot;</span>, <span class="st">&quot;#A1DAB4&quot;</span>, <span class="st">&quot;#41B6C4&quot;</span>, <span class="st">&quot;#225EA8&quot;</span>), <span class="co">#copy from RColorBrewer: brewer.pal(4, &quot;YlGnBu&quot;)</span></span>
 <span id="cb30-16"><a href="nodes.html#cb30-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">is.portrait =</span> <span class="cn">FALSE</span>, <span class="co"># legend becomes horizontal</span></span>
-<span id="cb30-17"><a href="nodes.html#cb30-17" aria-hidden="true" tabindex="-1"></a>                <span class="co"># size defined here should be the sqaure root of the normalized point size * scale. </span></span>
+<span id="cb30-17"><a href="nodes.html#cb30-17" aria-hidden="true" tabindex="-1"></a>                <span class="co"># size defined here should be the square root of the normalized point size * scale. </span></span>
 <span id="cb30-18"><a href="nodes.html#cb30-18" aria-hidden="true" tabindex="-1"></a>                <span class="co"># The square root is taken since the area is proportional to the data, not the radius.</span></span>
 <span id="cb30-19"><a href="nodes.html#cb30-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">size =</span> (<span class="fu">c</span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span>,<span class="dv">1</span>)<span class="sc">/</span><span class="dv">1</span>)<span class="sc">^</span><span class="fl">0.5</span><span class="sc">*</span><span class="fl">1.5</span>, </span>
 <span id="cb30-20"><a href="nodes.html#cb30-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&#39;2-8&#39;</span>,<span class="st">&#39;8-12&#39;</span>,<span class="st">&#39;12-20&#39;</span>,<span class="st">&#39;20-154&#39;</span>), <span class="co">#break labels </span></span>
@@ -391,15 +406,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 <p>To export the tmap object into a local folder, you can add:</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="nodes.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(map, <span class="at">filename=</span><span class="st">&#39;YOUR_LOCAL_FOLDER_PATH/map.png&#39;</span>)</span></code></pre></div>
-<p>The full codes for creating the map above is in the following:
-<!-- **Scale bar** and **north arrow** can be added to the map like layers using `tm_scale_bar` and `tm_compass`, while map **title** is created as an argument in `tm_layer`. The full codes for creating the final map with scale bar, north arrow, and proper title is in the following:  --></p>
-<p><!-- # Add other cartography elements  -->
-<!-- tm_compass(position=c('right', 'bottom')) +  -->
-<!-- tm_scale_bar(position=c('right', 'bottom'), breaks=c(0, 500, 1000)) +  -->
-<!-- tm_layout( -->
-<!--   title = "Map of Mafia Members in U.S.", -->
-<!--   title.position=c('center', 'top'), -->
-<!--   inner.margins = c(0.1,0.05,0.1,0.05) --></p>
+<p>The full codes for creating the map above is in the following:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="nodes.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb32-2"><a href="nodes.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
 <span id="cb32-3"><a href="nodes.html#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>

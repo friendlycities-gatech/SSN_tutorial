@@ -196,6 +196,10 @@ library(igraph)
 library(SSNtools)
 
 #MafiaNodes and MafiaEdges are built-in datasets in SSNtools package
+data(MafiaNodes)
+data(MafiaEdges)
+
+#convert networkd data to an igraph object
 g <- graph_from_data_frame(MafiaEdges, directed = FALSE, vertices=MafiaNodes)
 
 #set the node size to base on clustering coefficients 
@@ -216,7 +220,7 @@ V(g)$color <- colrs[as.numeric(factor(V(g)$Family))]
 plot(g,
      vertex.label = NA,
      vertex.color = V(g)$color,
-     vertex.size = 50*V(g)$size, #Scaled node size
+     vertex.size = 10*V(g)$size, #Scaled node size
      edge.width=0.5,
      layout=layout_with_fr(g)
 )
@@ -238,7 +242,7 @@ legend(x = -2.2, y = -1.2, #legend position
        legend=breaks, pch=21, 
        pt.bg=NA, #no color background
        cex=0.7, #size of legend
-       pt.cex=breaks * 10, #Scaled node size 
+       pt.cex=breaks * 2, #Scaled node size 
        bty="n", #node shape
        ncol=5, #number of column for legend
        text.width = 0.27, #adjust width of each column

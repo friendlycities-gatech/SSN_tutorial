@@ -24,7 +24,7 @@
 <meta name="author" content="Xiaofan Liang, Clio Andris, Dipto Sarkar" />
 
 
-<meta name="date" content="2022-11-30" />
+<meta name="date" content="2023-05-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -210,13 +210,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Visualize Local Flattening Ratio</a></li>
 <li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.3</span> Application to a bipartite network</a></li>
 </ul></li>
-<li><a href="advanced-ssn-metrics.html#linked-activity-space" id="toc-linked-activity-space"><span class="toc-section-number">6.4</span> Linked Activity Space</a>
+<li><a href="advanced-ssn-metrics.html#linked-activity-spaces" id="toc-linked-activity-spaces"><span class="toc-section-number">6.4</span> Linked Activity Spaces</a>
 <ul>
 <li><a href="advanced-ssn-metrics.html#visualize-linked-activity-spaces" id="toc-visualize-linked-activity-spaces"><span class="toc-section-number">6.4.1</span> Visualize Linked Activity Spaces</a></li>
 <li><a href="advanced-ssn-metrics.html#quantify-linked-activity-spaces" id="toc-quantify-linked-activity-spaces"><span class="toc-section-number">6.4.2</span> Quantify Linked Activity Spaces</a></li>
 </ul></li>
 </ul></li>
-<li><a href="edges.html#edges" id="toc-edges"><span class="toc-section-number">7</span> Future Development</a></li>
+<li><a href="development.html#development" id="toc-development"><span class="toc-section-number">7</span> Future Development</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -451,53 +451,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-2"><a href="metrics.html#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SSNtools)</span>
 <span id="cb19-3"><a href="metrics.html#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-4"><a href="metrics.html#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#MafiaNodes and MafiaEdges are built-in datasets in SSNtools package</span></span>
-<span id="cb19-5"><a href="metrics.html#cb19-5" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(MafiaEdges, <span class="at">directed =</span> <span class="cn">FALSE</span>, <span class="at">vertices=</span>MafiaNodes)</span>
-<span id="cb19-6"><a href="metrics.html#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-7"><a href="metrics.html#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#set the node size to base on clustering coefficients </span></span>
-<span id="cb19-8"><a href="metrics.html#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">transitivity</span>(g, <span class="at">type=</span><span class="st">&#39;local&#39;</span>) </span>
-<span id="cb19-9"><a href="metrics.html#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-10"><a href="metrics.html#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#delete vertices that do not have clustering coefficients</span></span>
-<span id="cb19-11"><a href="metrics.html#cb19-11" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">delete_vertices</span>(g, <span class="fu">is.na</span>(<span class="fu">V</span>(g)<span class="sc">$</span>size))</span>
-<span id="cb19-12"><a href="metrics.html#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-13"><a href="metrics.html#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Set the node color to vary by mafia family group.  </span></span>
-<span id="cb19-14"><a href="metrics.html#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- get all color from a color device </span></span>
-<span id="cb19-15"><a href="metrics.html#cb19-15" aria-hidden="true" tabindex="-1"></a>color <span class="ot">=</span> grDevices<span class="sc">::</span><span class="fu">colors</span>()[<span class="fu">grep</span>(<span class="st">&#39;gr(a|e)y&#39;</span>, grDevices<span class="sc">::</span><span class="fu">colors</span>(), <span class="at">invert =</span> T)] </span>
-<span id="cb19-16"><a href="metrics.html#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- sample n color, in which n = family groups</span></span>
-<span id="cb19-17"><a href="metrics.html#cb19-17" aria-hidden="true" tabindex="-1"></a>colrs <span class="ot">&lt;-</span> <span class="fu">sample</span>(color, <span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family))) </span>
-<span id="cb19-18"><a href="metrics.html#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- #assign color to correpsonding mafia family member</span></span>
-<span id="cb19-19"><a href="metrics.html#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>color <span class="ot">&lt;-</span> colrs[<span class="fu">as.numeric</span>(<span class="fu">factor</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family))] </span>
-<span id="cb19-20"><a href="metrics.html#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-21"><a href="metrics.html#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot igraph network </span></span>
-<span id="cb19-22"><a href="metrics.html#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(g,</span>
-<span id="cb19-23"><a href="metrics.html#cb19-23" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
-<span id="cb19-24"><a href="metrics.html#cb19-24" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.color =</span> <span class="fu">V</span>(g)<span class="sc">$</span>color,</span>
-<span id="cb19-25"><a href="metrics.html#cb19-25" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.size =</span> <span class="dv">50</span><span class="sc">*</span><span class="fu">V</span>(g)<span class="sc">$</span>size, <span class="co">#Scaled node size</span></span>
-<span id="cb19-26"><a href="metrics.html#cb19-26" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.width=</span><span class="fl">0.5</span>,</span>
-<span id="cb19-27"><a href="metrics.html#cb19-27" aria-hidden="true" tabindex="-1"></a>     <span class="at">layout=</span><span class="fu">layout_with_fr</span>(g)</span>
-<span id="cb19-28"><a href="metrics.html#cb19-28" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-29"><a href="metrics.html#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-30"><a href="metrics.html#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="co">#Add node color legend</span></span>
-<span id="cb19-31"><a href="metrics.html#cb19-31" aria-hidden="true" tabindex="-1"></a>fname <span class="ot">=</span> <span class="fu">sort</span>(<span class="fu">unique</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family)) <span class="co">#sort the legend labels </span></span>
-<span id="cb19-32"><a href="metrics.html#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x=</span><span class="sc">-</span><span class="fl">2.2</span>, <span class="at">y=</span><span class="fl">1.5</span>, <span class="co">#legend position </span></span>
-<span id="cb19-33"><a href="metrics.html#cb19-33" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span>fname,</span>
-<span id="cb19-34"><a href="metrics.html#cb19-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="dv">21</span>, <span class="co">#solid circle with one color </span></span>
-<span id="cb19-35"><a href="metrics.html#cb19-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span>colrs[<span class="fu">as.numeric</span>(<span class="fu">factor</span>(fname))],</span>
-<span id="cb19-36"><a href="metrics.html#cb19-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.cex=</span><span class="dv">1</span>, <span class="at">cex=</span>.<span class="dv">7</span>, <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="at">ncol=</span><span class="dv">1</span>,</span>
-<span id="cb19-37"><a href="metrics.html#cb19-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&#39;Node Color: Family Group&#39;</span></span>
-<span id="cb19-38"><a href="metrics.html#cb19-38" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-39"><a href="metrics.html#cb19-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-40"><a href="metrics.html#cb19-40" aria-hidden="true" tabindex="-1"></a><span class="co">#Add node size legend</span></span>
-<span id="cb19-41"><a href="metrics.html#cb19-41" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- quantile breaks to show node size</span></span>
-<span id="cb19-42"><a href="metrics.html#cb19-42" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">quantile</span>(<span class="fu">V</span>(g)<span class="sc">$</span>size, <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)),<span class="dv">2</span>) </span>
-<span id="cb19-43"><a href="metrics.html#cb19-43" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">2.2</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">1.2</span>, <span class="co">#legend position </span></span>
-<span id="cb19-44"><a href="metrics.html#cb19-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span>breaks, <span class="at">pch=</span><span class="dv">21</span>, </span>
-<span id="cb19-45"><a href="metrics.html#cb19-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span><span class="cn">NA</span>, <span class="co">#no color background</span></span>
-<span id="cb19-46"><a href="metrics.html#cb19-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex=</span><span class="fl">0.7</span>, <span class="co">#size of legend</span></span>
-<span id="cb19-47"><a href="metrics.html#cb19-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.cex=</span>breaks <span class="sc">*</span> <span class="dv">10</span>, <span class="co">#Scaled node size </span></span>
-<span id="cb19-48"><a href="metrics.html#cb19-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="co">#node shape</span></span>
-<span id="cb19-49"><a href="metrics.html#cb19-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">5</span>, <span class="co">#number of column for legend</span></span>
-<span id="cb19-50"><a href="metrics.html#cb19-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.width =</span> <span class="fl">0.27</span>, <span class="co">#adjust width of each column</span></span>
-<span id="cb19-51"><a href="metrics.html#cb19-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&#39;Node Size: Local Clustering Coefficient&#39;</span>)</span></code></pre></div>
+<span id="cb19-5"><a href="metrics.html#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaNodes)</span>
+<span id="cb19-6"><a href="metrics.html#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaEdges)</span>
+<span id="cb19-7"><a href="metrics.html#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="metrics.html#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#convert networkd data to an igraph object</span></span>
+<span id="cb19-9"><a href="metrics.html#cb19-9" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">graph_from_data_frame</span>(MafiaEdges, <span class="at">directed =</span> <span class="cn">FALSE</span>, <span class="at">vertices=</span>MafiaNodes)</span>
+<span id="cb19-10"><a href="metrics.html#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="metrics.html#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#set the node size to base on clustering coefficients </span></span>
+<span id="cb19-12"><a href="metrics.html#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>size <span class="ot">&lt;-</span> <span class="fu">transitivity</span>(g, <span class="at">type=</span><span class="st">&#39;local&#39;</span>) </span>
+<span id="cb19-13"><a href="metrics.html#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="metrics.html#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#delete vertices that do not have clustering coefficients</span></span>
+<span id="cb19-15"><a href="metrics.html#cb19-15" aria-hidden="true" tabindex="-1"></a>g <span class="ot">=</span> <span class="fu">delete_vertices</span>(g, <span class="fu">is.na</span>(<span class="fu">V</span>(g)<span class="sc">$</span>size))</span>
+<span id="cb19-16"><a href="metrics.html#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="metrics.html#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Set the node color to vary by mafia family group.  </span></span>
+<span id="cb19-18"><a href="metrics.html#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- get all color from a color device </span></span>
+<span id="cb19-19"><a href="metrics.html#cb19-19" aria-hidden="true" tabindex="-1"></a>color <span class="ot">=</span> grDevices<span class="sc">::</span><span class="fu">colors</span>()[<span class="fu">grep</span>(<span class="st">&#39;gr(a|e)y&#39;</span>, grDevices<span class="sc">::</span><span class="fu">colors</span>(), <span class="at">invert =</span> T)] </span>
+<span id="cb19-20"><a href="metrics.html#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- sample n color, in which n = family groups</span></span>
+<span id="cb19-21"><a href="metrics.html#cb19-21" aria-hidden="true" tabindex="-1"></a>colrs <span class="ot">&lt;-</span> <span class="fu">sample</span>(color, <span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family))) </span>
+<span id="cb19-22"><a href="metrics.html#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- #assign color to correpsonding mafia family member</span></span>
+<span id="cb19-23"><a href="metrics.html#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g)<span class="sc">$</span>color <span class="ot">&lt;-</span> colrs[<span class="fu">as.numeric</span>(<span class="fu">factor</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family))] </span>
+<span id="cb19-24"><a href="metrics.html#cb19-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-25"><a href="metrics.html#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot igraph network </span></span>
+<span id="cb19-26"><a href="metrics.html#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(g,</span>
+<span id="cb19-27"><a href="metrics.html#cb19-27" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.label =</span> <span class="cn">NA</span>,</span>
+<span id="cb19-28"><a href="metrics.html#cb19-28" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.color =</span> <span class="fu">V</span>(g)<span class="sc">$</span>color,</span>
+<span id="cb19-29"><a href="metrics.html#cb19-29" aria-hidden="true" tabindex="-1"></a>     <span class="at">vertex.size =</span> <span class="dv">10</span><span class="sc">*</span><span class="fu">V</span>(g)<span class="sc">$</span>size, <span class="co">#Scaled node size</span></span>
+<span id="cb19-30"><a href="metrics.html#cb19-30" aria-hidden="true" tabindex="-1"></a>     <span class="at">edge.width=</span><span class="fl">0.5</span>,</span>
+<span id="cb19-31"><a href="metrics.html#cb19-31" aria-hidden="true" tabindex="-1"></a>     <span class="at">layout=</span><span class="fu">layout_with_fr</span>(g)</span>
+<span id="cb19-32"><a href="metrics.html#cb19-32" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-33"><a href="metrics.html#cb19-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-34"><a href="metrics.html#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="co">#Add node color legend</span></span>
+<span id="cb19-35"><a href="metrics.html#cb19-35" aria-hidden="true" tabindex="-1"></a>fname <span class="ot">=</span> <span class="fu">sort</span>(<span class="fu">unique</span>(<span class="fu">V</span>(g)<span class="sc">$</span>Family)) <span class="co">#sort the legend labels </span></span>
+<span id="cb19-36"><a href="metrics.html#cb19-36" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x=</span><span class="sc">-</span><span class="fl">2.2</span>, <span class="at">y=</span><span class="fl">1.5</span>, <span class="co">#legend position </span></span>
+<span id="cb19-37"><a href="metrics.html#cb19-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span>fname,</span>
+<span id="cb19-38"><a href="metrics.html#cb19-38" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="dv">21</span>, <span class="co">#solid circle with one color </span></span>
+<span id="cb19-39"><a href="metrics.html#cb19-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span>colrs[<span class="fu">as.numeric</span>(<span class="fu">factor</span>(fname))],</span>
+<span id="cb19-40"><a href="metrics.html#cb19-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.cex=</span><span class="dv">1</span>, <span class="at">cex=</span>.<span class="dv">7</span>, <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="at">ncol=</span><span class="dv">1</span>,</span>
+<span id="cb19-41"><a href="metrics.html#cb19-41" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&#39;Node Color: Family Group&#39;</span></span>
+<span id="cb19-42"><a href="metrics.html#cb19-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-43"><a href="metrics.html#cb19-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-44"><a href="metrics.html#cb19-44" aria-hidden="true" tabindex="-1"></a><span class="co">#Add node size legend</span></span>
+<span id="cb19-45"><a href="metrics.html#cb19-45" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- quantile breaks to show node size</span></span>
+<span id="cb19-46"><a href="metrics.html#cb19-46" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">quantile</span>(<span class="fu">V</span>(g)<span class="sc">$</span>size, <span class="fu">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)),<span class="dv">2</span>) </span>
+<span id="cb19-47"><a href="metrics.html#cb19-47" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">2.2</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">1.2</span>, <span class="co">#legend position </span></span>
+<span id="cb19-48"><a href="metrics.html#cb19-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend=</span>breaks, <span class="at">pch=</span><span class="dv">21</span>, </span>
+<span id="cb19-49"><a href="metrics.html#cb19-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.bg=</span><span class="cn">NA</span>, <span class="co">#no color background</span></span>
+<span id="cb19-50"><a href="metrics.html#cb19-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">cex=</span><span class="fl">0.7</span>, <span class="co">#size of legend</span></span>
+<span id="cb19-51"><a href="metrics.html#cb19-51" aria-hidden="true" tabindex="-1"></a>       <span class="at">pt.cex=</span>breaks <span class="sc">*</span> <span class="dv">2</span>, <span class="co">#Scaled node size </span></span>
+<span id="cb19-52"><a href="metrics.html#cb19-52" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">&quot;n&quot;</span>, <span class="co">#node shape</span></span>
+<span id="cb19-53"><a href="metrics.html#cb19-53" aria-hidden="true" tabindex="-1"></a>       <span class="at">ncol=</span><span class="dv">5</span>, <span class="co">#number of column for legend</span></span>
+<span id="cb19-54"><a href="metrics.html#cb19-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">text.width =</span> <span class="fl">0.27</span>, <span class="co">#adjust width of each column</span></span>
+<span id="cb19-55"><a href="metrics.html#cb19-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&#39;Node Size: Local Clustering Coefficient&#39;</span>)</span></code></pre></div>
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <!-- You can label chapter and section titles using `{#label}` after them, e.g., we can reference Chapter \@ref(intro). If you do not manually label them, there will be automatic labels anyway, e.g., Chapter \@ref(methods). -->
 <!-- Figures and tables with captions will be placed in `figure` and `table` environments, respectively. -->

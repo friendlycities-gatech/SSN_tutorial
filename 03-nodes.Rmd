@@ -1,6 +1,22 @@
 # Visualizing Nodes {#nodes}
 
-In this chapter, we continue to use the American Mafia data introduced in Chapter 2. This chapter covers the following topics: 
+In this chapter, we continue to use the American Mafia data introduced in Chapter 2. They can be loaded from the `SSNtools` package directly. 
+
+The node table **MafiaNodes** contains:
+
+* `NODE`: Name of the Mafia member (capitalized)
+* `Family`: Mafia family the member belongs to 
+* `NY`: Whether the member is in New York City
+* `LonX`: Longitude of the location of the member
+* `LatY`: Latitude of the location of the member 
+* `NiceLabel`: Name of the Mafia member (lower case)
+
+The edge list **MafiaEdges** contains pairs of undirected connections:
+
+* `Source`: the name of a member
+* `Target`: the name of a different member
+
+This chapter covers the following topics: 
 
 * How to convert node coordinates into point geometry
 * How to visualize nodes with constant color and size 
@@ -50,7 +66,7 @@ head(MafiaSpatial, 3)
 
 The coordinate information can be stored in other projection system other than the commonly used WGS84. Users need to find out what crs is used before transforming the data to another system. Only when crs are the same for two or more shapefiles (or geometry) can we overlay them correctly on each other. Since we are mapping the data on U.S. mainland, we exclude U.S. territories and further transform the node table into `sf` spatial objects with *North America Equidistant Conic projection* (crs="ESRI:102010"). 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, eval=TRUE}
 #Convert coordinate system
 MafiaSpatial = MafiaSpatial %>%
   st_transform(MafiaSpatioal, crs="ESRI:102010")
@@ -62,7 +78,7 @@ us_states = states(cb=TRUE, progress_bar = FALSE) %>%
 ```
 
 **Second step**: visualize the nodes on the US state map! 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, eval=TRUE}
 tmap_mode('plot') # set tmap plotting mode to static map 
 tm_shape(us_states) +  
   tm_polygons() + #draw U.S. state shapefile first as polygons
@@ -75,7 +91,7 @@ The map above only shows the locations of Mafia members. We want to visualize th
 
 **To vary the node color by degree**, we simply set the `col` argument to the variable `degree` that should vary by color. Different from node size, `style` argument can modulate the breaks for node color in different styles, such as quantile breaks, equal interval breaks, head/tail breaks and so on. The number of class is defaulted to five. To define the color, you can either pass a R palette (e.g., `YlGnBu`) or a vector of color to `palette` argument. More details can be found in `tmap` [document](https://cran.r-project.org/web/packages/tmap/tmap.pdf).  
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, eval=TRUE}
 #MafiaEdges is a built-in dataset in SSNtools
 #Construct a network and calculate the degree for each node. 
 g = graph_from_data_frame(MafiaEdges, directed = FALSE, vertices=MafiaSpatial)
@@ -96,7 +112,7 @@ tm_shape(us_states) +
 ## Visualize Nodes by Node Size
 **To visualize the node size by the connection degree**, we have to set the node size varies by degree in `tm_symbols`. The default breaks for node size is interval breaks. You can adjust the breaks for node size in the legend directly through `sizes.legend` argument in `tm_symbols`.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, eval=TRUE}
 # Visualize 
 tmap_mode('plot')
 tm_shape(us_states) +
@@ -115,7 +131,7 @@ tm_shape(us_states) +
 
 Numbers in the `degree_brackets` column only define the relative size difference between the nodes. `size.max` and `scale` are often defaulted to be 1, therefore makes it easy for people to directly define node size in the `degree_brackets` column. In that case, the node with designated with the highest size value will have the node size of 1. In our example, node size of 1 is visually too small in the map, so we scale up the node size by 1.5. Thus, the actual node sizes for the four brackets are c(0.1, 0.3, 0.5, 1)/1*1.5 = c(0.15, 0.45, 0.75, 1.5). 
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, eval=TRUE}
 quantile(MafiaSpatial$degree)
 
 # Create a new 'degree_bracket' column that contains the node size for each group of nodes. 
@@ -159,9 +175,9 @@ map = tm_shape(us_states) +
     border.col='black', border.alpha = 0.5,
     legend.col.show = FALSE) +
   tm_add_legend(type=c("symbol"),
-                col = brewer.pal(4, "YlGnBu"), #copy the color from R palette
+                col = c("#FFFFCC", "#A1DAB4", "#41B6C4", "#225EA8"), #copy from RColorBrewer: brewer.pal(4, "YlGnBu")
                 alpha = 0.5, is.portrait = FALSE, # legend becomes horizontal
-                # size defined here should be the sqaure root of the normalized point size * scale. 
+                # size defined here should be the square root of the normalized point size * scale. 
                 # The square root is taken since the area is proportional to the data, not the radius.
                 size = (c(0.1,0.3,0.5,1)/1)^0.5*1.5, 
                 labels = c('2-8','8-12','12-20','20-154'), #break labels 
@@ -177,16 +193,6 @@ tmap_save(map, filename='YOUR_LOCAL_FOLDER_PATH/map.png')
 ```
 
 The full codes for creating the map above is in the following: 
-<!-- **Scale bar** and **north arrow** can be added to the map like layers using `tm_scale_bar` and `tm_compass`, while map **title** is created as an argument in `tm_layer`. The full codes for creating the final map with scale bar, north arrow, and proper title is in the following:  -->
-
-  <!-- # Add other cartography elements  -->
-  <!-- tm_compass(position=c('right', 'bottom')) +  -->
-  <!-- tm_scale_bar(position=c('right', 'bottom'), breaks=c(0, 500, 1000)) +  -->
-  <!-- tm_layout( -->
-  <!--   title = "Map of Mafia Members in U.S.", -->
-  <!--   title.position=c('center', 'top'), -->
-  <!--   inner.margins = c(0.1,0.05,0.1,0.05) -->
-
 ```{r message=FALSE, warning=FALSE}
 library(readr)
 library(igraph)
