@@ -252,8 +252,8 @@ tm_shape(us_states) +
   tm_shape(arrange(MafiaEdges_toLine, desc(edge_family))) + 
   tm_lines(col='edge_family', style='cat', alpha=0.5, lwd=1,
            palette=c('#57B897', '#F7774F', '#7A8CC1', '#E072B5', '#FAD324', 'lightgrey'),
-           title.col = c('Edges by Families'),
-           legend.position = c('right', 'bottom'))
+           title.col = c('Edges by Families')) + 
+  tm_layout(legend.position = c('right', 'bottom'))
 ```
 
 ## Visualizing Edges by Width and Color

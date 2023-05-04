@@ -764,20 +764,28 @@ edgelist[c(1:3),]
 ```
 
 ## Flattening Ratio
-**Global Flattening Ratio** is a network-level metric to measure the spatial tightness of a network. We reference the following definition in the paper [Metrics for characterizing network structure and node importance in Spatial Social Network (Sarkar et al., 2019)](https://www.tandfonline.com/doi/full/10.1080/13658816.2019.1567736). To define the flattening ratio, we first create a degree-constrained nearest neighbour network \bar{G} from the given social network G by reconfiguration, such that each node *i* in \bar{G} with degree *K* connects to its nearest *K* neighbors in Euclidean space. As such, the (global) flattening ratio is the ratio of the sum of the Euclidean distance of edges in \bar{G} where all nodes are connected to their K-nearest neighbors and the sum of the Euclidean distance of actual edges in G. 
+**Global Flattening Ratio** is a network-level metric to measure the spatial tightness of a network. We reference the following definition in the paper [Metrics for characterizing network structure and node importance in Spatial Social Network (Sarkar et al., 2019)](https://www.tandfonline.com/doi/full/10.1080/13658816.2019.1567736). To define the flattening ratio, we first create a degree-constrained nearest neighbour network $\bar{G}$ from the given social network *G* by reconfiguration, such that each node *i* in $\bar{G}$ with degree *K* connects to its nearest *K* neighbors in Euclidean space. As such, the (global) flattening ratio is the ratio of the sum of the Euclidean distance of edges in $\bar{G}$ where all nodes are connected to their K-nearest neighbors versus the sum of the Euclidean distance of actual edges in *G*. 
+
+Note that many $\bar{G}$ can be possible for one *G*. Here is an example: 
+
+```{r echo=FALSE, fig.cap="Different $\\bar{G}$ can be possible for one G", out.width = '100%', fig.show = "hold"}
+knitr::include_graphics("Figs/06-metrics-global-flattening-ratio.png")
+```
+
+In the Figure 6.2 above, every node has degree *K* equals to 2. In the first network, *G1* = $\bar{G1}$ because the network *G1* is already spatially efficient (i.e., every node connects to its two nearest neighbors). In the second network, two $\bar{G}$ ($\bar{G2.1}$ and $\bar{G2.2}$) are possible for *G2*. If we reroute the network *G2* in the node order of A -> B -> C -> D, then we have $\bar{G2.1}$ because when it loops to node C or D, both A, B, and C have satisfied the degree constraints (*K*=2). The sum of distance for $\bar{G2.1}$ is `1+1+Sqrt(2)`. However, if the node order is A -> D -> B -> C, then when it loops to B and C, all nodes have satisfied the degree constraints (*K*=2). The sum of distance for $\bar{G2.2}$ is `1+1+Sqrt(5)+Sqrt(5)`. Thus, the sum of distance for $\bar{G2}$ is the average sum of distance for $\bar{G2.1}$, $\bar{G2.2}$, etc. Our `GlobalFlatteningRatio()` function will allow users to select how many iterations (i.e., randomly generated order of nodes) they would like to use to calculate the average sum of distance. 
 
 **Local Flattening Ratio** is a node-level metric, adapted from the **Global Flattening Ratio** definition. It is defined as the ratio of a node’s minimized distance (*d_opt*) needed to connect to any k nearest neighbors to the total actual distance (*d_act*) of its connections. Nodes with low values prioritize distant connections. This metric is similar to **K-fullfillment**, as both describe local (dis)connection. 
 
 Our implementation of the Global and Local Flattening Ratio in `SSNtools` assume that the network is undirected and unweighted. These two concepts can also be applied to **bipartite networks**. In bipartite networks, a node (in set 1)'s K nearest neighbors can only be nodes in set 0.
 
-Here are some example research questions that can be answered by the **Local Flattening Ratio** metric: 
+Here are some example research questions that can be answered by the **Global/Local Flattening Ratio** metric: 
 
-* (Mafia members SSN) Which mafia members have strong local social connections (or the most spatially tight social connections)? 
-* (Restaurant POI visits SSN) Which restaurant tends to serve residents from nearby census block groups? 
-* (Food sharing SSN) Which organization is highly connected to other local organizations? 
+* (Global Flattening Ratio) Is the SSN spatially efficient? In another word, do nodes prefer to connect to their nearest neighbors or far friends? 
+* (Local Flattening Ratio) Which SSN node tends to connect to their neighbors (or have the most spatially tight social connections)? 
 
 Our tutorial will cover the following topics:
 
+* How to calculate Global Flattening Ratio values on the node level using `GlobalFlatteningRatio()` in `SSNtools`.
 * How to calculate Local Flattening Ratio values on the node level using `LocalFlatteningRatio()` in `SSNtools`.
 * How to visualize Local Flattening Ratio values on the node level and connections to the nearest neighbors. 
 
@@ -791,6 +799,44 @@ devtools::install_github("friendlycities-gatech/SSNtools")
 **NYCMafiaNodes** is a node table with label and spatial coordinates for each node (a mafia member). **NYCMafiaeEdges** contains pairs of node labels (corresponding to node table label), representing mafia criminal associations. This is a unweighted and undirected network. The coordinate system crs is 32118, in the unit of meters. 
 
 Data in **POINodes** and **POIEdges** are processed from SafeGraph with extra filters and coding to hide sensitive information. The dataset is meant to be educational and thus can be inaccurate for real implications. The nodes in the dataset are restaurants in Atlanta (set 0) and centroids of census block group (set 1). The edges in the dataset are visits from the census block group to restaurants. The weight of the edges represent the percentage of total visits coming from a particular census block group. You can call **POINodes** (n=1356) and **POIEdges** (n=7926) to directly access the sample dataset. The coordinates system is transformed with crs=26967 (unit meter). 
+
+### Calculate Global Flattening Ratio
+
+To get the Global Flattening Ratio for your network, you just need to run your node and edge dataframe through the following codes. Because the random generation of node orders can be different every time and across different machines, you are expected to get slightly different result than what is shown in the tutorial. `set.seed()` may help you get the exact same outcome. Here, our data have 298 nodes, so we try 100 different node orders to calculate the average values for $\bar{G}$. You should scale your iterations based on the size of your network. 
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+library(SSNtools)
+
+data(NYCMafiaNodes)
+data(NYCMafiaEdges)
+
+# ----process dataframe into a list of lists 
+# params:
+#     data - a R dataframe containing node label, longitude, and latitude
+#     label_name - the name of the column for node label
+#     lon_name - the name of the column for node longitude 
+#     lat_name - the name of the column for node latitude
+#     bipartite_name - (optional) the name of the column that indicates the bipartite set of the nodes. The set of nodes that EdgeScan or NDScan should report on should be coded as 1 in the biparite column, and 0 otherwise.  
+nodes = processNode(NYCMafiaNodes, 'label', 'LonX', 'LatY')
+# params:
+#     data - a R dataframe containing source node label and target node label
+#     source_name - the name of the column for source node label
+#     target_name - the name of the column for target node label
+#     weight_name - (optional) the name of the column for edge weight 
+edges = processEdge(NYCMafiaEdges, 'Source', 'Target')
+
+# run both lines to get consistent GlobalFlatteningRatio results
+set.seed(1234, "Mersenne-Twister", sample.kind="Rounding")
+# params:
+#     nodes - a list of named list; each sublist is a node 
+#     edges - a list of named list; each sublist is an edge
+#     iter - the number of iterations for node orders 
+GlobalFlatteningRatio(nodes, edges, 100)
+```
+
+**Interpret Outputs**
+
+**Global Flattening Ratio** reports **0.1940646** for our mafia network, which means that the mafia network is not very spatially tight. In another word, mafia members prefer far friends rather than connections to nearest neighbors. This result makes sense because mafia members are likely to connect to other mafia members in the same families and these members spread out in geographic space. 
 
 ### Calculate Local Flattening Ratio
 
@@ -837,7 +883,7 @@ edgelist[c(1:3), ]
 
 * `label`: the node label
 * `K`: the node's degree K, which is the same K for the node's K-nearest neighbors.  
-* `Local_flattening_ratio`: the ratio of the sum of Euclidean distance between a node and its K-nearest neighbors (K is the node's degree) and the sum of Euclidean distance between a node and all other nodes it connects to. The value is ranged between 0 and 1. 
+* `Local_flattening_ratio`: the ratio of the sum of Euclidean distance between a node and its K-nearest neighbors (K is the node's degree) versus the sum of Euclidean distance between a node and all other nodes it connects to. The value is ranged between 0 and 1. 
 
 The second dataframe is an edge dataframe that has three columns: 
 

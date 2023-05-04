@@ -30,16 +30,16 @@ install.packages("sf") #for spatial objects operation
 install.packages("tmap") #for interactive and static maps 
 install.packages("basemaps") #for retrieving basemaps for tmap 
 install.packages("tidyverse") #for data processing 
-install.packages('tigris') #for loading TIGRR shapefiles
+install.packages('tigris') #for loading TIGER shapefiles
 install.packages('stplanr') #for using od2line function to convert points to lines
 install.packages('ggplot2') #for visualizing statistical graphics
 install.packages("devtools") #to download R package on GitHub
 devtools::install_github("friendlycities-gatech/SSNtools") #install development version of our SSNtools R package for advanced SSN metrics. 
 ```
 
-There are a few packages for visualizing maps. We chose `tmap` in the end for its flexibility to switch between interactive maps and static plots. We also have some codes that use `ggpplot2` to generate other graphic visualizations. 
+There are a few packages for visualizing maps. We chose `tmap` in the end for its flexibility to switch between interactive maps and static plots. We also have some codes that use `ggplot2` to generate other graphic visualizations. 
 
-`ggpplot2` has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of `ggpplot2` is that it can easily add high-resolution Google Maps as basemaps using `ggmap` package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to [map planar networks](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html) and [produce basic elements of a map](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/). However, you need to convert spatial objects to dataframe for `ggpplot2` to draw on.  
+`ggplot2` has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of `ggplot2` is that it can easily add high-resolution Google Maps as basemaps using `ggmap` package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to [map planar networks](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html) and [produce basic elements of a map](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/). However, you need to convert spatial objects to dataframe for `ggpplot2` to draw on.  
 
 `tmap` is equally powerful as `ggpplot2`, and has the extra function to switch between a static plot and interactive plot mode. This feature is useful when you want to zoom in and out to explore your data.  
 

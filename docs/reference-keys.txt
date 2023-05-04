@@ -2,6 +2,7 @@ tab:matrix
 tab:nodetable
 tab:edgetable
 fig:unnamed-chunk-71
+fig:unnamed-chunk-95
 introduction
 metrics
 network-data-formats
@@ -43,6 +44,7 @@ calculate-k-fullfillment-values
 visualize-k-fullfillment
 application-to-a-bipartite-network
 flattening-ratio
+calculate-global-flattening-ratio
 calculate-local-flattening-ratio
 visualize-local-flattening-ratio
 application-to-a-bipartite-network-1

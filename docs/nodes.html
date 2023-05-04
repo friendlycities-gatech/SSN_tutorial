@@ -206,9 +206,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li><a href="advanced-ssn-metrics.html#flattening-ratio" id="toc-flattening-ratio"><span class="toc-section-number">6.3</span> Flattening Ratio</a>
 <ul>
-<li><a href="advanced-ssn-metrics.html#calculate-local-flattening-ratio" id="toc-calculate-local-flattening-ratio"><span class="toc-section-number">6.3.1</span> Calculate Local Flattening Ratio</a></li>
-<li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Visualize Local Flattening Ratio</a></li>
-<li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.3</span> Application to a bipartite network</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-global-flattening-ratio" id="toc-calculate-global-flattening-ratio"><span class="toc-section-number">6.3.1</span> Calculate Global Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-local-flattening-ratio" id="toc-calculate-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Calculate Local Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.3</span> Visualize Local Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.4</span> Application to a bipartite network</a></li>
 </ul></li>
 <li><a href="advanced-ssn-metrics.html#linked-activity-spaces" id="toc-linked-activity-spaces"><span class="toc-section-number">6.4</span> Linked Activity Spaces</a>
 <ul>
@@ -531,6 +532,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

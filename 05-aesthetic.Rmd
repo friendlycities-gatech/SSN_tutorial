@@ -248,7 +248,7 @@ map = tm_shape(bg) + #add base map
   tm_shape(us_states) + 
   tm_polygons(alpha=0) + 
   tm_shape(MafiaSpatial) +
-  tm_symbols(size="degree", scale=5, 
+  tm_symbols(size="degree", scale=1, 
              col='lightblue', border.col='#6698CC', 
              title.size=c('Degree of Connections')) + 
   tm_layout(legend.position = c('left', 'bottom'))
@@ -280,14 +280,14 @@ First, we need to create the inset map. We pick a bounding box around the centra
 ```{r, warning=FALSE, message=FALSE, eval=FALSE, class.source="Code"}
 
 set_defaults(map_service = "carto", map_type = "light")
-#Create the bounding box for the inset map and retrieve corresponding base map 
+# create the bounding box for the inset map and retrieve corresponding base map 
 bgbox = st_bbox(c(xmin=-74.065141, xmax=-73.537727, ymin=40.558198, ymax=40.882353), crs=4326) 
 inset_bg = basemap_stars(bgbox)
 
-#Calculate aspect ratio.  
+# calculate aspect ratio.  
 aspect_ratio = unname((bgbox$ymax - bgbox$ymin)/(bgbox$xmax - bgbox$xmin))
 
-#putting base map as the first layer restricts the bounding box of the map, so no additional filtering for MafiaSpatial is needed.
+# putting base map as the first layer restricts the bounding box of the map, so no additional filtering for MafiaSpatial is needed.
 tmap_mode('plot')
 inset = tm_shape(inset_bg) +
   tm_rgb() + 

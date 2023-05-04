@@ -206,9 +206,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li><a href="advanced-ssn-metrics.html#flattening-ratio" id="toc-flattening-ratio"><span class="toc-section-number">6.3</span> Flattening Ratio</a>
 <ul>
-<li><a href="advanced-ssn-metrics.html#calculate-local-flattening-ratio" id="toc-calculate-local-flattening-ratio"><span class="toc-section-number">6.3.1</span> Calculate Local Flattening Ratio</a></li>
-<li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Visualize Local Flattening Ratio</a></li>
-<li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.3</span> Application to a bipartite network</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-global-flattening-ratio" id="toc-calculate-global-flattening-ratio"><span class="toc-section-number">6.3.1</span> Calculate Global Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-local-flattening-ratio" id="toc-calculate-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Calculate Local Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.3</span> Visualize Local Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.4</span> Application to a bipartite network</a></li>
 </ul></li>
 <li><a href="advanced-ssn-metrics.html#linked-activity-spaces" id="toc-linked-activity-spaces"><span class="toc-section-number">6.4</span> Linked Activity Spaces</a>
 <ul>
@@ -498,8 +499,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb46-13"><a href="vizedges.html#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(<span class="fu">arrange</span>(MafiaEdges_toLine, <span class="fu">desc</span>(edge_family))) <span class="sc">+</span> </span>
 <span id="cb46-14"><a href="vizedges.html#cb46-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_lines</span>(<span class="at">col=</span><span class="st">&#39;edge_family&#39;</span>, <span class="at">style=</span><span class="st">&#39;cat&#39;</span>, <span class="at">alpha=</span><span class="fl">0.5</span>, <span class="at">lwd=</span><span class="dv">1</span>,</span>
 <span id="cb46-15"><a href="vizedges.html#cb46-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">palette=</span><span class="fu">c</span>(<span class="st">&#39;#57B897&#39;</span>, <span class="st">&#39;#F7774F&#39;</span>, <span class="st">&#39;#7A8CC1&#39;</span>, <span class="st">&#39;#E072B5&#39;</span>, <span class="st">&#39;#FAD324&#39;</span>, <span class="st">&#39;lightgrey&#39;</span>),</span>
-<span id="cb46-16"><a href="vizedges.html#cb46-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.col =</span> <span class="fu">c</span>(<span class="st">&#39;Edges by Families&#39;</span>),</span>
-<span id="cb46-17"><a href="vizedges.html#cb46-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;bottom&#39;</span>))</span></code></pre></div>
+<span id="cb46-16"><a href="vizedges.html#cb46-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">title.col =</span> <span class="fu">c</span>(<span class="st">&#39;Edges by Families&#39;</span>)) <span class="sc">+</span> </span>
+<span id="cb46-17"><a href="vizedges.html#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="st">&#39;right&#39;</span>, <span class="st">&#39;bottom&#39;</span>))</span></code></pre></div>
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
 </div>
 <div id="visualizing-edges-by-width-and-color" class="section level2" number="4.5">
@@ -686,6 +687,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

@@ -206,9 +206,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li><a href="advanced-ssn-metrics.html#flattening-ratio" id="toc-flattening-ratio"><span class="toc-section-number">6.3</span> Flattening Ratio</a>
 <ul>
-<li><a href="advanced-ssn-metrics.html#calculate-local-flattening-ratio" id="toc-calculate-local-flattening-ratio"><span class="toc-section-number">6.3.1</span> Calculate Local Flattening Ratio</a></li>
-<li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Visualize Local Flattening Ratio</a></li>
-<li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.3</span> Application to a bipartite network</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-global-flattening-ratio" id="toc-calculate-global-flattening-ratio"><span class="toc-section-number">6.3.1</span> Calculate Global Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#calculate-local-flattening-ratio" id="toc-calculate-local-flattening-ratio"><span class="toc-section-number">6.3.2</span> Calculate Local Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#visualize-local-flattening-ratio" id="toc-visualize-local-flattening-ratio"><span class="toc-section-number">6.3.3</span> Visualize Local Flattening Ratio</a></li>
+<li><a href="advanced-ssn-metrics.html#application-to-a-bipartite-network-1" id="toc-application-to-a-bipartite-network-1"><span class="toc-section-number">6.3.4</span> Application to a bipartite network</a></li>
 </ul></li>
 <li><a href="advanced-ssn-metrics.html#linked-activity-spaces" id="toc-linked-activity-spaces"><span class="toc-section-number">6.4</span> Linked Activity Spaces</a>
 <ul>
@@ -255,13 +256,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tmap&quot;</span>) <span class="co">#for interactive and static maps </span></span>
 <span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;basemaps&quot;</span>) <span class="co">#for retrieving basemaps for tmap </span></span>
 <span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>) <span class="co">#for data processing </span></span>
-<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;tigris&#39;</span>) <span class="co">#for loading TIGRR shapefiles</span></span>
+<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;tigris&#39;</span>) <span class="co">#for loading TIGER shapefiles</span></span>
 <span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;stplanr&#39;</span>) <span class="co">#for using od2line function to convert points to lines</span></span>
 <span id="cb1-8"><a href="index.html#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>) <span class="co">#for visualizing statistical graphics</span></span>
 <span id="cb1-9"><a href="index.html#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) <span class="co">#to download R package on GitHub</span></span>
 <span id="cb1-10"><a href="index.html#cb1-10" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>) <span class="co">#install development version of our SSNtools R package for advanced SSN metrics. </span></span></code></pre></div>
-<p>There are a few packages for visualizing maps. We chose <code>tmap</code> in the end for its flexibility to switch between interactive maps and static plots. We also have some codes that use <code>ggpplot2</code> to generate other graphic visualizations.</p>
-<p><code>ggpplot2</code> has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of <code>ggpplot2</code> is that it can easily add high-resolution Google Maps as basemaps using <code>ggmap</code> package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to <a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html">map planar networks</a> and <a href="https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/">produce basic elements of a map</a>. However, you need to convert spatial objects to dataframe for <code>ggpplot2</code> to draw on.</p>
+<p>There are a few packages for visualizing maps. We chose <code>tmap</code> in the end for its flexibility to switch between interactive maps and static plots. We also have some codes that use <code>ggplot2</code> to generate other graphic visualizations.</p>
+<p><code>ggplot2</code> has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of <code>ggplot2</code> is that it can easily add high-resolution Google Maps as basemaps using <code>ggmap</code> package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to <a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html">map planar networks</a> and <a href="https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/">produce basic elements of a map</a>. However, you need to convert spatial objects to dataframe for <code>ggpplot2</code> to draw on.</p>
 <p><code>tmap</code> is equally powerful as <code>ggpplot2</code>, and has the extra function to switch between a static plot and interactive plot mode. This feature is useful when you want to zoom in and out to explore your data.</p>
 <p><code>sf</code> converts data frame into spatial objects that can be used in base R plot function and <code>tmap</code>. It can also conduct various spatial operation, such as coordinate system projection, spatial joins, and topological relations. A brief introduction of how to streamline <code>sf</code> and <code>tmap</code> is given in the book <a href="https://geocompr.robinlovelace.net/spatial-operations.html">Geocomputation with R</a>.</p>
 <p><code>igraph</code> is the go-to package for network analysis, such as calculating the centrality measures of a network. These measures may become the attributes for nodes or edges in the maps (see <a href="https://friendlycities-gatech.github.io/SSN_tutorial/nodes.html#nodes">Chapter 3</a>).</p>
@@ -331,6 +332,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
