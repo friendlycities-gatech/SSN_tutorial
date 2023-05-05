@@ -14,8 +14,8 @@ You will be able to find a copy of all the codes at the bottom of the page.
 
 ```{r echo=FALSE, fig.cap="", out.width = '50%', fig.show = "hold"}
 knitr::include_graphics("Figs/04-edges-basic.png")
-knitr::include_graphics("Figs/04-edges-line-width.png")
 knitr::include_graphics("Figs/04-edges-color.png")
+knitr::include_graphics("Figs/04-edges-line-width.png")
 knitr::include_graphics("Figs/04-edges-line-color-node.png")
 ```
 
