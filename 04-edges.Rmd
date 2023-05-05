@@ -167,7 +167,7 @@ tm_shape(us_states) +
 
 ## Visualizing Edges by Color
 
-To visualize edges by color, we assign the variable column `weight` to argument `col` in `tm_lines`. The default color setting is proportional to the column variable (in this case, `weight` values). In reality, the weight distribution of non-planar networks is often skewed, with a few edges have very high weights or flow values and most of the rest have low values. Therefore, we need to adjust the breaks to better visualize the SSN network. To do that, we give argument `breaks` a vector of fixed numbers, and set argument `style` to `fixed`. 
+To visualize edges by color, we create a column `weight` for edges based on the edge distance. Then we assign the variable column `weight` to argument `col` in `tm_lines`. The default color setting is proportional to the equal intervals of the column variable (in this case, `weight` values). However, in reality, the weight distribution of non-planar networks is often skewed, with a few edges have very high weights or flow values and most of the rest have low values. Therefore, we need to adjust the breaks to better visualize the SSN network. To do that, we give argument `breaks` a vector of fixed numbers, and set argument `style` to `fixed`. 
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
 # create a line weight column based on edge distance
