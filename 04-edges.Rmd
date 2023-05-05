@@ -165,14 +165,57 @@ tm_shape(us_states) +
   tm_lines()
 ```
 
-## Visualizing Edges by Line Width
+## Visualizing Edges by Color
 
-To visualize edges by line width, we added a column variable `weight` for line width in `tm_lines()`. 
+To visualize edges by color, we assign the variable column `weight` to argument `col` in `tm_lines`. The default color setting is proportional to the column variable (in this case, `weight` values). In reality, the weight distribution of non-planar networks is often skewed, with a few edges have very high weights or flow values and most of the rest have low values. Therefore, we need to adjust the breaks to better visualize the SSN network. To do that, we give argument `breaks` a vector of fixed numbers, and set argument `style` to `fixed`. 
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
 # create a line weight column based on edge distance
 MafiaEdges_toLine = MafiaEdges_toLine %>% mutate(weight = as.numeric(st_length(geometry)))
-  
+
+tmap_mode('plot')
+tm_shape(us_states) + 
+  tm_polygons(alpha=0, border.col = 'grey') + 
+  #reorder edges so that long distance edges are drawn first and short-ranged edges drawn last
+  tm_shape(arrange(MafiaEdges_toLine, desc(weight))) + 
+  #define line color with column `weight` and properties associated with lines 
+  tm_lines(col='weight', scale=2, alpha=0.2, 
+           breaks = round(quantile(MafiaEdges_toLine$weight, probs=c(0, 0.5, 0.9, 0.99, 1)), 0),
+           style="fixed", n = 4, 
+           labels=c('0-14','14-1630','1630-4000','4000-4150'),
+           palette=c('#CCEBC5', '#7BCCC4', '#2B8CBE', '#094081'), 
+           title.col = c('Distance (km)')) + 
+  tm_layout(legend.position = c('right', 'bottom'))
+```
+
+We can also **visualize lines by color based on a categorical variable**, such as mafia families. To assign a categorical value to each edge, we identified the top 5 mafia families with the most number of members. They are `Genovese`, `Lucchese`, `Gambino`, `Detroit`, and `Chicago`. If an edge is affiliated with one of the top 5 mafia families, it will be joined with the respective mafia family name. Otherwise, it will has the value `Others`. **The biggest difference with the codes above is to change `style = 'fixed'` to `style = 'cat'` in `tm_lines()`** and change the color palette to represent categorical colors.  
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+top_5 = c('Genovese', 'Lucchese', 'Gambino', 'Detroit', 'Chicago')
+MafiaNodes = MafiaNodes %>% mutate(Family = ifelse(Family %in% top_5, Family, 'Others'))
+MafiaEdges_toLine = MafiaEdges_toLine %>% 
+  left_join(MafiaNodes %>% select(c(NODE, Family)), by=c('Source' = 'NODE'), copy=FALSE) %>% 
+  left_join(MafiaNodes %>% select(c(NODE, Family)), by=c('Target' = 'NODE'), copy=FALSE) %>% 
+  #the two left join above will automatically create Family.x and Family.y to differentiate having `Family` twice. 
+  mutate(edge_family = ifelse(Family.x %in% top_5, Family.x, 'Others')) %>% 
+  mutate(edge_family = ifelse(Family.y %in% top_5, Family.y, edge_family))
+
+tmap_mode('plot')
+tm_shape(us_states) + 
+  tm_polygons(alpha=0, border.col = 'grey') + 
+  tm_shape(arrange(MafiaEdges_toLine, desc(edge_family))) + 
+  tm_lines(col='edge_family', style='cat', alpha=0.5, lwd=1,
+           palette=c('#57B897', '#F7774F', '#7A8CC1', '#E072B5', '#FAD324', 'lightgrey'),
+           title.col = c('Edges by Families')) + 
+  tm_layout(legend.position = c('right', 'bottom'))
+```
+
+
+## Visualizing Edges by Line Width
+
+To visualize edges by line width, we assign the variable column `weight` to argument `lwd` in `tm_lines`. The following map has constant color across different line width 
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
 #library(tmap)
 tmap_mode('plot')
 tm_shape(us_states) + 
@@ -184,9 +227,7 @@ tm_shape(us_states) +
   tm_layout(legend.position = c('right', 'bottom'))
 ```
 
-The default line width setting is proportional to the column variable (in this case, weight values). In reality, the degree weight distribution of non-planar networks is often skewed, with a few edges have very high weights or flow values and most of the rest have low values. Therefore, we need to adjust the breaks to better visualize the SSN network. 
-
-**To adjust the line width breaks**, we need to create a column to store relative edge width, which is similar to the node size visualization in chapter 2. We chose a skewed quantile breaks for line width. This step is quite manual for line width aesthetics, and better supported for color aesthetics. The upcoming [tmap v4](https://mtennekes.github.io/tmap4/) will have significant improvements on the ease of use. 
+Since we already established that the edges are better viewed through a skewed weight breaks, we manually assign break values for line width. **To adjust the line width breaks**, we need to create a column to store relative edge width, which is similar to the node size visualization in chapter 2. We chose a skewed quantile breaks for line width. This step is quite manual for line width aesthetics, and better supported for color aesthetics. The upcoming [tmap v4](https://mtennekes.github.io/tmap4/) will have significant improvements on the ease of use. 
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
 # We create a column called flow_breaks that stores relative line width 
@@ -214,51 +255,9 @@ tm_shape(us_states) +
   tm_layout(legend.position = c('right', 'bottom'))
 ```
 
-## Visualizing Edges by Color
+## Visualizing Edges by Color and Width
 
-To visualize edges by color, we assign the variable column `weight` to argument `col` in `tm_lines`. Since we already established that the edges are better viewed through a skewed flow breaks, we manually assign break values for color. To do that, we give argument `breaks` a vector of fixed numbers, and set argument `style` to `fixed`. The following map has constant line width across different colors. 
-
-```{r, message=FALSE, warning=FALSE, eval=TRUE}
-tmap_mode('plot')
-tm_shape(us_states) + 
-  tm_polygons(alpha=0, border.col = 'grey') + 
-  #reorder edges so that long distance edges are drawn first and short-ranged edges drawn last
-  tm_shape(arrange(MafiaEdges_toLine, desc(weight))) + 
-  #define line color with column `weight` and properties associated with lines 
-  tm_lines(col='weight', scale=2, alpha=0.2, 
-           breaks = round(quantile(MafiaEdges_toLine$weight, probs=c(0, 0.5, 0.9, 0.99, 1)), 0),
-           style="fixed", n = 4, 
-           labels=c('0-14','14-1630','1630-4000','4000-4150'),
-           palette=c('#CCEBC5', '#7BCCC4', '#2B8CBE', '#094081'), 
-           title.col = c('Distance (km)')) + 
-  tm_layout(legend.position = c('right', 'bottom'))
-```
-
-We can also **visualize lines by color based on a categorical variable**, such as mafia families. To create assign a categorical value to each edge, we identified the top 5 mafia families with the most number of members. They are 'Genovese', 'Lucchese', 'Gambino', 'Detroit', and 'Chicago'. If an edge is affiliated with one of the top 5 mafia families, it will be joined with the respective mafia family name. Otherwise, it will has the value `Others`. **The biggest difference with the codes above is to change `style = 'fixed'` to `style = 'cat'` in `tm_lines()`** and change the color palette to represent categorical colors.  
-
-```{r, message=FALSE, warning=FALSE, eval=TRUE}
-top_5 = c('Genovese', 'Lucchese', 'Gambino', 'Detroit', 'Chicago')
-MafiaNodes = MafiaNodes %>% mutate(Family = ifelse(Family %in% top_5, Family, 'Others'))
-MafiaEdges_toLine = MafiaEdges_toLine %>% 
-  left_join(MafiaNodes %>% select(c(NODE, Family)), by=c('Source' = 'NODE'), copy=FALSE) %>% 
-  left_join(MafiaNodes %>% select(c(NODE, Family)), by=c('Target' = 'NODE'), copy=FALSE) %>% 
-  #the two left join above will automatically create Family.x and Family.y to differentiate having `Family` twice. 
-  mutate(edge_family = ifelse(Family.x %in% top_5, Family.x, 'Others')) %>% 
-  mutate(edge_family = ifelse(Family.y %in% top_5, Family.y, edge_family))
-
-tmap_mode('plot')
-tm_shape(us_states) + 
-  tm_polygons(alpha=0, border.col = 'grey') + 
-  tm_shape(arrange(MafiaEdges_toLine, desc(edge_family))) + 
-  tm_lines(col='edge_family', style='cat', alpha=0.5, lwd=1,
-           palette=c('#57B897', '#F7774F', '#7A8CC1', '#E072B5', '#FAD324', 'lightgrey'),
-           title.col = c('Edges by Families')) + 
-  tm_layout(legend.position = c('right', 'bottom'))
-```
-
-## Visualizing Edges by Width and Color
-
-Similar to node visualization, to visualize edges with both line width and color, we need to add arguments for both and create a combined legend through `tm_add_legend`. Unfortunately, the package does not have an automatic way to combine color and line width legend together, so we have to define the values manually. 
+Similar to node visualization, to visualize edges with both color and line width, we need to add arguments for both and create a combined legend through `tm_add_legend`. Unfortunately, the package does not have an automatic way to combine color and line width legend together, so we have to define the values manually. 
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
 tmap_mode('plot')

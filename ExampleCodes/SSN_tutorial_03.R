@@ -2,7 +2,6 @@ library(sf)
 library(tidyverse)
 library(tmap)
 library(igraph)
-library(RColorBrewer)
 library(tigris)
 #install.packages("devtools") #to download R package on GitHub
 #devtools::install_github("friendlycities-gatech/SSNtools")

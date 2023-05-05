@@ -22,9 +22,9 @@ method-1-use-od2line-function-in-stplanr-package.
 method-2-group-by-lineid-and-summarize-points-into-line
 method-3-join-two-point-geometry-into-one-row-and-unite-into-line
 visualizing-edges
-visualizing-edges-by-line-width
 visualizing-edges-by-color
-visualizing-edges-by-width-and-color
+visualizing-edges-by-line-width
+visualizing-edges-by-color-and-width
 advanced-aesthetics
 export-maps
 small-multiples

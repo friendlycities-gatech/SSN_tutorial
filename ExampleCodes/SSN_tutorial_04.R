@@ -113,46 +113,9 @@ tm_shape(us_states) +
   tm_shape(MafiaEdges_toLine) + 
   tm_lines()
 
-# ------- 4.3 Visualizing Edges by Line Width ------- # 
-
+# ------- 4.3 Visualizing Edges by Color ------- # 
 # create a line weight column based on edge distance
 MafiaEdges_toLine = MafiaEdges_toLine %>% mutate(weight = as.numeric(st_length(geometry)))
-
-#library(tmap)
-tmap_mode('plot')
-tm_shape(us_states) + 
-  tm_polygons(alpha=0, border.col = 'grey') + 
-  tm_shape(MafiaEdges_toLine) + 
-  #define line width with column `weight` and properties associated with lines 
-  tm_lines(lwd='weight', scale=2, alpha=0.2, legend.lwd.is.portrait = TRUE,
-           title.lwd = c('Distance (m)')) + 
-  tm_layout(legend.position = c('right', 'bottom'))
-
-# We create a column called flow_breaks that stores relative line width 
-brks = round(quantile(MafiaEdges_toLine$weight, probs=c(0, 0.5, 0.9, 0.99, 1)), 0)
-
-MafiaEdges_toLine = MafiaEdges_toLine %>% mutate(
-  line_width = case_when(
-    weight >= brks[1] & weight <= brks[2] ~ 0.1,
-    weight > brks[2] & weight <= brks[3] ~ 0.3,
-    weight > brks[3] & weight <= brks[4] ~ 0.5,
-    weight > brks[4] & weight <= brks[5] ~ 1
-  )
-)
-
-tmap_mode('plot')
-tm_shape(us_states) + 
-  tm_polygons(alpha=0, border.col = 'grey') + 
-  tm_shape(MafiaEdges_toLine) + 
-  #define line width with column `weight` and properties associated with lines 
-  tm_lines(lwd='line_width', scale=2, alpha=0.2, 
-           legend.lwd.is.portrait = TRUE,
-           lwd.legend = c(0.1, 0.3, 0.5, 1)*2, 
-           lwd.legend.labels=c('0-14','14-1630','1630-4000','4000-4150'),
-           title.lwd = c('Distance (km)')) + 
-  tm_layout(legend.position = c('right', 'bottom'))
-
-# ------- 4.4 Visualizing Edges by Color ------- # 
 
 tmap_mode('plot')
 tm_shape(us_states) + 
@@ -186,6 +149,42 @@ tm_shape(us_states) +
   tm_lines(col='edge_family', style='cat', alpha=0.5, lwd=1,
            palette=c('#57B897', '#F7774F', '#7A8CC1', '#E072B5', '#FAD324', 'lightgrey'),
            title.col = c('Edges by Families')) + 
+  tm_layout(legend.position = c('right', 'bottom'))
+
+# ------- 4.4 Visualizing Edges by Line Width ------- # 
+
+#library(tmap)
+tmap_mode('plot')
+tm_shape(us_states) + 
+  tm_polygons(alpha=0, border.col = 'grey') + 
+  tm_shape(MafiaEdges_toLine) + 
+  #define line width with column `weight` and properties associated with lines 
+  tm_lines(lwd='weight', scale=2, alpha=0.2, legend.lwd.is.portrait = TRUE,
+           title.lwd = c('Distance (m)')) + 
+  tm_layout(legend.position = c('right', 'bottom'))
+
+# We create a column called flow_breaks that stores relative line width 
+brks = round(quantile(MafiaEdges_toLine$weight, probs=c(0, 0.5, 0.9, 0.99, 1)), 0)
+
+MafiaEdges_toLine = MafiaEdges_toLine %>% mutate(
+  line_width = case_when(
+    weight >= brks[1] & weight <= brks[2] ~ 0.1,
+    weight > brks[2] & weight <= brks[3] ~ 0.3,
+    weight > brks[3] & weight <= brks[4] ~ 0.5,
+    weight > brks[4] & weight <= brks[5] ~ 1
+  )
+)
+
+tmap_mode('plot')
+tm_shape(us_states) + 
+  tm_polygons(alpha=0, border.col = 'grey') + 
+  tm_shape(MafiaEdges_toLine) + 
+  #define line width with column `weight` and properties associated with lines 
+  tm_lines(lwd='line_width', scale=2, alpha=0.2, 
+           legend.lwd.is.portrait = TRUE,
+           lwd.legend = c(0.1, 0.3, 0.5, 1)*2, 
+           lwd.legend.labels=c('0-14','14-1630','1630-4000','4000-4150'),
+           title.lwd = c('Distance (km)')) + 
   tm_layout(legend.position = c('right', 'bottom'))
 
 # ------- 4.5 Visualizing Edges by Width and Color ------- # 

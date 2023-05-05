@@ -177,17 +177,19 @@ avg_path_length = average.path.length(g, directed=FALSE) #calculate the average 
 
 Here is an example using data about the American Mafia to visualize an igraph network. This data was collected by Dan DellaPosta at Penn State and published in the paper [Network closure and integration in the mid-20th century American mafia](https://www.sciencedirect.com/science/article/abs/pii/S037887331630199X). 
 
-The node table contains:
+The node list **MafiaNodes** contains:
 
-* Name of the Mafia member 
-* Mafia family the member belongs to 
-* Whether the member is in New York City
-* Longitude and Latitude of the location of the member
+* `NODE`: Name of the Mafia member (capitalized)
+* `Family`: Mafia family the member belongs to 
+* `NY`: Whether the member is in New York City
+* `LonX`: Longitude of the location of the member
+* `LatY`: Latitude of the location of the member 
+* `NiceLabel`: Name of the Mafia member (lower case)
 
-The edge list contains pairs of undirected connections:
+The edge list **MafiaEdges** contains pairs of undirected connections:
 
-* Source (the name of a member)
-* Target (the name of a different member)
+* `Source`: the name of a member
+* `Target`: the name of a different member
 
 The node size varies by the values of local clustering coefficient, and the node color varies by the mafia family the node belongs to. 
 

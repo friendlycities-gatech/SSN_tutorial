@@ -2,6 +2,9 @@
 
 The following subchapters will introduce advanced SSN metrics. **Spatial Social Network (SSN)** refers to social networks where the nodes are also geolocated. They can be collaborations between organizations, economic hiring between individuals, trades between companies, and friendships. Different from social network metrics or spatial methods, these metrics tend to focus on the interaction between the networks and geographic space. While the metrics are designed for small-scale SSNs, some can also be applied to analyze origin-destination flows, POI visits, and mobility data. 
 
+You can download the R codes for the following subchapters from GitHub here (go to : 
+* 
+
 ## SSN Hotspots Detection
 
 In this chapter we show two GIS methods, **EdgeScan** and **NDScan**, for capturing areas with high and low levels of number of edges or network density respectively. Both methods are moving window processes that count the number of edges and network density, respectively, for each node in a given focal area (window area). It is important to note that while our functions report **EdgeScan** and **NDScan** values on the node level, **these values represent local social connections in the moving window area centered by that node**. Thus, it is possible that a node can have high **EdgeScan** and **NDScan** values, but are not connected with others locally. The contents below come from this paper published in *Transactions in GIS*: [Is Your Neighbor Your Friend? Scan Methods for Spatial Social Network (SSN) Hotspot Detection (Liang et al., 2023)](https://onlinelibrary.wiley.com/doi/10.1111/tgis.13050). 
