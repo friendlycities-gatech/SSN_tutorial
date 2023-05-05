@@ -530,6 +530,7 @@ To visualize the POI visits hotspots, you can use the following codes as a refer
 library(tmap)
 library(tidyverse)
 library(basemaps)
+library(sf)
 
 # convert heat dataframe to a spatial sf object
 POISpatial = heat %>% left_join(POINodes, copy=FALSE) %>% st_as_sf(coords=c('LonX', 'LatY'), crs=26967)
@@ -666,7 +667,7 @@ The second dataframe is an edge dataframe that has three columns:
 To visualize **Kfullfillment** values on the node level, you can use the following codes as a reference.
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
-# packages for wranggling data and map visualization
+# packages for wrangling data and map visualization
 library(tmap)
 library(tidyverse)
 library(sf)
@@ -896,7 +897,7 @@ The second dataframe is an edge dataframe that has three columns:
 To visualize **Local Flattening Ratio** values on the node level, you can use the following codes as a reference.
 
 ```{r, message=FALSE, warning=FALSE, eval=TRUE}
-# packages for wranggling data and map visualization
+# packages for wrangling data and map visualization
 library(tmap)
 library(tidyverse)
 library(sf)

@@ -328,18 +328,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb38-8"><a href="vizedges.html#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb38-9"><a href="vizedges.html#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_cast</span>(<span class="st">&quot;LINESTRING&quot;</span>)</span>
 <span id="cb38-10"><a href="vizedges.html#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-11"><a href="vizedges.html#cb38-11" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>
-<pre><code>## Simple feature collection with 3 features and 1 field
+<span id="cb38-11"><a href="vizedges.html#cb38-11" aria-hidden="true" tabindex="-1"></a>MafiaEdges_toLine[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>),]</span></code></pre></div>
+<pre><code>## Simple feature collection with 4 features and 1 field
 ## Geometry type: LINESTRING
 ## Dimension:     XY
-## Bounding box:  xmin: -80.1252 ymin: 25.9783 xmax: -73.9652 ymax: 40.7449
+## Bounding box:  xmin: -118.157 ymin: 25.9783 xmax: -73.9652 ymax: 40.7449
 ## Geodetic CRS:  WGS 84
-## # A tibble: 3 × 2
+## # A tibble: 4 × 2
 ##      ID                             geometry
 ##   &lt;int&gt;                     &lt;LINESTRING [°]&gt;
 ## 1     1 (-74.0049 40.6133, -73.9908 40.7142)
 ## 2     2  (-80.1252 25.9783, -73.9652 40.595)
-## 3     3  (-74.0049 40.6133, -73.985 40.7449)</code></pre>
+## 3     3  (-74.0049 40.6133, -73.985 40.7449)
+## 4     4  (-118.157 33.9231, -117.93 34.0768)</code></pre>
 </div>
 <div id="method-3-join-two-point-geometry-into-one-row-and-unite-into-line" class="section level3" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Method 3: Join Two Point Geometry into One Row and Unite into Line</h3>

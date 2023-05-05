@@ -54,6 +54,8 @@ You can convert a node table with coordinates into a spatial object with `st_as_
 
 ```{r spatialobject, message=FALSE, eval=TRUE}
 #MafiaNodes is a built-in dataset in SSNtools R package
+data(MafiaNodes)
+
 MafiaSpatial = MafiaNodes %>% 
   st_as_sf(coords=c("LonX", "LatY"), crs = 4326) 
 

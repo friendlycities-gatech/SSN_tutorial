@@ -280,10 +280,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The data for the nodes may come in two common format. One is the node table that we mentioned in Chapter 2 (REF), and the other is spatial object, in which nodes are already point geometry. The <strong>node table</strong> often stores the spatial information of the node as two columns: <code>latitude</code> and <code>longitude</code>. <strong>Spatial object</strong> contains spatial information of the node in the <code>geometry</code> column. It also includes projection coordinates system of the object. Unless you are working with <code>ggplot2</code>, most other visualization packages require nodes to be spatial objects for mapping.</p>
 <p>You can convert a node table with coordinates into a spatial object with <code>st_as_sf</code> function in <code>sf</code> package. Spatial information is stored in the <strong>LonX</strong> and <strong>LatY</strong> column in <code>MafiaNodes</code> node table. Therefore, when we convert it to <code>sf</code> spatial object, we need to set the coordinates crs to be <em>WGS84</em> (4326).</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="nodes.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#MafiaNodes is a built-in dataset in SSNtools R package</span></span>
-<span id="cb21-2"><a href="nodes.html#cb21-2" aria-hidden="true" tabindex="-1"></a>MafiaSpatial <span class="ot">=</span> MafiaNodes <span class="sc">%&gt;%</span> </span>
-<span id="cb21-3"><a href="nodes.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>) </span>
-<span id="cb21-4"><a href="nodes.html#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="nodes.html#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(MafiaSpatial, <span class="dv">3</span>)</span></code></pre></div>
+<span id="cb21-2"><a href="nodes.html#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaNodes)</span>
+<span id="cb21-3"><a href="nodes.html#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="nodes.html#cb21-4" aria-hidden="true" tabindex="-1"></a>MafiaSpatial <span class="ot">=</span> MafiaNodes <span class="sc">%&gt;%</span> </span>
+<span id="cb21-5"><a href="nodes.html#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&quot;LonX&quot;</span>, <span class="st">&quot;LatY&quot;</span>), <span class="at">crs =</span> <span class="dv">4326</span>) </span>
+<span id="cb21-6"><a href="nodes.html#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="nodes.html#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(MafiaSpatial, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## Simple feature collection with 3 features and 4 fields
 ## Geometry type: POINT
 ## Dimension:     XY
