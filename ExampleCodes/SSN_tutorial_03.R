@@ -87,7 +87,34 @@ tm_shape(us_states) +
     alpha=0.5, border.alpha = 0.5, 
     title.size=c('Degree of Connections'))
 
-# ------- 3.5 Visualize Nodes by Size and Color ------- # 
+# ------- 3.4 Visualize Nodes by Size and Color ------- # 
+tmap_mode('plot')
+map = tm_shape(us_states) +
+  tm_polygons(alpha=0) +
+  tm_shape(MafiaSpatial) +
+  tm_symbols(
+    #arguments that define point sizes 
+    size="degree_brackets", size.max = 1, scale = 1.5,
+    legend.size.show = FALSE,
+    #arguments that define point colors 
+    col='degree_brackets', palette = 'YlGnBu', n = 4,
+    alpha=0.5, 
+    border.col='black', border.alpha = 0.5,
+    legend.col.show = FALSE) +
+  tm_add_legend(type=c("symbol"),
+                #copy from RColorBrewer::brewer.pal(4, "YlGnBu")
+                col = c("#FFFFCC", "#A1DAB4", "#41B6C4", "#225EA8"), 
+                alpha = 0.5, is.portrait = FALSE, # legend becomes horizontal
+                # size defined here should be the square root of the normalized point size * scale. 
+                # The square root is taken since the area is proportional to the data, not the radius.
+                size = (c(0.1,0.3,0.5,1)/1)^0.5*1.5, 
+                labels = c('2-8','8-12','12-20','20-154'), #break labels 
+                border.col = 'black', border.alpha = 0.2,
+                title = c("Degree of Connections"))
+
+map
+
+# ------- Full codes for 3.4 ------- # 
 
 # complete codes from start to end 
 library(readr)
@@ -95,7 +122,6 @@ library(igraph)
 library(tmap)
 library(sf)
 library(tidyverse)
-library(RColorBrewer)
 library(SSNtools)
 
 #read data
@@ -121,28 +147,27 @@ MafiaSpatial = MafiaSpatial %>%
 
 # Visualize
 tmap_mode('plot')
-map = tm_shape(us_states) +
+tm_shape(us_states) +
   tm_polygons(alpha=0) +
   tm_shape(MafiaSpatial) +
   tm_symbols(
-    #arguments that define point sizes
+    #arguments that define point sizes 
     size="degree_brackets", size.max = 1, scale = 1.5,
     legend.size.show = FALSE,
-    #arguments that define point colors
-    col='degree', palette = 'YlGnBu', style='quantile', n = 4,
-    alpha=0.5,
+    #arguments that define point colors 
+    col='degree_brackets', palette = 'YlGnBu', n = 4,
+    alpha=0.5, 
     border.col='black', border.alpha = 0.5,
     legend.col.show = FALSE) +
   tm_add_legend(type=c("symbol"),
-                col = brewer.pal(4, "YlGnBu"), #copy the color from R palette
+                #copy from RColorBrewer::brewer.pal(4, "YlGnBu")
+                col = c("#FFFFCC", "#A1DAB4", "#41B6C4", "#225EA8"), 
                 alpha = 0.5, is.portrait = FALSE, # legend becomes horizontal
-                # size defined here should be the sqaure root of the normalized point size * scale.
+                # size defined here should be the square root of the normalized point size * scale. 
                 # The square root is taken since the area is proportional to the data, not the radius.
-                size = (c(0.1,0.3,0.5,1)/1)^0.5*1.5,
-                labels = c('2-8','8-12','12-20','20-154'), #break labels
+                size = (c(0.1,0.3,0.5,1)/1)^0.5*1.5, 
+                labels = c('2-8','8-12','12-20','20-154'), #break labels 
                 border.col = 'black', border.alpha = 0.2,
                 title = c("Degree of Connections"))
-
-map
 
 #tmap_save(map, filename='YOUR_LOCAL_FOLDER_PATH/map.png')
