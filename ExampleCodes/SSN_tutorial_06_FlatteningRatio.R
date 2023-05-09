@@ -1,6 +1,8 @@
+# ---------------------------------------------------#
 # ---- 6.3.1 Calculate Global Flattening Ratio ----- #
+# ---------------------------------------------------#
 
-# the sum of the Euclidean distance between every pair of connected nodes in the network G- 
+# GFR: the sum of the Euclidean distance between every pair of connected nodes in the network G- 
 # (each node with degree D connects to its nearest D neighbor in Euclidean space) 
 # compared to the sum of the Euclidean distance between every pair of connected nodes in G. 
 library(SSNtools)
@@ -15,7 +17,9 @@ edges = processEdge(NYCMafiaEdges, 'Source', 'Target')
 set.seed(1234, "Mersenne-Twister", sample.kind="Rounding")
 GlobalFlatteningRatio(nodes, edges, 100)
 
+# -------------------------------------------------- #
 # ---- 6.3.2 Calculate Local Flattening Ratio ------ #
+# -------------------------------------------------- #
 
 # This metric (adapted from Sarkar et al. 2019) is defined as the ratio of a 
 # node’s minimized distance (d_opt) needed to connect to any k nearest neighbors 
@@ -34,8 +38,9 @@ results = LocalFlatteningRatio(nodes, edges)
 nodelist = results[[1]]
 edgelist = results[[2]]
 
-
+# -------------------------------------------------- #
 # ---- 6.3.3 Visualize Local Flattening Ratio ------ #
+# -------------------------------------------------- #
 
 # packages for wrangling data and map visualization
 library(tmap)
@@ -88,7 +93,10 @@ g =
 
 g
 
-# ---- 6.3.4 Application to a bipartite network ------ #  
+# ---------------------------------------------------- #  
+# ---- 6.3.4 Application to a bipartite network ------ # 
+# ---------------------------------------------------- #
+
 library(SSNtools)
 
 data(POINodes)

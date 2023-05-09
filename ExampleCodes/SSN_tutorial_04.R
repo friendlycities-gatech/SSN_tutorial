@@ -6,7 +6,9 @@ library(stplanr) #for using od2line function to convert points to lines
 library(igraph) #for calculating node degree
 library(SSNtools) #load sample datasets MafiaNodes and MafiaEdges
 
-# ------- 4.1 Convert Points to Lines ------- # 
+# --------------------------------------------------#
+# ------- 4.1 Convert Points to Lines ------------- # 
+# --------------------------------------------------#
 
 # ---- 4.1.1 # Method 1: Use `od2line` function in `stplanr` package. 
 #library(SSNtools)
@@ -25,7 +27,6 @@ MafiaEdges_toLine = od2line(MafiaEdges, MafiaSpatial)
 
 # print first three rows 
 MafiaEdges_toLine[c(1:3),]
-
 
 # ---- 4.1.2 # Method 2: Group by lineID and Summarize Points into Line  
 
@@ -83,7 +84,9 @@ MafiaEdges_toLine = MafiaEdges_toLine %>% st_as_sf() %>% st_set_crs(4326)
 
 MafiaEdges_toLine[c(1:3),]
 
-# ------- 4.2 Visualizing Edges ------- # 
+# --------------------------------------------------#
+# ------- 4.2 Visualizing Edges ------------------- # 
+# --------------------------------------------------#
 
 #library(SSNtools)
 #library(tidyverse)
@@ -113,7 +116,10 @@ tm_shape(us_states) +
   tm_shape(MafiaEdges_toLine) + 
   tm_lines()
 
-# ------- 4.3 Visualizing Edges by Color ------- # 
+# --------------------------------------------------#
+# ------- 4.3 Visualizing Edges by Color ---------- # 
+# --------------------------------------------------#
+
 # create a line weight column based on edge distance
 MafiaEdges_toLine = MafiaEdges_toLine %>% mutate(weight = as.numeric(st_length(geometry)))
 
@@ -151,7 +157,9 @@ tm_shape(us_states) +
            title.col = c('Edges by Families')) + 
   tm_layout(legend.position = c('right', 'bottom'))
 
+# ----------------------------------------------------#
 # ------- 4.4 Visualizing Edges by Line Width ------- # 
+# ----------------------------------------------------#
 
 #library(tmap)
 tmap_mode('plot')
@@ -187,7 +195,9 @@ tm_shape(us_states) +
            title.lwd = c('Distance (km)')) + 
   tm_layout(legend.position = c('right', 'bottom'))
 
+# ---------------------------------------------------------#
 # ------- 4.5 Visualizing Edges by Width and Color ------- # 
+# ---------------------------------------------------------#
 
 tmap_mode('plot')
 
@@ -232,7 +242,9 @@ map = map +
 
 map
 
-# full codes 
+# --------------------------------------------------#
+# ----------- Full codes ---------------------------# 
+# --------------------------------------------------#
 
 library(sf)
 library(tidyverse)

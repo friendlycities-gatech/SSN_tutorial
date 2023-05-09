@@ -1,4 +1,6 @@
-# ---- 6.2.1 Calculate K-fullfillment values -------# 
+# --------------------------------------------------#
+# ---- 6.2.1 Calculate K-fullfillment values -------#
+# --------------------------------------------------#
 
 library(SSNtools)
 
@@ -15,7 +17,9 @@ edgelist = results[[2]]
 nodelist[c(1:3), ]
 edgelist[c(1:3), ]
 
-# ----- 6.2.2 Visualize K-fullfillment -----------# 
+# --------------------------------------------------#
+# ----- 6.2.2 Visualize K-fullfillment -------------# 
+# --------------------------------------------------#
 
 # packages for wrangling data and map visualization
 library(tmap)
@@ -68,7 +72,10 @@ g =
 
 g
 
+# ----------------------------------------------------------#
 # ----- 6.2.3 Application to a bipartite network -----------#  
+# ----------------------------------------------------------#
+
 library(SSNtools)
 data(POINodes)
 data(POIEdges)

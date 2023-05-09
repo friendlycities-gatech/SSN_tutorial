@@ -7,7 +7,10 @@ library(tigris)
 #devtools::install_github("friendlycities-gatech/SSNtools")
 library(SSNtools)
 
+# --------------------------------------------------#
 # ------- 3.1 Convert Coordinates to Points ------- # 
+# --------------------------------------------------#
+
 #MafiaNodes is a built-in dataset in SSNtools R package
 
 data(MafiaNodes)
@@ -16,7 +19,9 @@ MafiaSpatial = MafiaNodes %>%
 
 head(MafiaSpatial, 3)
 
-# ------- 3.2 Visualize Nodes ------- # 
+# --------------------------------------------------#
+# ------- 3.2 Visualize Nodes --------------------- # 
+# --------------------------------------------------#
 
 #Convert coordinate system
 MafiaSpatial = MafiaSpatial %>%
@@ -33,7 +38,9 @@ tm_shape(us_states) +
   tm_shape(MafiaSpatial) + 
   tm_symbols() #overlay nodes as points
 
+# --------------------------------------------------#
 # ------- 3.3 Visualize Nodes by Node Color ------- # 
+# --------------------------------------------------#
 
 #MafiaEdges is a built-in dataset in SSNtools
 data(MafiaEdges)
@@ -52,7 +59,9 @@ tm_shape(us_states) +
     alpha=0.5, border.col='black', border.alpha = 0.5,
     title.col=c('Degree of Connections'))
 
-# ------- 3.3 Visualize Nodes by Node Size ------- # 
+# --------------------------------------------------#
+# ------- 3.3 Visualize Nodes by Node Size -------- # 
+# --------------------------------------------------#
 
 # Visualize 
 tmap_mode('plot')
@@ -87,7 +96,9 @@ tm_shape(us_states) +
     alpha=0.5, border.alpha = 0.5, 
     title.size=c('Degree of Connections'))
 
+# ------------------------------------------------------#
 # ------- 3.4 Visualize Nodes by Size and Color ------- # 
+# ------------------------------------------------------#
 tmap_mode('plot')
 map = tm_shape(us_states) +
   tm_polygons(alpha=0) +
@@ -114,7 +125,9 @@ map = tm_shape(us_states) +
 
 map
 
-# ------- Full codes for 3.4 ------- # 
+# --------------------------------------------------#
+# ------- Full codes for 3.4 ---------------------- # 
+# --------------------------------------------------#
 
 # complete codes from start to end 
 library(readr)

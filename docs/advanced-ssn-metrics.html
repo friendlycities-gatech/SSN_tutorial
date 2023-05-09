@@ -431,7 +431,7 @@ Figure 6.1: Schematic Diagram of EdgeScan and NDScan Values Calculation
 <span id="cb83-28"><a href="advanced-ssn-metrics.html#cb83-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.size =</span> <span class="fl">1.5</span>)</span>
 <span id="cb83-29"><a href="advanced-ssn-metrics.html#cb83-29" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div>
 <p><img src="SSN_tutorial_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
-<p>You may wonder why edges are invisible: that is because the edges within the window size (500m) are short-ranged and thus may be hidden under the nodes! The following codes add an inset map to highlight an area with dense SSN hotspots.</p>
+<p>You may wonder why edges are invisible: that is because the edges within the window size (500m) are short-ranged and thus may be hidden under the nodes! The following codes add an inset map to highlight an area with dense SSN hotspots. You can either print the map in your Rstudio Plots console or directly exports it. You can adjust position of the inset map through viewport positions, width, and height.</p>
 <div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="advanced-ssn-metrics.html#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a bounding box in crs=32118 to retrieve basemap </span></span>
 <span id="cb84-2"><a href="advanced-ssn-metrics.html#cb84-2" aria-hidden="true" tabindex="-1"></a>Inset <span class="ot">=</span> <span class="fu">st_bbox</span>(<span class="fu">data.frame</span>(<span class="at">lon=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.00434</span>, <span class="sc">-</span><span class="fl">73.98125</span>), <span class="at">lat=</span><span class="fu">c</span>(<span class="fl">40.73080</span>, <span class="fl">40.71109</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb84-3"><a href="advanced-ssn-metrics.html#cb84-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">st_as_sf</span>(<span class="at">coords=</span><span class="fu">c</span>(<span class="st">&#39;lon&#39;</span>, <span class="st">&#39;lat&#39;</span>), <span class="at">crs=</span><span class="dv">4326</span>) <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="dv">32118</span>)) </span>
@@ -460,11 +460,16 @@ Figure 6.1: Schematic Diagram of EdgeScan and NDScan Values Calculation
 <span id="cb84-26"><a href="advanced-ssn-metrics.html#cb84-26" aria-hidden="true" tabindex="-1"></a><span class="co"># create aspect ratio to preserve the height and width ratio in the inset map</span></span>
 <span id="cb84-27"><a href="advanced-ssn-metrics.html#cb84-27" aria-hidden="true" tabindex="-1"></a>aspect_ratio <span class="ot">=</span> <span class="fu">unname</span>((Inset<span class="sc">$</span>ymax <span class="sc">-</span> Inset<span class="sc">$</span>ymin)<span class="sc">/</span>(Inset<span class="sc">$</span>xmax <span class="sc">-</span> Inset<span class="sc">$</span>xmin))</span>
 <span id="cb84-28"><a href="advanced-ssn-metrics.html#cb84-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb84-29"><a href="advanced-ssn-metrics.html#cb84-29" aria-hidden="true" tabindex="-1"></a><span class="co"># export the background map g with the inset map.</span></span>
+<span id="cb84-29"><a href="advanced-ssn-metrics.html#cb84-29" aria-hidden="true" tabindex="-1"></a><span class="co"># --- uncomment below export the background map g with the inset map ----</span></span>
 <span id="cb84-30"><a href="advanced-ssn-metrics.html#cb84-30" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(grid)</span>
-<span id="cb84-31"><a href="advanced-ssn-metrics.html#cb84-31" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(g <span class="sc">+</span> box, <span class="at">insets_tm=</span>InsetMap, </span>
+<span id="cb84-31"><a href="advanced-ssn-metrics.html#cb84-31" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(g <span class="sc">+</span> box, <span class="at">insets_tm=</span>InsetMap,</span>
 <span id="cb84-32"><a href="advanced-ssn-metrics.html#cb84-32" aria-hidden="true" tabindex="-1"></a>          <span class="at">insets_vp =</span> <span class="fu">viewport</span>(<span class="fl">0.21</span>, <span class="fl">0.54</span>, <span class="at">width =</span> <span class="fl">0.3</span>, <span class="at">height =</span> aspect_ratio<span class="sc">*</span><span class="fl">0.5</span>),</span>
-<span id="cb84-33"><a href="advanced-ssn-metrics.html#cb84-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">filename=</span><span class="st">&#39;PATH&#39;</span>, <span class="at">dpi=</span><span class="dv">600</span>)</span></code></pre></div>
+<span id="cb84-33"><a href="advanced-ssn-metrics.html#cb84-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">filename=</span><span class="st">&#39;PATH&#39;</span>, <span class="at">dpi=</span><span class="dv">600</span>)</span>
+<span id="cb84-34"><a href="advanced-ssn-metrics.html#cb84-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-35"><a href="advanced-ssn-metrics.html#cb84-35" aria-hidden="true" tabindex="-1"></a><span class="co"># --- uncomment below to print maps in R Studio Plots window ---- </span></span>
+<span id="cb84-36"><a href="advanced-ssn-metrics.html#cb84-36" aria-hidden="true" tabindex="-1"></a><span class="co"># library(grid)</span></span>
+<span id="cb84-37"><a href="advanced-ssn-metrics.html#cb84-37" aria-hidden="true" tabindex="-1"></a><span class="co"># g + box</span></span>
+<span id="cb84-38"><a href="advanced-ssn-metrics.html#cb84-38" aria-hidden="true" tabindex="-1"></a><span class="co"># print(InsetMap, vp=viewport(0.21, 0.54, width = 0.2, height = aspect_ratio*0.5))</span></span></code></pre></div>
 <p><img src="Figs/06-metrics-hotspot-inset.png" width="70%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="find-optimal-window-sizes-for-ssn-hotspots" class="section level3" number="6.1.3">
@@ -663,7 +668,7 @@ Figure 6.1: Schematic Diagram of EdgeScan and NDScan Values Calculation
 <span id="cb95-30"><a href="advanced-ssn-metrics.html#cb95-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb95-31"><a href="advanced-ssn-metrics.html#cb95-31" aria-hidden="true" tabindex="-1"></a>heat[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>
 <pre><code>##               label heat
-## 1 AMAROSA-ALEXANDER    1
+## 1 AMAROSA-ALEXANDER   NA
 ## 2   VINTALORO-JAMES   NA
 ## 3   TANTILLO-ENRICO   NA</code></pre>
 <div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="advanced-ssn-metrics.html#cb97-1" aria-hidden="true" tabindex="-1"></a>edgeWithin[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),]</span></code></pre></div>

@@ -207,7 +207,7 @@ g =
 g
 ```
 
-You may wonder why edges are invisible: that is because the edges within the window size (500m) are short-ranged and thus may be hidden under the nodes! The following codes add an inset map to highlight an area with dense SSN hotspots. 
+You may wonder why edges are invisible: that is because the edges within the window size (500m) are short-ranged and thus may be hidden under the nodes! The following codes add an inset map to highlight an area with dense SSN hotspots. You can either print the map in your Rstudio Plots console or directly exports it. You can adjust position of the inset map through viewport positions, width, and height. 
 
 ```{r, message=FALSE, warning=FALSE, eval=FALSE}
 # create a bounding box in crs=32118 to retrieve basemap 
@@ -238,11 +238,16 @@ box = tm_shape(st_bbox(Inset) %>% st_as_sfc()) + tm_polygons(alpha=0, border.col
 # create aspect ratio to preserve the height and width ratio in the inset map
 aspect_ratio = unname((Inset$ymax - Inset$ymin)/(Inset$xmax - Inset$xmin))
 
-# export the background map g with the inset map.
+# --- uncomment below export the background map g with the inset map ----
 library(grid)
-tmap_save(g + box, insets_tm=InsetMap, 
+tmap_save(g + box, insets_tm=InsetMap,
           insets_vp = viewport(0.21, 0.54, width = 0.3, height = aspect_ratio*0.5),
           filename='PATH', dpi=600)
+
+# --- uncomment below to print maps in R Studio Plots window ---- 
+# library(grid)
+# g + box
+# print(InsetMap, vp=viewport(0.21, 0.54, width = 0.2, height = aspect_ratio*0.5))
 ```
 
 ```{r echo=FALSE, fig.cap="", out.width = '70%', fig.show = "hold", fig.align='center'}

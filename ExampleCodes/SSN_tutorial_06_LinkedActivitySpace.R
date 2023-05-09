@@ -1,4 +1,6 @@
-# ----- 6.4.1 Visualize Linked Activity Spaces -----------#  
+# --------------------------------------------------------#
+# ----- 6.4.1 Visualize Linked Activity Spaces -----------#
+# --------------------------------------------------------#
 
 library(SSNtools)
 library(ggplot2)
@@ -95,7 +97,9 @@ g3 = suppressMessages(
 )
 g3
 
-# ----- 6.4.2 Quantify Linked Activity Spaces -----------#  
+# -------------------------------------------------------#
+# ----- 6.4.2 Quantify Linked Activity Spaces -----------#
+# -------------------------------------------------------#
 
 #reference: https://stackoverflow.com/questions/34650441/how-to-get-the-points-inside-of-the-ellipse-in-ggplot2
 

@@ -1,4 +1,6 @@
-# ----- 6.1.1 Calculate SSN hotspots using radius or K-nearest neighbor window sizes -----------#  
+# ----------------------------------------------------------------------------------------------#
+# ----- 6.1.1 Calculate SSN hotspots using radius or K-nearest neighbor window sizes -----------#
+# ----------------------------------------------------------------------------------------------#
 
 library(SSNtools)
   
@@ -109,12 +111,21 @@ box = tm_shape(st_bbox(Inset) %>% st_as_sfc()) + tm_polygons(alpha=0, border.col
 # create aspect ratio to preserve the height and width ratio in the inset map
 aspect_ratio = unname((Inset$ymax - Inset$ymin)/(Inset$xmax - Inset$xmin))
 
+# --- uncomment below export the background map g with the inset map ----
 library(grid)
-tmap_save(g + box, insets_tm=InsetMap, 
+tmap_save(g + box, insets_tm=InsetMap,
           insets_vp = viewport(0.21, 0.54, width = 0.3, height = aspect_ratio*0.5),
           filename='PATH', dpi=600)
 
-# ----- 6.1.3 Find optimal window sizes for SSN hotspots -----------#  
+# --- uncomment below to print maps in R Studio Plots window ---- 
+# library(grid)
+# g + box
+# print(InsetMap, vp=viewport(0.21, 0.54, width = 0.3, height = aspect_ratio*0.5))
+
+# ------------------------------------------------------------------#
+# ----- 6.1.3 Find optimal window sizes for SSN hotspots -----------#
+# ------------------------------------------------------------------#
+
 library(SSNtools)
 library(ggplot2)
 library(ggdist)
@@ -157,7 +168,9 @@ g = ggplot(df, aes(x=`Window Size`, y=`Average Network Density`, group=`Window S
 
 g
 
+# --------------------------------------------------------------------------------------------------------------#
 # ----- 6.1.4 Calculate SSN hotspots using a user-defined walking distance matrix extracted from OSM -----------#  
+# --------------------------------------------------------------------------------------------------------------#
 
 # create a dataframe that contains all non-repetitive combinations of nodes
 library(tidyverse)
@@ -231,7 +244,9 @@ edges = processEdge(NYCMafiaEdges, 'Source', 'Target')
 
 heat = edgeScanMatrix(nodes, edges, 1600, mat, min=3)[[1]]
 
+# -----------------------------------------------------------------------#
 # ----- 6.1.4 Application to a weighted and bipartite network -----------#  
+# -----------------------------------------------------------------------#
 
 library(SSNtools)
 
@@ -302,4 +317,4 @@ g = tm_shape(bg) +
             main.title.position = c('center')) 
 g
 
-tmap_save(g, '/Users/xiaofanliang/Dropbox (GaTech)/GT_Research/Spatial_Networks_R/SSN_tutorial/Figs/06-metrics-POIvisits.png')
+#tmap_save(g, 'PATH')
