@@ -1,8 +1,8 @@
 tab:matrix
 tab:nodetable
 tab:edgetable
-fig:unnamed-chunk-71
-fig:unnamed-chunk-95
+fig:unnamed-chunk-73
+fig:unnamed-chunk-97
 introduction
 metrics
 network-data-formats

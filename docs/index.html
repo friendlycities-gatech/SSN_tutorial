@@ -249,18 +249,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We assume our audience has basic knowledge of R programming with <code>tidyverse</code> syntax and basic GIS concepts (e.g., basic geometry types, coordinate system projection, spatial operation etc.). If not, you can use this book <a href="https://geocompr.robinlovelace.net/spatial-operations.html">Geocomputation with R</a> to get started with the basic concepts. The book also leverages <code>tmap</code> at map visualization.</p>
 <p>Mapping relationship in geographic space has its own challenges, which is described thoroughly in Andris’s paper <a href="https://isiarticles.com/bundles/Article/pre/pdf/105132.pdf">Challenges for Social Flows</a>. In our visualization examples, we will try to show the best practices to map social networks in space that can counter some of these problems.</p>
 <p>All the data you need to complete the tutorial can be loaded from <code>SSNtools</code> R package, which is developed together with this tutorial.</p>
-<p><strong>Required Packages</strong></p>
-<p>We use <code>igraph</code> package to calculate network metrics, <code>sf</code> package to create geospatial objects from dataframe, <code>tmap</code> package to create both static and interactive maps, <code>basemaps</code> package to extract OpenStreetMap basemaps, and <code>tidyverse</code> package as the syntax to process data. You can download the packages using the following codes:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;igraph&quot;</span>) <span class="co">#for network analysis</span></span>
-<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;sf&quot;</span>) <span class="co">#for spatial objects operation</span></span>
-<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tmap&quot;</span>) <span class="co">#for interactive and static maps </span></span>
-<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;basemaps&quot;</span>) <span class="co">#for retrieving basemaps for tmap </span></span>
-<span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>) <span class="co">#for data processing </span></span>
-<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;tigris&#39;</span>) <span class="co">#for loading TIGER shapefiles</span></span>
-<span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;stplanr&#39;</span>) <span class="co">#for using od2line function to convert points to lines</span></span>
-<span id="cb1-8"><a href="index.html#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>) <span class="co">#for visualizing statistical graphics</span></span>
-<span id="cb1-9"><a href="index.html#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) <span class="co">#to download R package on GitHub</span></span>
-<span id="cb1-10"><a href="index.html#cb1-10" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>) <span class="co">#install development version of our SSNtools R package for advanced SSN metrics. </span></span></code></pre></div>
+<p><strong>SSNtools R package</strong></p>
+<p>This tutorial comes with an R package <code>SSNtools</code> (see <a href="https://github.com/friendlycities-gatech/SSNtools/tree/main">R package GitHub</a>), which provides metrics for analyzing and visualizing spatial social networks. It is implemented with base R syntax. Download the R package using the following lines below in your R console.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#to download R package on GitHub</span></span>
+<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>) </span>
+<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install development version of our SSNtools R package for advanced SSN metrics. </span></span>
+<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;friendlycities-gatech/SSNtools&quot;</span>) </span></code></pre></div>
+<p>This <code>SSNtools</code> also include the following sample datasets. You can directly use them by calling their names, or explicitly call them at the beginning of the scripts like the following:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mafia spatial social networks; undirected and unweighted</span></span>
+<span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaNodes)</span>
+<span id="cb2-3"><a href="index.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(MafiaEdges)</span>
+<span id="cb2-4"><a href="index.html#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="index.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Mafia spatial social networks, limited to NYC </span></span>
+<span id="cb2-6"><a href="index.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(NYCMafiaNodes)</span>
+<span id="cb2-7"><a href="index.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(NYCMafiaEdges)</span>
+<span id="cb2-8"><a href="index.html#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="index.html#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Mafia spatial social networks, limited to Detroit </span></span>
+<span id="cb2-10"><a href="index.html#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(DTMafiaNodes)</span>
+<span id="cb2-11"><a href="index.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(DTMafiaEdges)</span>
+<span id="cb2-12"><a href="index.html#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="index.html#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Census block groups to restaurant POIs; bipartite and weighted</span></span>
+<span id="cb2-14"><a href="index.html#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(POINodes)</span>
+<span id="cb2-15"><a href="index.html#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(POIEdges)</span>
+<span id="cb2-16"><a href="index.html#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="index.html#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Emergency responders, emergency locations, and their teammates; ego-centric network</span></span>
+<span id="cb2-18"><a href="index.html#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(EmergencyNodes)</span>
+<span id="cb2-19"><a href="index.html#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(EmergencyEdges)</span></code></pre></div>
+<p><strong>Other required packages</strong></p>
+<p>We use the following packages in the tutorial to wrangle data, calculate network metrics, and visualize statistical graphs.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;igraph&quot;</span>) <span class="co">#for network analysis</span></span>
+<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;sf&quot;</span>) <span class="co">#for spatial objects operation</span></span>
+<span id="cb3-3"><a href="index.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tmap&quot;</span>) <span class="co">#for interactive and static maps </span></span>
+<span id="cb3-4"><a href="index.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;basemaps&quot;</span>) <span class="co">#for retrieving basemaps for tmap </span></span>
+<span id="cb3-5"><a href="index.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>) <span class="co">#for data processing </span></span>
+<span id="cb3-6"><a href="index.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;tigris&#39;</span>) <span class="co">#for loading TIGER shapefiles</span></span>
+<span id="cb3-7"><a href="index.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;stplanr&#39;</span>) <span class="co">#for using od2line function to convert points to lines</span></span>
+<span id="cb3-8"><a href="index.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&#39;ggplot2&#39;</span>) <span class="co">#for visualizing statistical graphics</span></span></code></pre></div>
 <p>There are a few packages for visualizing maps. We chose <code>tmap</code> in the end for its flexibility to switch between interactive maps and static plots. We also have some codes that use <code>ggplot2</code> to generate other graphic visualizations.</p>
 <p><code>ggplot2</code> has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of <code>ggplot2</code> is that it can easily add high-resolution Google Maps as basemaps using <code>ggmap</code> package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to <a href="https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html">map planar networks</a> and <a href="https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/">produce basic elements of a map</a>. However, you need to convert spatial objects to dataframe for <code>ggpplot2</code> to draw on.</p>
 <p><code>tmap</code> is equally powerful as <code>ggpplot2</code>, and has the extra function to switch between a static plot and interactive plot mode. This feature is useful when you want to zoom in and out to explore your data.</p>
@@ -269,7 +293,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><code>tidyverse</code> provides a set of packages that share the same data representation and use the <a href="https://style.tidyverse.org/pipes.html">pip symbol</a> <code>%&gt;%</code> to connect steps of processing.</p>
 <p><code>tigris</code> download geographic boundary shapefiles from TIGER website.</p>
 <p><code>stplanr</code> is an R package that analyze planar spatial network. We mostly use the <code>od2line()</code> function in the package to convert points to lines.</p>
-<p><code>SSNtools</code> is an R package that provides advanced metrics for analyzing and visualizing spatial social networks. It also include all the sample data we use in the tutorial.</p>
 
 </div>
             </section>

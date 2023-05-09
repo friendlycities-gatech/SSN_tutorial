@@ -20,9 +20,44 @@ Mapping relationship in geographic space has its own challenges, which is descri
 
 All the data you need to complete the tutorial can be loaded from `SSNtools` R package, which is developed together with this tutorial.
 
-**Required Packages**
+**SSNtools R package**
 
-We use `igraph` package to calculate network metrics, `sf` package to create geospatial objects from dataframe, `tmap` package to create both static and interactive maps, `basemaps` package to extract OpenStreetMap basemaps, and `tidyverse` package as the syntax to process data. You can download the packages using the following codes:
+This tutorial comes with an R package `SSNtools` (see [R package GitHub](https://github.com/friendlycities-gatech/SSNtools/tree/main)), which provides metrics for analyzing and visualizing spatial social networks. It is implemented with base R syntax. Download the R package using the following lines below in your R console. 
+
+```{r eval=FALSE}
+#to download R package on GitHub
+install.packages("devtools") 
+#install development version of our SSNtools R package for advanced SSN metrics. 
+devtools::install_github("friendlycities-gatech/SSNtools") 
+```
+
+This `SSNtools` also include the following sample datasets. You can directly use them by calling their names, or explicitly call them at the beginning of the scripts like the following: 
+
+```{r eval=FALSE}
+# Mafia spatial social networks; undirected and unweighted
+data(MafiaNodes)
+data(MafiaEdges)
+
+# Mafia spatial social networks, limited to NYC 
+data(NYCMafiaNodes)
+data(NYCMafiaEdges)
+
+# Mafia spatial social networks, limited to Detroit 
+data(DTMafiaNodes)
+data(DTMafiaEdges)
+
+# Census block groups to restaurant POIs; bipartite and weighted
+data(POINodes)
+data(POIEdges)
+
+# Emergency responders, emergency locations, and their teammates; ego-centric network
+data(EmergencyNodes)
+data(EmergencyEdges)
+```
+
+**Other required packages**
+
+We use the following packages in the tutorial to wrangle data, calculate network metrics, and visualize statistical graphs. 
 
 ```{r eval=FALSE}
 install.packages("igraph") #for network analysis
@@ -33,8 +68,6 @@ install.packages("tidyverse") #for data processing
 install.packages('tigris') #for loading TIGER shapefiles
 install.packages('stplanr') #for using od2line function to convert points to lines
 install.packages('ggplot2') #for visualizing statistical graphics
-install.packages("devtools") #to download R package on GitHub
-devtools::install_github("friendlycities-gatech/SSNtools") #install development version of our SSNtools R package for advanced SSN metrics. 
 ```
 
 There are a few packages for visualizing maps. We chose `tmap` in the end for its flexibility to switch between interactive maps and static plots. We also have some codes that use `ggplot2` to generate other graphic visualizations. 
@@ -52,8 +85,6 @@ There are a few packages for visualizing maps. We chose `tmap` in the end for it
 `tigris` download geographic boundary shapefiles from TIGER website.
 
 `stplanr` is an R package that analyze planar spatial network. We mostly use the `od2line()` function in the package to convert points to lines. 
-
-`SSNtools` is an R package that provides advanced metrics for analyzing and visualizing spatial social networks. It also include all the sample data we use in the tutorial. 
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages
