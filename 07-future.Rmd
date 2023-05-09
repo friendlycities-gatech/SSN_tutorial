@@ -15,4 +15,4 @@ The future development of the tutorial includes:
   
 We are also considering more examples of topic applications using visualization and metrics. If you would like to contribute writing a chapter, sharing a sample dataset, or developing a metric in the `SSNtools` R package, please contact Xiaofan Liang at xiaofan.l@gatech.edu. 
 
-If you run into an issue with the `SSNtools` R package or this tutorial, please open an [issue](https://github.com/friendlycities-gatech/SSNtools/issues) at the GitHub with an replicable example. 
+If you run into an issue with the `SSNtools` R package or this tutorial, please open an issue (for `SSNtools` [here](https://github.com/friendlycities-gatech/SSNtools/issues) and for R tutorial [here](https://github.com/friendlycities-gatech/SSN_tutorial/issues)) at the GitHub with an replicable example. 
