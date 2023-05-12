@@ -86,6 +86,13 @@ There are a few packages for visualizing maps. We chose `tmap` in the end for it
 
 `stplanr` is an R package that analyze planar spatial network. We mostly use the `od2line()` function in the package to convert points to lines. 
 
+**Download R codes from the tutorial**
+
+The example R codes in this tutorial can be downloaded [here](https://github.com/friendlycities-gatech/SSN_tutorial/tree/main/ExampleCodes). To download a specific R script, you can: 
+- click a specific R script 
+- go to `Raw`
+- copy and paste the codes in your R studio OR right click -> Save as -> delete .txt in file extension name (so the file name should be name.R)
+
 ```{r include=FALSE}
 # automatically create a bib database for R packages
 knitr::write_bib(c(
