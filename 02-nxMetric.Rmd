@@ -175,7 +175,7 @@ avg_path_length = average.path.length(g, directed=FALSE) #calculate the average 
 
 ## igraph Visualization 
 
-Here is an example using data about the American Mafia to visualize an igraph network. This data were collected by Daniel DellaPosta and published in the paper [Network closure and integration in the mid-20th century American mafia](https://www.sciencedirect.com/science/article/abs/pii/S037887331630199X). 
+Here is an example using data about the 1960s American Mafia to visualize an igraph network. This data were collected by Daniel DellaPosta and published in the paper [Network closure and integration in the mid-20th century American mafia](https://www.sciencedirect.com/science/article/abs/pii/S037887331630199X). This archival data come from the Bureau of Narcotics dossier and documented the spatial locations (home addresses) of mafia members and their criminal associations.
 
 The node list **MafiaNodes** contains:
 

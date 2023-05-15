@@ -35,29 +35,35 @@ This `SSNtools` also include the following sample datasets. You can directly use
 
 ```{r eval=FALSE}
 # Mafia spatial social networks; undirected and unweighted
-data(MafiaNodes)
-data(MafiaEdges)
+# Nodes: America mafia members in 1960s and their home locations 
+# Edges: Criminal associations between mafia members 
+data(MafiaNodes) # n=680
+data(MafiaEdges) # n=2699
 
 # Mafia spatial social networks, limited to NYC 
-data(NYCMafiaNodes)
-data(NYCMafiaEdges)
+data(NYCMafiaNodes) # n = 298
+data(NYCMafiaEdges) # n = 946
 
 # Mafia spatial social networks, limited to Detroit 
-data(DTMafiaNodes)
-data(DTMafiaEdges)
+data(DTMafiaNodes) # n = 40
+data(DTMafiaEdges) # n = 147
 
-# Census block groups to restaurant POIs; bipartite and weighted
-data(POINodes)
-data(POIEdges)
+# Census block group centroids to restaurant POIs; bipartite and weighted
+# Nodes: Point-of-interests (restaurants) and census block groups centroids at ATL 
+# Edges: Visits from census block groups to POIs 
+data(POINodes) # n = 1356
+data(POIEdges) # n = 7926
 
 # Emergency responders, emergency locations, and their teammates; ego-centric network
-data(EmergencyNodes)
-data(EmergencyEdges)
+# Nodes: Emergency responders at NYC and their dispatched (task) locations 
+# Edges: Emergency responders who were dispatched on the same team
+data(EmergencyNodes) # n = 1582
+data(EmergencyEdges) # n = 47
 ```
 
 **Other required packages**
 
-We use the following packages in the tutorial to wrangle data, calculate network metrics, and visualize statistical graphs. 
+We mostly use the following packages in the tutorial to wrangle data, calculate network metrics, and visualize maps and statistical graphs. Some other packages (e.g., `osrm`, `fpc`, `ggdist`) are used for specific task demonstration and you can install them in the same ways as below.
 
 ```{r eval=FALSE}
 install.packages("igraph") #for network analysis
@@ -72,7 +78,7 @@ install.packages('ggplot2') #for visualizing statistical graphics
 
 There are a few packages for visualizing maps. We chose `tmap` in the end for its flexibility to switch between interactive maps and static plots. We also have some codes that use `ggplot2` to generate other graphic visualizations. 
 
-`ggplot2` has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of `ggplot2` is that it can easily add high-resolution Google Maps as basemaps using `ggmap` package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to [map planar networks](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html) and [produce basic elements of a map](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/). However, you need to convert spatial objects to dataframe for `ggpplot2` to draw on.  
+`ggplot2` has powerful mapping functions. It is intuitive for people who are used to the underlying logic of ggplot2. One advantage of `ggplot2` is that it can easily add high-resolution Google Maps as basemaps using `ggmap` package (only in WGS84 projection). Here are some good tutorials that teach you how to use ggplot2 to [map planar networks](https://www.r-spatial.org/r/2018/10/25/ggplot2-sf.html) and [produce basic elements of a map](https://www.earthdatascience.org/courses/earth-analytics/spatial-data-r/make-maps-with-ggplot-in-R/). However, you need to convert spatial objects to dataframe for `ggplot2` to draw on.  
 
 `tmap` is equally powerful as `ggpplot2`, and has the extra function to switch between a static plot and interactive plot mode. This feature is useful when you want to zoom in and out to explore your data.  
 
@@ -89,9 +95,10 @@ There are a few packages for visualizing maps. We chose `tmap` in the end for it
 **Download R codes from the tutorial**
 
 The example R codes in this tutorial can be downloaded [here](https://github.com/friendlycities-gatech/SSN_tutorial/tree/main/ExampleCodes). To download a specific R script, you can: 
-- click a specific R script 
-- go to `Raw`
-- copy and paste the codes in your R studio OR right click -> Save as -> delete .txt in file extension name (so the file name should be name.R)
+* click a specific R script 
+* go to `Raw`
+* copy and paste the codes in your R studio OR 
+* right click -> Save as -> delete .txt in file extension name (so the file name should be name.R)
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages

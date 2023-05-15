@@ -172,8 +172,8 @@ g
 # ----- 6.1.4 Calculate SSN hotspots using a user-defined walking distance matrix extracted from OSM -----------#  
 # --------------------------------------------------------------------------------------------------------------#
 
-# create a dataframe that contains all non-repetitive combinations of nodes
 library(tidyverse)
+
 # create a dataframe that contains all non-repetitive combinations of nodes
 allEdgesTable = as.data.frame(t(combn(NYCMafiaNodes$label, 2))) 
 colnames(allEdgesTable) <- c('Source', 'Target')
@@ -210,6 +210,7 @@ origin[c(1:3), ]
 origin_sub = origin[c(1:10),]
 des_sub = des[c(1:10),]
 
+library(osrm)
 # distances contains a list of outputs. 
 distances <- osrmTable(
   src = origin_sub[c("LonX", "LatY")],
@@ -222,6 +223,7 @@ distances <- osrmTable(
 Distance_m = diag(distances$distances)
 Distance_m
 
+# fill Distance_m with random values 
 Distance_m = sample.int(2000, nrow(origin), replace=TRUE)
 
 dist = data.frame(Source = origin$Source, Target = des$Target, Distance_m = Distance_m)
